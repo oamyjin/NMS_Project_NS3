@@ -20,4 +20,7 @@
     #include <ns3/red-queue-disc.h>
     #include <ns3/tbf-queue-disc.h>
     #include <ns3/traffic-control-layer.h>
+    #include <ns3/sp-pifo.h>
+    #include <ns3/Flow_pl.h>
+    #include <ns3/Replace_string.h>
 #endif 

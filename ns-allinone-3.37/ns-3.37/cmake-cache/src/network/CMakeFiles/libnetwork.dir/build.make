@@ -142,7 +142,8 @@ libnetwork_EXTERNAL_OBJECTS = \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/radiotap-header.cc.o" \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/simple-channel.cc.o" \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/simple-net-device.cc.o" \
-"/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.o"
+"/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.o" \
+"/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o"
 
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/helper/application-container.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/helper/delay-jitter-estimation.cc.o
@@ -213,6 +214,7 @@ libnetwork_EXTERNAL_OBJECTS = \
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/simple-channel.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/simple-net-device.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.o
+/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork.dir/build.make
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk/usr/lib/libsqlite3.tbd
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork.dir/link.txt

@@ -1462,6 +1462,30 @@ utils/flow-id-tag.cc.s:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/flow-id-tag.cc.s
 .PHONY : utils/flow-id-tag.cc.s
 
+utils/gearbox-pkt-tag.o: utils/gearbox-pkt-tag.cc.o
+.PHONY : utils/gearbox-pkt-tag.o
+
+# target to build an object file
+utils/gearbox-pkt-tag.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o
+.PHONY : utils/gearbox-pkt-tag.cc.o
+
+utils/gearbox-pkt-tag.i: utils/gearbox-pkt-tag.cc.i
+.PHONY : utils/gearbox-pkt-tag.i
+
+# target to preprocess a source file
+utils/gearbox-pkt-tag.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.i
+.PHONY : utils/gearbox-pkt-tag.cc.i
+
+utils/gearbox-pkt-tag.s: utils/gearbox-pkt-tag.cc.s
+.PHONY : utils/gearbox-pkt-tag.s
+
+# target to generate assembly for a file
+utils/gearbox-pkt-tag.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.s
+.PHONY : utils/gearbox-pkt-tag.cc.s
+
 utils/inet-socket-address.o: utils/inet-socket-address.cc.o
 .PHONY : utils/inet-socket-address.o
 
@@ -2354,6 +2378,9 @@ help:
 	@echo "... utils/flow-id-tag.o"
 	@echo "... utils/flow-id-tag.i"
 	@echo "... utils/flow-id-tag.s"
+	@echo "... utils/gearbox-pkt-tag.o"
+	@echo "... utils/gearbox-pkt-tag.i"
+	@echo "... utils/gearbox-pkt-tag.s"
 	@echo "... utils/inet-socket-address.o"
 	@echo "... utils/inet-socket-address.i"
 	@echo "... utils/inet-socket-address.s"

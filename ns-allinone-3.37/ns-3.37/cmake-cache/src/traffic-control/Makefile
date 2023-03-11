@@ -262,6 +262,54 @@ helper/traffic-control-helper.cc.s:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/helper/traffic-control-helper.cc.s
 .PHONY : helper/traffic-control-helper.cc.s
 
+model/Flow_pl.o: model/Flow_pl.cc.o
+.PHONY : model/Flow_pl.o
+
+# target to build an object file
+model/Flow_pl.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o
+.PHONY : model/Flow_pl.cc.o
+
+model/Flow_pl.i: model/Flow_pl.cc.i
+.PHONY : model/Flow_pl.i
+
+# target to preprocess a source file
+model/Flow_pl.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.i
+.PHONY : model/Flow_pl.cc.i
+
+model/Flow_pl.s: model/Flow_pl.cc.s
+.PHONY : model/Flow_pl.s
+
+# target to generate assembly for a file
+model/Flow_pl.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.s
+.PHONY : model/Flow_pl.cc.s
+
+model/Replace_string.o: model/Replace_string.cc.o
+.PHONY : model/Replace_string.o
+
+# target to build an object file
+model/Replace_string.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o
+.PHONY : model/Replace_string.cc.o
+
+model/Replace_string.i: model/Replace_string.cc.i
+.PHONY : model/Replace_string.i
+
+# target to preprocess a source file
+model/Replace_string.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.i
+.PHONY : model/Replace_string.cc.i
+
+model/Replace_string.s: model/Replace_string.cc.s
+.PHONY : model/Replace_string.s
+
+# target to generate assembly for a file
+model/Replace_string.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.s
+.PHONY : model/Replace_string.cc.s
+
 model/cobalt-queue-disc.o: model/cobalt-queue-disc.cc.o
 .PHONY : model/cobalt-queue-disc.o
 
@@ -574,6 +622,30 @@ model/red-queue-disc.cc.s:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/red-queue-disc.cc.s
 .PHONY : model/red-queue-disc.cc.s
 
+model/sp-pifo.o: model/sp-pifo.cc.o
+.PHONY : model/sp-pifo.o
+
+# target to build an object file
+model/sp-pifo.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o
+.PHONY : model/sp-pifo.cc.o
+
+model/sp-pifo.i: model/sp-pifo.cc.i
+.PHONY : model/sp-pifo.i
+
+# target to preprocess a source file
+model/sp-pifo.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.i
+.PHONY : model/sp-pifo.cc.i
+
+model/sp-pifo.s: model/sp-pifo.cc.s
+.PHONY : model/sp-pifo.s
+
+# target to generate assembly for a file
+model/sp-pifo.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s
+.PHONY : model/sp-pifo.cc.s
+
 model/tbf-queue-disc.o: model/tbf-queue-disc.cc.o
 .PHONY : model/tbf-queue-disc.o
 
@@ -884,6 +956,12 @@ help:
 	@echo "... helper/traffic-control-helper.o"
 	@echo "... helper/traffic-control-helper.i"
 	@echo "... helper/traffic-control-helper.s"
+	@echo "... model/Flow_pl.o"
+	@echo "... model/Flow_pl.i"
+	@echo "... model/Flow_pl.s"
+	@echo "... model/Replace_string.o"
+	@echo "... model/Replace_string.i"
+	@echo "... model/Replace_string.s"
 	@echo "... model/cobalt-queue-disc.o"
 	@echo "... model/cobalt-queue-disc.i"
 	@echo "... model/cobalt-queue-disc.s"
@@ -923,6 +1001,9 @@ help:
 	@echo "... model/red-queue-disc.o"
 	@echo "... model/red-queue-disc.i"
 	@echo "... model/red-queue-disc.s"
+	@echo "... model/sp-pifo.o"
+	@echo "... model/sp-pifo.i"
+	@echo "... model/sp-pifo.s"
 	@echo "... model/tbf-queue-disc.o"
 	@echo "... model/tbf-queue-disc.i"
 	@echo "... model/tbf-queue-disc.s"

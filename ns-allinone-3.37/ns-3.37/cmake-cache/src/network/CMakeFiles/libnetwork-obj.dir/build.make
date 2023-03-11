@@ -1173,6 +1173,22 @@ src/network/CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.s"
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/sll-header.cc -o CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.s
 
+src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o: src/network/CMakeFiles/libnetwork-obj.dir/flags.make
+src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o: /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/gearbox-pkt-tag.cc
+src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
+src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o: src/network/CMakeFiles/libnetwork-obj.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building CXX object src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o -MF CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o.d -o CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/gearbox-pkt-tag.cc
+
+src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.i"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -E /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/gearbox-pkt-tag.cc > CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.i
+
+src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.s"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/gearbox-pkt-tag.cc -o CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.s
+
 libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/helper/application-container.cc.o
 libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/helper/delay-jitter-estimation.cc.o
 libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/helper/net-device-container.cc.o
@@ -1242,6 +1258,7 @@ libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/utils/radiotap-header.
 libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/utils/simple-channel.cc.o
 libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/utils/simple-net-device.cc.o
 libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.o
+libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o
 libnetwork-obj: src/network/CMakeFiles/libnetwork-obj.dir/build.make
 .PHONY : libnetwork-obj
 

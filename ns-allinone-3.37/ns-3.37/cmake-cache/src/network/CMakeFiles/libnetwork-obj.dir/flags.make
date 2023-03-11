@@ -148,3 +148,5 @@ CXX_FLAGS = -O2 -g -DNDEBUG -std=gnu++17 -arch arm64 -isysroot /Library/Develope
 
 # PCH options: src/network/CMakeFiles/libnetwork-obj.dir/utils/sll-header.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
 
+# PCH options: src/network/CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+

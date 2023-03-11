@@ -126,7 +126,7 @@ main(int argc, char* argv[])
 {
     std::string bandwidth = "10Mbps";
     std::string delay = "5ms";
-    std::string queueDiscType = "PfifoFast";
+    std::string queueDiscType = "SpPifo";
     uint32_t queueDiscSize = 1000;
     uint32_t netdevicesQueueSize = 50;
     bool bql = false;
@@ -189,6 +189,7 @@ main(int argc, char* argv[])
     // Bottleneck link traffic control configuration
     TrafficControlHelper tchBottleneck;
 
+    std::cout << "queueDiscType:" << queueDiscType << std::endl;
     if (queueDiscType == "PfifoFast")
     {
         tchBottleneck.SetRootQueueDisc(
@@ -232,6 +233,15 @@ main(int argc, char* argv[])
         tchBottleneck.AddChildQueueDisc(handle, cid[0], "ns3::FifoQueueDisc");
         tchBottleneck.AddChildQueueDisc(handle, cid[1], "ns3::RedQueueDisc");
     }
+    // Jiajin's modification start
+    else if (queueDiscType == "SpPifo")
+    {
+        std::cout << "==SpPifo" << std::endl;
+        tchBottleneck.SetRootQueueDisc("ns3::SpPifo");
+        // Config::SetDefault("ns3::FqCoDelQueueDisc::MaxSize",
+        //                    QueueSizeValue(QueueSize(QueueSizeUnit::PACKETS, queueDiscSize)));
+    }
+    // modification end
     else
     {
         NS_ABORT_MSG("--queueDiscType not valid");

@@ -78,4 +78,5 @@
     #include <ns3/simple-channel.h>
     #include <ns3/simple-net-device.h>
     #include <ns3/sll-header.h>
+    #include <ns3/gearbox-pkt-tag.h>
 #endif 

@@ -77,6 +77,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/libnetwork-obj.dir/utils/ethernet-trailer.cc.o.d"
   "CMakeFiles/libnetwork-obj.dir/utils/flow-id-tag.cc.o"
   "CMakeFiles/libnetwork-obj.dir/utils/flow-id-tag.cc.o.d"
+  "CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o"
+  "CMakeFiles/libnetwork-obj.dir/utils/gearbox-pkt-tag.cc.o.d"
   "CMakeFiles/libnetwork-obj.dir/utils/inet-socket-address.cc.o"
   "CMakeFiles/libnetwork-obj.dir/utils/inet-socket-address.cc.o.d"
   "CMakeFiles/libnetwork-obj.dir/utils/inet6-socket-address.cc.o"

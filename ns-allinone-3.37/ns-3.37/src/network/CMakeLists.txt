@@ -68,6 +68,7 @@ set(source_files
     utils/simple-channel.cc
     utils/simple-net-device.cc
     utils/sll-header.cc
+    utils/gearbox-pkt-tag.cc
 )
 
 set(header_files
@@ -146,6 +147,7 @@ set(header_files
     utils/simple-channel.h
     utils/simple-net-device.h
     utils/sll-header.h
+    utils/gearbox-pkt-tag.h
 )
 
 build_lib(

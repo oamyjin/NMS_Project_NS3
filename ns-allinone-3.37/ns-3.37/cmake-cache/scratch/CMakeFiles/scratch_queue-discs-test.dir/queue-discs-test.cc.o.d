@@ -1140,6 +1140,8 @@ scratch/CMakeFiles/scratch_queue-discs-test.dir/queue-discs-test.cc.o: \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/simple-net-device.h \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/include/ns3/sll-header.h \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/sll-header.h \
+  /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/include/ns3/gearbox-pkt-tag.h \
+  /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/network/utils/gearbox-pkt-tag.h \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/include/ns3/point-to-point-module.h \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/include/ns3/point-to-point-helper.h \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/point-to-point/helper/point-to-point-helper.h \
