@@ -47,7 +47,7 @@ uint32_t
 FlowIdTag::GetSerializedSize() const
 {
     NS_LOG_FUNCTION(this);
-    return 4;
+    return 9;
 }
 
 void
@@ -55,6 +55,8 @@ FlowIdTag::Serialize(TagBuffer buf) const
 {
     NS_LOG_FUNCTION(this << &buf);
     buf.WriteU32(m_flowId);
+    buf.WriteU32(m_flowWeight);
+    buf.WriteU8(m_isFwd);
 }
 
 void
@@ -62,13 +64,15 @@ FlowIdTag::Deserialize(TagBuffer buf)
 {
     NS_LOG_FUNCTION(this << &buf);
     m_flowId = buf.ReadU32();
+    m_flowWeight = buf.ReadU32();
+    m_isFwd = buf.ReadU8();
 }
 
 void
 FlowIdTag::Print(std::ostream& os) const
 {
     NS_LOG_FUNCTION(this << &os);
-    os << "FlowId=" << m_flowId;
+    os << "FlowId=" << m_flowId << " m_flowWeight=" << m_flowWeight << " m_isFwd=" << m_isFwd;
 }
 
 FlowIdTag::FlowIdTag()
@@ -84,11 +88,48 @@ FlowIdTag::FlowIdTag(uint32_t id)
     NS_LOG_FUNCTION(this << id);
 }
 
+FlowIdTag::FlowIdTag(uint32_t id, uint32_t weight, bool isFwd)
+    : Tag(),
+      m_flowId(id),
+      m_flowWeight(weight),
+      m_isFwd(isFwd)
+{
+    NS_LOG_FUNCTION(this << id << weight << isFwd);
+}
+
 void
 FlowIdTag::SetFlowId(uint32_t id)
 {
     NS_LOG_FUNCTION(this << id);
     m_flowId = id;
+}
+
+void
+FlowIdTag::SetFlowWeight(uint32_t weight)
+{
+    NS_LOG_FUNCTION(this << weight);
+    m_flowWeight = weight;
+}
+
+void
+FlowIdTag::SetIsFwd(bool isFwd)
+{
+    NS_LOG_FUNCTION(this << isFwd);
+    m_isFwd = isFwd;
+}
+
+bool
+FlowIdTag::GetIsFwd() const
+{
+    NS_LOG_FUNCTION(this);
+    return m_isFwd;
+}
+
+uint32_t
+FlowIdTag::GetFlowWeight() const
+{
+    NS_LOG_FUNCTION(this);
+    return m_flowWeight;
 }
 
 uint32_t

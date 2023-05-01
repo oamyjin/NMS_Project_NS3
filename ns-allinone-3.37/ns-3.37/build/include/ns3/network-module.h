@@ -54,6 +54,7 @@
     #include <ns3/mac48-address.h>
     #include <ns3/mac64-address.h>
     #include <ns3/mac8-address.h>
+    #include <ns3/prio-queue.h>
     #include <ns3/net-device-queue-interface.h>
     #include <ns3/output-stream-wrapper.h>
     #include <ns3/packet-burst.h>

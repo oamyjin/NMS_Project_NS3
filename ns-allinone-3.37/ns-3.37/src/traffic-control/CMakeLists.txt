@@ -18,9 +18,12 @@ build_lib(
     model/red-queue-disc.cc
     model/tbf-queue-disc.cc
     model/traffic-control-layer.cc
-    model/sp-pifo.cc
     model/Flow_pl.cc
     model/Replace_string.cc
+    model/sp-pifo.cc
+    model/pifo-queue-disc.cc
+    model/sppifo-queue-disc.cc
+    model/afq-queue-disc.cc
   HEADER_FILES
     helper/queue-disc-container.h
     helper/traffic-control-helper.h
@@ -39,9 +42,12 @@ build_lib(
     model/red-queue-disc.h
     model/tbf-queue-disc.h
     model/traffic-control-layer.h
-    model/sp-pifo.h
     model/Flow_pl.h
     model/Replace_string.h
+    model/sp-pifo.h
+    model/pifo-queue-disc.h
+    model/sppifo-queue-disc.h
+    model/afq-queue-disc.h
   LIBRARIES_TO_LINK ${libnetwork}
                     ${libcore}
   TEST_SOURCES

@@ -25,9 +25,11 @@
 #include "ns3/packet.h"
 #include "ns3/pointer.h"
 #include "ns3/queue.h"
+#include "ns3/prio-queue.h"
 #include "ns3/simulator.h"
 #include "ns3/socket.h"
 #include "ns3/uinteger.h"
+#include "ns3/flow-id-tag.h"
 
 namespace ns3
 {
@@ -265,6 +267,10 @@ QueueDisc::GetTypeId()
                           ObjectVectorValue(),
                           MakeObjectVectorAccessor(&QueueDisc::m_queues),
                           MakeObjectVectorChecker<InternalQueue>())
+            .AddAttribute ("InternalPrioQueueList", "The list of internal priority queues.",
+                            ObjectVectorValue (),
+                            MakeObjectVectorAccessor (&QueueDisc::m_prio_queues),
+                            MakeObjectVectorChecker<InternalPrioQueue> ())
             .AddAttribute("PacketFilterList",
                           "The list of packet filters.",
                           ObjectVectorValue(),
@@ -370,6 +376,12 @@ QueueDisc::QueueDisc(QueueDiscSizePolicy policy, QueueSizeUnit unit)
     m_prohibitChangeMode = true;
 }
 
+QueueDisc::QueueDisc(SchedulingAlgorithm algo, QueueDiscSizePolicy policy, QueueSizeUnit unit)
+    : QueueDisc(policy, unit)
+{
+    SetSchedulingAlgorithm(algo);
+}
+
 QueueDisc::~QueueDisc()
 {
     NS_LOG_FUNCTION(this);
@@ -380,6 +392,7 @@ QueueDisc::DoDispose()
 {
     NS_LOG_FUNCTION(this);
     m_queues.clear();
+    m_prio_queues.clear ();
     m_filters.clear();
     m_classes.clear();
     m_devQueueIface = nullptr;
@@ -461,6 +474,12 @@ QueueDisc::GetMaxSize() const
         {
             return GetInternalQueue(0)->GetMaxSize();
         }
+    
+    case QueueDiscSizePolicy::SINGLE_INTERNAL_PRIO_QUEUE:
+      if (GetNInternalPrioQueues ())
+        {
+          return GetInternalPrioQueue (0)->GetMaxSize ();
+        }
 
     case QueueDiscSizePolicy::SINGLE_CHILD_QUEUE_DISC:
         if (GetNQueueDiscClasses())
@@ -502,6 +521,12 @@ QueueDisc::SetMaxSize(QueueSize size)
             GetInternalQueue(0)->SetMaxSize(size);
         }
 
+    case QueueDiscSizePolicy::SINGLE_INTERNAL_PRIO_QUEUE:
+      if (GetNInternalPrioQueues ())
+        {
+          GetInternalPrioQueue (0)->SetMaxSize (size);
+        }
+
     case QueueDiscSizePolicy::SINGLE_CHILD_QUEUE_DISC:
         if (GetNQueueDiscClasses())
         {
@@ -509,10 +534,42 @@ QueueDisc::SetMaxSize(QueueSize size)
         }
 
     case QueueDiscSizePolicy::MULTIPLE_QUEUES:
+    
     default:
         m_maxSize = size;
     }
     return true;
+}
+
+bool
+QueueDisc::SetSchedulingAlgorithm(SchedulingAlgorithm algo)
+{
+    NS_LOG_FUNCTION(this << algo);
+    m_scheAlog = algo;
+    return true;
+}
+
+
+bool
+QueueDisc::SetCurrentRound(uint32_t vt)
+{
+    NS_LOG_FUNCTION(this << vt);
+    m_current_round = vt;
+    return true;
+}
+
+uint32_t
+QueueDisc::GetCurrentRound() const
+{
+    NS_LOG_FUNCTION(this);
+    return m_current_round; 
+}
+
+SchedulingAlgorithm
+QueueDisc::GetSchedulingAlgorithm() const
+{
+    NS_LOG_FUNCTION(this);
+    return m_scheAlog; 
 }
 
 QueueSize
@@ -591,6 +648,26 @@ QueueDisc::AddInternalQueue(Ptr<InternalQueue> queue)
     m_queues.push_back(queue);
 }
 
+void
+QueueDisc::AddInternalPrioQueue (Ptr<InternalPrioQueue> queue)
+{
+  NS_LOG_FUNCTION (this);
+
+  // set various callbacks on the internal prio queue, so that the queue disc is
+  // notified of packets enqueued, dequeued or dropped by the internal queue
+  queue->TraceConnectWithoutContext ("Enqueue",
+                                     MakeCallback (&QueueDisc::PacketEnqueued, this));
+  queue->TraceConnectWithoutContext ("Dequeue",
+                                     MakeCallback (&QueueDisc::PacketDequeued, this));
+  queue->TraceConnectWithoutContext ("DropBeforeEnqueue",
+                                     MakeCallback (&InternalQueueDropFunctor::operator(),
+                                                   &m_internalQueueDbeFunctor));
+  queue->TraceConnectWithoutContext ("DropAfterDequeue",
+                                     MakeCallback (&InternalQueueDropFunctor::operator(),
+                                                   &m_internalQueueDadFunctor));
+  m_prio_queues.push_back (queue);
+}
+
 Ptr<QueueDisc::InternalQueue>
 QueueDisc::GetInternalQueue(std::size_t i) const
 {
@@ -598,10 +675,23 @@ QueueDisc::GetInternalQueue(std::size_t i) const
     return m_queues[i];
 }
 
+Ptr<QueueDisc::InternalPrioQueue>
+QueueDisc::GetInternalPrioQueue (std::size_t i) const
+{
+  NS_ASSERT (i < m_prio_queues.size ());
+  return m_prio_queues[i];
+}
+
 std::size_t
 QueueDisc::GetNInternalQueues() const
 {
     return m_queues.size();
+}
+
+std::size_t
+QueueDisc::GetNInternalPrioQueues (void) const
+{
+  return m_prio_queues.size ();
 }
 
 void
@@ -691,6 +781,7 @@ QueueDisc::GetWakeMode() const
 void
 QueueDisc::PacketEnqueued(Ptr<const QueueDiscItem> item)
 {
+    NS_LOG_DEBUG("PacketEnqueued");
     m_nPackets++;
     m_nBytes += item->GetSize();
     m_stats.nTotalEnqueuedPackets++;
@@ -726,6 +817,7 @@ void
 QueueDisc::DropBeforeEnqueue(Ptr<const QueueDiscItem> item, const char* reason)
 {
     NS_LOG_FUNCTION(this << item << reason);
+    NS_LOG_DEBUG("DropBeforeEnqueue");
 
     m_stats.nTotalDroppedPackets++;
     m_stats.nTotalDroppedBytes += item->GetSize();
@@ -859,12 +951,14 @@ bool
 QueueDisc::Enqueue(Ptr<QueueDiscItem> item)
 {
     NS_LOG_FUNCTION(this << item);
+    NS_LOG_DEBUG("Enqueue");
 
     m_stats.nTotalReceivedPackets++;
     m_stats.nTotalReceivedBytes += item->GetSize();
 
     bool retval = DoEnqueue(item);
 
+    NS_LOG_DEBUG("retval:" << retval);
     if (retval)
     {
         item->SetTimeStamp(Simulator::Now());
@@ -882,6 +976,7 @@ QueueDisc::Enqueue(Ptr<QueueDiscItem> item)
     // Thus, we do not have to call DropBeforeEnqueue here.
 
     // check that the received packet was either enqueued or dropped
+    NS_LOG_DEBUG("m_stats.nTotalReceivedPackets " << m_stats.nTotalReceivedPackets << " m_stats.nTotalDroppedPacketsBeforeEnqueue" << m_stats.nTotalDroppedPacketsBeforeEnqueue << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets);
     NS_ASSERT(m_stats.nTotalReceivedPackets ==
               m_stats.nTotalDroppedPacketsBeforeEnqueue + m_stats.nTotalEnqueuedPackets);
     NS_ASSERT(m_stats.nTotalReceivedBytes ==
@@ -920,7 +1015,6 @@ QueueDisc::Dequeue()
 
     NS_ASSERT(m_nPackets == m_stats.nTotalEnqueuedPackets - m_stats.nTotalDequeuedPackets);
     NS_ASSERT(m_nBytes == m_stats.nTotalEnqueuedBytes - m_stats.nTotalDequeuedBytes);
-
     return item;
 }
 
@@ -1000,7 +1094,6 @@ QueueDisc::Restart()
         NS_LOG_LOGIC("No packet to send");
         return false;
     }
-
     return Transmit(item);
 }
 
@@ -1113,7 +1206,72 @@ QueueDisc::Transmit(Ptr<QueueDiscItem> item)
     {
         return false;
     }
+    return true;
+}
 
+uint32_t
+QueueDisc::RankComputation (Ptr<QueueDiscItem> item)
+{
+    NS_LOG_FUNCTION(this << item);
+    FlowIdTag tag;
+    Packet* packet = GetPointer(item->GetPacket());
+    packet->PeekPacketTag(tag);
+    uint32_t rank = 0;
+    uint32_t flowId = tag.GetFlowId();
+    uint32_t weight = tag.GetFlowWeight();
+    switch (m_scheAlog)
+    {
+        case SchedulingAlgorithm::STFQ:
+            rank = std::max(m_current_round, m_flow_table[flowId]);
+            m_flow_table[flowId] = rank + weight; // update the last finish time in flow table 
+            break;
+
+        case SchedulingAlgorithm::LSTF:
+            rank = weight;
+            break;
+
+        default:
+            rank = 0;
+    }
+    item->SetPriority(rank);
+    NS_LOG_DEBUG("RankComputation " << " flowId:" << flowId << " rank:" << rank << " weight:" << weight << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets);
+    return rank;
+}
+
+bool
+QueueDisc::UpdateCurrentRound (Ptr<QueueDiscItem> item)
+{
+    NS_LOG_FUNCTION(this << item);
+    uint32_t before = m_current_round;
+    switch (m_scheAlog)
+    {
+        case SchedulingAlgorithm::STFQ:
+            m_current_round = item->GetPriority();
+            break;
+        default:
+            break;
+    }
+
+    // record
+    FlowIdTag tag;
+    Packet* packet = GetPointer(item->GetPacket());
+    packet->PeekPacketTag(tag);
+    if (tag.GetIsFwd())
+    {
+        std::stringstream path;
+        path << "GBResult/cr_update_" << m_devQueueIface << ".txt";
+        std::ofstream thr(path.str(), std::ios::out | std::ios::app);
+        if (before <= m_current_round)
+        {
+            thr << Simulator::Now().GetSeconds() << " " << m_current_round << " " << tag.GetFlowId() << std::endl;
+        }
+        else
+        {
+            thr << Simulator::Now().GetSeconds() << " " << m_current_round << " " << tag.GetFlowId() << " Inversion" << std::endl;
+        }
+    }
+
+    NS_LOG_DEBUG(Simulator::Now().GetSeconds() << " Update the current round: " << before << " -> " << m_current_round << " rank=" << item->GetPriority() << " flowid:" << tag.GetFlowId());
     return true;
 }
 

@@ -335,7 +335,6 @@ TrafficControlLayer::Receive(Ptr<NetDevice> device,
     NS_LOG_FUNCTION(this << device << p << protocol << from << to << packetType);
 
     bool found = false;
-
     for (ProtocolHandlerList::iterator i = m_handlers.begin(); i != m_handlers.end(); i++)
     {
         if (!i->device || (i->device == device))

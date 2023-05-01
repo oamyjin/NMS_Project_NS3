@@ -7,6 +7,7 @@
 #include <cstring>
 #include "Replace_string.h"
 #include "ns3/log.h"
+#include "ns3/packet.h"
 #include <vector>
 using namespace std;
 

@@ -34,6 +34,7 @@ Ipv4QueueDiscItem::Ipv4QueueDiscItem(Ptr<Packet> p,
       m_header(header),
       m_headerAdded(false)
 {
+    //std::cout << "when" << std::endl;
 }
 
 Ipv4QueueDiscItem::~Ipv4QueueDiscItem()

@@ -2014,6 +2014,30 @@ utils/pcap-file.cc.s:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/pcap-file.cc.s
 .PHONY : utils/pcap-file.cc.s
 
+utils/prio-queue.o: utils/prio-queue.cc.o
+.PHONY : utils/prio-queue.o
+
+# target to build an object file
+utils/prio-queue.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/prio-queue.cc.o
+.PHONY : utils/prio-queue.cc.o
+
+utils/prio-queue.i: utils/prio-queue.cc.i
+.PHONY : utils/prio-queue.i
+
+# target to preprocess a source file
+utils/prio-queue.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/prio-queue.cc.i
+.PHONY : utils/prio-queue.cc.i
+
+utils/prio-queue.s: utils/prio-queue.cc.s
+.PHONY : utils/prio-queue.s
+
+# target to generate assembly for a file
+utils/prio-queue.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/network/CMakeFiles/libnetwork-obj.dir/build.make src/network/CMakeFiles/libnetwork-obj.dir/utils/prio-queue.cc.s
+.PHONY : utils/prio-queue.cc.s
+
 utils/queue-item.o: utils/queue-item.cc.o
 .PHONY : utils/queue-item.o
 
@@ -2447,6 +2471,9 @@ help:
 	@echo "... utils/pcap-file.o"
 	@echo "... utils/pcap-file.i"
 	@echo "... utils/pcap-file.s"
+	@echo "... utils/prio-queue.o"
+	@echo "... utils/prio-queue.i"
+	@echo "... utils/prio-queue.s"
 	@echo "... utils/queue-item.o"
 	@echo "... utils/queue-item.i"
 	@echo "... utils/queue-item.s"

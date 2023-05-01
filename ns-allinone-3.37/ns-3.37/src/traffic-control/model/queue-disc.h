@@ -27,6 +27,7 @@
 #include "ns3/queue-size.h"
 #include "ns3/traced-callback.h"
 #include "ns3/traced-value.h"
+#include "ns3/prio-queue.h"
 
 #include <functional>
 #include <map>
@@ -105,10 +106,17 @@ class QueueDiscClass : public Object
  */
 enum QueueDiscSizePolicy
 {
+    SINGLE_INTERNAL_PRIO_QUEUE,  /**< Used by queue discs with single internal priority queue */
     SINGLE_INTERNAL_QUEUE,   //!< Used by queue discs with single internal queue
     SINGLE_CHILD_QUEUE_DISC, //!< Used by queue discs with single child queue disc
     MULTIPLE_QUEUES, //!< Used by queue discs with multiple internal queues/child queue discs
     NO_LIMITS        //!< Used by queue discs with unlimited size
+};
+
+enum SchedulingAlgorithm
+{
+    STFQ,  // Start Time Fair Queueing
+    LSTF   // Least Slack Time First (pFabric)
 };
 
 /**
@@ -288,6 +296,15 @@ class QueueDisc : public Object
      */
     QueueDisc(QueueDiscSizePolicy policy, QueueSizeUnit unit);
 
+    /**
+     * \brief Constructor
+     * \param algo the scheduling algorithm for rank compuatation
+     * \param policy the policy to handle the queue disc size
+     * \param unit The fixed operating mode of this queue disc
+     */
+    QueueDisc(SchedulingAlgorithm algo, QueueDiscSizePolicy policy, QueueSizeUnit unit);
+
+
     ~QueueDisc() override;
 
     // Delete copy constructor and assignment operator to avoid misuse
@@ -316,7 +333,37 @@ class QueueDisc : public Object
      * \returns the maximum size of the queue disc.
      */
     QueueSize GetMaxSize() const;
+      
+    /**
+     * \brief Get the Scheduling Algorithm the queue disc.
+     *
+     * \returns the Scheduling Algorithm of the queue disc.
+     */
+    SchedulingAlgorithm GetSchedulingAlgorithm() const;
 
+    /**
+     * \brief Get the current round in the queue disc.
+     *
+     * \returns the current round of the queue disc.
+     */
+    uint32_t GetCurrentRound() const;
+
+    /**
+     * \brief Set the current round of the queue disc.
+     *
+     * \param vt the current round.
+     * \returns true if setting the current round succeeded, false otherwise.
+     */
+    bool SetCurrentRound(uint32_t vt);
+    
+    /**
+     * \brief Set the Scheduling Algorithm of the queue disc.
+     *
+     * \param algo the Scheduling Algorithm.
+     * \returns true if setting the Scheduling Algorithm succeeded, false otherwise.
+     */
+    bool SetSchedulingAlgorithm(SchedulingAlgorithm algo);
+    
     /**
      * \brief Set the maximum size of the queue disc.
      *
@@ -427,11 +474,20 @@ class QueueDisc : public Object
     /// Internal queues store QueueDiscItem objects
     typedef Queue<QueueDiscItem> InternalQueue;
 
+    /// Internal priority queues store QueueDiscItem objects
+    typedef PrioQueue<QueueDiscItem> InternalPrioQueue;
+
     /**
      * \brief Add an internal queue to the tail of the list of queues.
      * \param queue the queue to be added
      */
     void AddInternalQueue(Ptr<InternalQueue> queue);
+
+    /**
+     * \brief Add an internal priority queue to the tail of the list of priority queues.
+     * \param queue the priority queue to be added
+     */
+    void AddInternalPrioQueue (Ptr<InternalPrioQueue> queue);
 
     /**
      * \brief Get the i-th internal queue
@@ -441,10 +497,23 @@ class QueueDisc : public Object
     Ptr<InternalQueue> GetInternalQueue(std::size_t i) const;
 
     /**
+     * \brief Get the i-th internal priority queue
+     * \param i the index of the priority queue
+     * \return the i-th internal priority queue.
+     */
+    Ptr<InternalPrioQueue> GetInternalPrioQueue (std::size_t i) const;
+
+    /**
      * \brief Get the number of internal queues
      * \return the number of internal queues.
      */
     std::size_t GetNInternalQueues() const;
+
+    /**
+     * \brief Get the number of internal priority queues
+     * \return the number of internal priority queues.
+     */
+    std::size_t GetNInternalPrioQueues (void) const;
 
     /**
      * \brief Add a packet filter to the tail of the list of filters used to classify packets.
@@ -493,6 +562,21 @@ class QueueDisc : public Object
      * returned by first filter found to be able to classify the packet otherwise.
      */
     int32_t Classify(Ptr<QueueDiscItem> item);
+  
+    /**
+     * Compute packet rank
+     * \param item item to compute rank
+     * \param alog rank computation algorithm
+     * \return rank
+     */
+    uint32_t RankComputation (Ptr<QueueDiscItem> item);
+     
+    /**
+     * update th ecurrent round by setting as the rank of the dequeued packet
+     * \param item item to deque
+     * \return true or false
+     */
+    bool UpdateCurrentRound (Ptr<QueueDiscItem> item);
 
     /**
      * \enum WakeMode
@@ -684,10 +768,19 @@ class QueueDisc : public Object
      */
     void PacketDequeued(Ptr<const QueueDiscItem> item);
 
+    /**
+     * \brief Perform the actions required when the queue disc is notified of
+     *        a packet enqueue
+     * \param item item that was enqueued
+     */
+    void RankComputation(Ptr<const QueueDiscItem> item);
+
+
     /// Default quota (as in /proc/sys/net/core/dev_weight)
     static const uint32_t DEFAULT_QUOTA = 64;
 
     std::vector<Ptr<InternalQueue>> m_queues;   //!< Internal queues
+    std::vector<Ptr<InternalPrioQueue> > m_prio_queues;    //!< Internal priority queues
     std::vector<Ptr<PacketFilter>> m_filters;   //!< Packet filters
     std::vector<Ptr<QueueDiscClass>> m_classes; //!< Classes
 
@@ -706,6 +799,7 @@ class QueueDisc : public Object
     std::string m_childQueueDiscDropMsg; //!< Reason why a packet was dropped by a child queue disc
     std::string m_childQueueDiscMarkMsg; //!< Reason why a packet was marked by a child queue disc
     QueueDiscSizePolicy m_sizePolicy;    //!< The queue disc size policy
+    SchedulingAlgorithm m_scheAlog; //!< The rank computation algorithm
     bool m_prohibitChangeMode;           //!< True if changing mode is prohibited
 
     /// Traced callback: fired when a packet is enqueued
@@ -740,6 +834,11 @@ class QueueDisc : public Object
     ChildQueueDiscDropFunctor m_childQueueDiscDadFunctor;
     /// Function object called when a child queue disc marked a packet
     ChildQueueDiscMarkFunctor m_childQueueDiscMarkFunctor;
+    
+    /// current system virtual time
+    uint32_t m_current_round;
+    /// uint32_t flowId, uint32_t last_finish_time
+    std::map<uint32_t, uint32_t> m_flow_table;
 };
 
 /**

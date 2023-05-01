@@ -5464,6 +5464,58 @@ wifi-ofdm-eht-validation/fast:
 .PHONY : wifi-ofdm-eht-validation/fast
 
 #=============================================================================
+# Target rules for targets named scratch_my-test-dctcp
+
+# Build rule for target.
+scratch_my-test-dctcp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch_my-test-dctcp
+.PHONY : scratch_my-test-dctcp
+
+# fast build rule for target.
+scratch_my-test-dctcp/fast:
+	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-dctcp.dir/build.make scratch/CMakeFiles/scratch_my-test-dctcp.dir/build
+.PHONY : scratch_my-test-dctcp/fast
+
+#=============================================================================
+# Target rules for targets named scratch_my-test-tcp
+
+# Build rule for target.
+scratch_my-test-tcp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch_my-test-tcp
+.PHONY : scratch_my-test-tcp
+
+# fast build rule for target.
+scratch_my-test-tcp/fast:
+	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-tcp.dir/build.make scratch/CMakeFiles/scratch_my-test-tcp.dir/build
+.PHONY : scratch_my-test-tcp/fast
+
+#=============================================================================
+# Target rules for targets named scratch_my-test-udp
+
+# Build rule for target.
+scratch_my-test-udp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch_my-test-udp
+.PHONY : scratch_my-test-udp
+
+# fast build rule for target.
+scratch_my-test-udp/fast:
+	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-udp.dir/build.make scratch/CMakeFiles/scratch_my-test-udp.dir/build
+.PHONY : scratch_my-test-udp/fast
+
+#=============================================================================
+# Target rules for targets named scratch_my-test
+
+# Build rule for target.
+scratch_my-test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch_my-test
+.PHONY : scratch_my-test
+
+# fast build rule for target.
+scratch_my-test/fast:
+	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test.dir/build.make scratch/CMakeFiles/scratch_my-test.dir/build
+.PHONY : scratch_my-test/fast
+
+#=============================================================================
 # Target rules for targets named scratch_queue-discs-test
 
 # Build rule for target.
@@ -5951,6 +6003,10 @@ help:
 	@echo "... sample-random-variable-stream"
 	@echo "... sample-show-progress"
 	@echo "... sample-simulator"
+	@echo "... scratch_my-test"
+	@echo "... scratch_my-test-dctcp"
+	@echo "... scratch_my-test-tcp"
+	@echo "... scratch_my-test-udp"
 	@echo "... scratch_queue-discs-test"
 	@echo "... scratch_scratch-simulator"
 	@echo "... scratch_subdir_scratch-subdir"

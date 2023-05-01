@@ -126,7 +126,7 @@ main(int argc, char* argv[])
 {
     std::string bandwidth = "10Mbps";
     std::string delay = "5ms";
-    std::string queueDiscType = "SpPifo";
+    std::string queueDiscType = "PifoQueueDisc";
     uint32_t queueDiscSize = 1000;
     uint32_t netdevicesQueueSize = 50;
     bool bql = false;

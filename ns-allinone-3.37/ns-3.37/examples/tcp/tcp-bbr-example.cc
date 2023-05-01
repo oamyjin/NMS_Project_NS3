@@ -63,12 +63,12 @@
 using namespace ns3;
 
 std::string dir;
-uint32_t prev = 0;
-Time prevTime = Seconds(0);
+// uint32_t prev = 0;
+// Time prevTime = Seconds(0);
 
 // Calculate throughput
 static void
-TraceThroughput(Ptr<FlowMonitor> monitor)
+TraceThroughput(Ptr<FlowMonitor> monitor, uint32_t prev, Time prevTime)
 {
     FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats();
     auto itr = stats.begin();
@@ -80,7 +80,7 @@ TraceThroughput(Ptr<FlowMonitor> monitor)
         << std::endl;
     prevTime = curTime;
     prev = itr->second.txBytes;
-    Simulator::Schedule(Seconds(0.2), &TraceThroughput, monitor);
+    Simulator::Schedule(Seconds(0.2), &TraceThroughput, monitor, prev, prevTime);
 }
 
 // Check the queue size
@@ -262,7 +262,9 @@ main(int argc, char* argv[])
     // Check for dropped packets using Flow Monitor
     FlowMonitorHelper flowmon;
     Ptr<FlowMonitor> monitor = flowmon.InstallAll();
-    Simulator::Schedule(Seconds(0 + 0.000001), &TraceThroughput, monitor);
+    uint32_t prev = 0;
+    Time prevTime = Seconds(0);
+    Simulator::Schedule(Seconds(0 + 0.000001), &TraceThroughput, monitor, prev, prevTime);
 
     Simulator::Stop(stopTime + TimeStep(1));
     Simulator::Run();

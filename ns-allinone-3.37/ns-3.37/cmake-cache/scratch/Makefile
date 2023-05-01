@@ -173,6 +173,62 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+scratch/CMakeFiles/scratch_my-test-dctcp.dir/rule:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch/CMakeFiles/scratch_my-test-dctcp.dir/rule
+.PHONY : scratch/CMakeFiles/scratch_my-test-dctcp.dir/rule
+
+# Convenience name for target.
+scratch_my-test-dctcp: scratch/CMakeFiles/scratch_my-test-dctcp.dir/rule
+.PHONY : scratch_my-test-dctcp
+
+# fast build rule for target.
+scratch_my-test-dctcp/fast:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-dctcp.dir/build.make scratch/CMakeFiles/scratch_my-test-dctcp.dir/build
+.PHONY : scratch_my-test-dctcp/fast
+
+# Convenience name for target.
+scratch/CMakeFiles/scratch_my-test-tcp.dir/rule:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch/CMakeFiles/scratch_my-test-tcp.dir/rule
+.PHONY : scratch/CMakeFiles/scratch_my-test-tcp.dir/rule
+
+# Convenience name for target.
+scratch_my-test-tcp: scratch/CMakeFiles/scratch_my-test-tcp.dir/rule
+.PHONY : scratch_my-test-tcp
+
+# fast build rule for target.
+scratch_my-test-tcp/fast:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-tcp.dir/build.make scratch/CMakeFiles/scratch_my-test-tcp.dir/build
+.PHONY : scratch_my-test-tcp/fast
+
+# Convenience name for target.
+scratch/CMakeFiles/scratch_my-test-udp.dir/rule:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch/CMakeFiles/scratch_my-test-udp.dir/rule
+.PHONY : scratch/CMakeFiles/scratch_my-test-udp.dir/rule
+
+# Convenience name for target.
+scratch_my-test-udp: scratch/CMakeFiles/scratch_my-test-udp.dir/rule
+.PHONY : scratch_my-test-udp
+
+# fast build rule for target.
+scratch_my-test-udp/fast:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-udp.dir/build.make scratch/CMakeFiles/scratch_my-test-udp.dir/build
+.PHONY : scratch_my-test-udp/fast
+
+# Convenience name for target.
+scratch/CMakeFiles/scratch_my-test.dir/rule:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch/CMakeFiles/scratch_my-test.dir/rule
+.PHONY : scratch/CMakeFiles/scratch_my-test.dir/rule
+
+# Convenience name for target.
+scratch_my-test: scratch/CMakeFiles/scratch_my-test.dir/rule
+.PHONY : scratch_my-test
+
+# fast build rule for target.
+scratch_my-test/fast:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test.dir/build.make scratch/CMakeFiles/scratch_my-test.dir/build
+.PHONY : scratch_my-test/fast
+
+# Convenience name for target.
 scratch/CMakeFiles/scratch_queue-discs-test.dir/rule:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch/CMakeFiles/scratch_queue-discs-test.dir/rule
 .PHONY : scratch/CMakeFiles/scratch_queue-discs-test.dir/rule
@@ -213,6 +269,102 @@ scratch_subdir_scratch-subdir: scratch/CMakeFiles/scratch_subdir_scratch-subdir.
 scratch_subdir_scratch-subdir/fast:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_subdir_scratch-subdir.dir/build.make scratch/CMakeFiles/scratch_subdir_scratch-subdir.dir/build
 .PHONY : scratch_subdir_scratch-subdir/fast
+
+my-test-dctcp.o: my-test-dctcp.cc.o
+.PHONY : my-test-dctcp.o
+
+# target to build an object file
+my-test-dctcp.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-dctcp.dir/build.make scratch/CMakeFiles/scratch_my-test-dctcp.dir/my-test-dctcp.cc.o
+.PHONY : my-test-dctcp.cc.o
+
+my-test-dctcp.i: my-test-dctcp.cc.i
+.PHONY : my-test-dctcp.i
+
+# target to preprocess a source file
+my-test-dctcp.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-dctcp.dir/build.make scratch/CMakeFiles/scratch_my-test-dctcp.dir/my-test-dctcp.cc.i
+.PHONY : my-test-dctcp.cc.i
+
+my-test-dctcp.s: my-test-dctcp.cc.s
+.PHONY : my-test-dctcp.s
+
+# target to generate assembly for a file
+my-test-dctcp.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-dctcp.dir/build.make scratch/CMakeFiles/scratch_my-test-dctcp.dir/my-test-dctcp.cc.s
+.PHONY : my-test-dctcp.cc.s
+
+my-test-tcp.o: my-test-tcp.cc.o
+.PHONY : my-test-tcp.o
+
+# target to build an object file
+my-test-tcp.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-tcp.dir/build.make scratch/CMakeFiles/scratch_my-test-tcp.dir/my-test-tcp.cc.o
+.PHONY : my-test-tcp.cc.o
+
+my-test-tcp.i: my-test-tcp.cc.i
+.PHONY : my-test-tcp.i
+
+# target to preprocess a source file
+my-test-tcp.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-tcp.dir/build.make scratch/CMakeFiles/scratch_my-test-tcp.dir/my-test-tcp.cc.i
+.PHONY : my-test-tcp.cc.i
+
+my-test-tcp.s: my-test-tcp.cc.s
+.PHONY : my-test-tcp.s
+
+# target to generate assembly for a file
+my-test-tcp.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-tcp.dir/build.make scratch/CMakeFiles/scratch_my-test-tcp.dir/my-test-tcp.cc.s
+.PHONY : my-test-tcp.cc.s
+
+my-test-udp.o: my-test-udp.cc.o
+.PHONY : my-test-udp.o
+
+# target to build an object file
+my-test-udp.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-udp.dir/build.make scratch/CMakeFiles/scratch_my-test-udp.dir/my-test-udp.cc.o
+.PHONY : my-test-udp.cc.o
+
+my-test-udp.i: my-test-udp.cc.i
+.PHONY : my-test-udp.i
+
+# target to preprocess a source file
+my-test-udp.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-udp.dir/build.make scratch/CMakeFiles/scratch_my-test-udp.dir/my-test-udp.cc.i
+.PHONY : my-test-udp.cc.i
+
+my-test-udp.s: my-test-udp.cc.s
+.PHONY : my-test-udp.s
+
+# target to generate assembly for a file
+my-test-udp.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-udp.dir/build.make scratch/CMakeFiles/scratch_my-test-udp.dir/my-test-udp.cc.s
+.PHONY : my-test-udp.cc.s
+
+my-test.o: my-test.cc.o
+.PHONY : my-test.o
+
+# target to build an object file
+my-test.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test.dir/build.make scratch/CMakeFiles/scratch_my-test.dir/my-test.cc.o
+.PHONY : my-test.cc.o
+
+my-test.i: my-test.cc.i
+.PHONY : my-test.i
+
+# target to preprocess a source file
+my-test.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test.dir/build.make scratch/CMakeFiles/scratch_my-test.dir/my-test.cc.i
+.PHONY : my-test.cc.i
+
+my-test.s: my-test.cc.s
+.PHONY : my-test.s
+
+# target to generate assembly for a file
+my-test.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test.dir/build.make scratch/CMakeFiles/scratch_my-test.dir/my-test.cc.s
+.PHONY : my-test.cc.s
 
 queue-discs-test.o: queue-discs-test.cc.o
 .PHONY : queue-discs-test.o
@@ -323,9 +475,25 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... scratch_my-test"
+	@echo "... scratch_my-test-dctcp"
+	@echo "... scratch_my-test-tcp"
+	@echo "... scratch_my-test-udp"
 	@echo "... scratch_queue-discs-test"
 	@echo "... scratch_scratch-simulator"
 	@echo "... scratch_subdir_scratch-subdir"
+	@echo "... my-test-dctcp.o"
+	@echo "... my-test-dctcp.i"
+	@echo "... my-test-dctcp.s"
+	@echo "... my-test-tcp.o"
+	@echo "... my-test-tcp.i"
+	@echo "... my-test-tcp.s"
+	@echo "... my-test-udp.o"
+	@echo "... my-test-udp.i"
+	@echo "... my-test-udp.s"
+	@echo "... my-test.o"
+	@echo "... my-test.i"
+	@echo "... my-test.s"
 	@echo "... queue-discs-test.o"
 	@echo "... queue-discs-test.i"
 	@echo "... queue-discs-test.s"

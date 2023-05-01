@@ -46,15 +46,43 @@ class FlowIdTag : public Tag
      */
     FlowIdTag(uint32_t flowId);
     /**
+     * Constructs a FlowIdTag with the given flow id
+     * 
+     * \param flowId Id to assign to the tag
+     * \param flowWeight Id to assign to the tag
+     * \param isFwd flow forwarding mark
+     */
+    FlowIdTag(uint32_t flowId, uint32_t flowWeight, bool isFwd);
+    /**
      * Sets the flow id for the tag
      * \param flowId Id to assign to the tag
      */
     void SetFlowId(uint32_t flowId);
     /**
+     * Sets the flow weight for the flow
+     * \param flowWeight Id to assign to the tag
+     */
+    void SetFlowWeight(uint32_t flowWeight);
+    /**
+     * Set the flow forwarding mark
+     * \param isFwd True if forwaring, False if ack
+     */
+    void SetIsFwd(bool isFwd);
+    /**
+     * Get the flow forwarding mark
+     * \returns True if the flow is a forwarding flow, otherwise False
+     */
+    bool GetIsFwd() const;
+    /**
      * Gets the flow id for the tag
      * \returns current flow id for this tag
      */
     uint32_t GetFlowId() const;
+    /**
+     * Gets the flow weight for the tag
+     * \returns current flow weight for this tag
+     */
+    uint32_t GetFlowWeight() const;
     /**
      * Uses a static variable to generate sequential flow id
      * \returns flow id allocated
@@ -63,6 +91,8 @@ class FlowIdTag : public Tag
 
   private:
     uint32_t m_flowId; //!< Flow ID
+    uint32_t m_flowWeight; //!< Flow weight
+    bool m_isFwd = false; //!< mark True if the flow is a forwarding flow
 };
 
 } // namespace ns3

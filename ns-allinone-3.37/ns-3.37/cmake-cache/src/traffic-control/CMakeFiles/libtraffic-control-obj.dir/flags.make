@@ -44,9 +44,15 @@ CXX_FLAGS = -O2 -g -DNDEBUG -std=gnu++17 -arch arm64 -isysroot /Library/Develope
 
 # PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/traffic-control-layer.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
 
-# PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
-
 # PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
 
 # PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+
+# PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+
+# PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+
+# PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+
+# PCH options: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o_OPTIONS = -Winvalid-pch;;-Xarch_arm64;-include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
 

@@ -146,6 +146,18 @@ class QueueDiscItem : public QueueItem
     QueueDiscItem() = delete;
     QueueDiscItem(const QueueDiscItem&) = delete;
     QueueDiscItem& operator=(const QueueDiscItem&) = delete;
+    
+    /**
+     * \brief Get the priority of the item
+     * \return the priority of the item
+     */
+    uint32_t GetPriority (void) const;
+  
+    /**
+     * \brief Set the priority of this item
+     * \param priority the item's priority
+     */
+    void SetPriority (uint32_t priority);
 
     /**
      * \brief Get the MAC address included in this item
@@ -222,6 +234,7 @@ class QueueDiscItem : public QueueItem
     uint16_t m_protocol; //!< L3 Protocol number
     uint8_t m_txq;       //!< Transmission queue index
     Time m_tstamp;       //!< timestamp when the packet was enqueued
+    uint32_t m_priority;    //!< priority of the item
 };
 
 } // namespace ns3

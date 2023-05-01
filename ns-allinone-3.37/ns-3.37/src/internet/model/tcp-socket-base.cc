@@ -846,6 +846,7 @@ TcpSocketBase::Send(Ptr<Packet> p, uint32_t flags)
 {
     NS_LOG_FUNCTION(this << p);
     NS_ABORT_MSG_IF(flags, "use of flags is not supported in TcpSocketBase::Send()");
+    
     if (m_state == ESTABLISHED || m_state == SYN_SENT || m_state == CLOSE_WAIT)
     {
         // Store the packet into Tx buffer

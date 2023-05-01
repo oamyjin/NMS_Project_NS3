@@ -2794,7 +2794,7 @@ as errors, the build may fail with an error similar to the following from GCC 11
                     from /ns-3-dev/build/include/ns3/assert.h:56,
                     from /ns-3-dev/build/include/ns3/buffer.h:26,
                     from /ns-3-dev/build/include/ns3/packet.h:24,
-                    from /ns-3-dev/cmake-build-debug/CMakeFiles/stdlib_pch.dir/cmake_pch.hxx:23,
+                    from /ns-3-dev//CMakeFiles/stdlib_pch.dir/cmake_pch.hxx:23,
                     from <command-line>:
    /ns-3-dev/src/core/model/log-macros-enabled.h:146: note: this is the location of the previous definition
      146 | #define NS_LOG_APPEND_CONTEXT

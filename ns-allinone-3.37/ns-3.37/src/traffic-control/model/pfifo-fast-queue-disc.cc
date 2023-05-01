@@ -25,6 +25,9 @@
 #include "ns3/object-factory.h"
 #include "ns3/queue.h"
 #include "ns3/socket.h"
+#include "ns3/gearbox-pkt-tag.h"
+#include "ns3/ipv4-queue-disc-item.h"
+#include "ns3/tcp-header.h"
 
 namespace ns3
 {
@@ -67,6 +70,19 @@ PfifoFastQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
 {
     NS_LOG_FUNCTION(this << item);
 
+    // std::cout << "EQ";
+    // FlowIdTag tag;
+    // Packet* packet = GetPointer(item->GetPacket());
+    // packet->PeekPacketTag(tag);
+    // std::cout << " flowId:" << int(tag.GetFlowId()) << std::endl;
+    // std::cout << " flowId:" << int(tag.GetFlowId()) << " addr:" << GetPointer(item)->GetAddress() 
+    //             << " size:" << GetPointer(item)->GetSize() << " cnt:" << GetPointer(item)->GetReferenceCount() 
+    //             << " addr:" << GetPointer(item)->GetAddress() << " pkt:" << GetPointer(item)->GetPacket()->GetUid() << std::endl;
+    //Ptr<const Ipv4QueueDiscItem> ipItem = DynamicCast<const Ipv4QueueDiscItem>(item);
+    //const Ipv4Header ipHeader = ipItem->GetHeader();
+    //TcpHeader header;
+    //GetPointer(item)->GetPacket()->PeekHeader(header);
+    //std::cout << " tcpheader:" << header.GetSourcePort() << std::endl;
     if (GetCurrentSize() >= GetMaxSize())
     {
         NS_LOG_LOGIC("Queue disc limit exceeded -- dropping packet");

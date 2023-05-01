@@ -78,7 +78,8 @@ QueueDiscItem::QueueDiscItem(Ptr<Packet> p, const Address& addr, uint16_t protoc
     : QueueItem(p),
       m_address(addr),
       m_protocol(protocol),
-      m_txq(0)
+      m_txq(0),
+      m_priority (0)
 {
     NS_LOG_FUNCTION(this << p << addr << protocol);
 }
@@ -86,6 +87,20 @@ QueueDiscItem::QueueDiscItem(Ptr<Packet> p, const Address& addr, uint16_t protoc
 QueueDiscItem::~QueueDiscItem()
 {
     NS_LOG_FUNCTION(this);
+}
+
+uint32_t
+QueueDiscItem::GetPriority (void) const
+{
+  NS_LOG_FUNCTION (this);
+  return m_priority;
+}
+
+void
+QueueDiscItem::SetPriority (uint32_t priority)
+{
+  NS_LOG_FUNCTION (this << (uint32_t) priority);
+  m_priority = priority;
 }
 
 Address

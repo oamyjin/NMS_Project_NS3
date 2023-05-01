@@ -310,6 +310,30 @@ model/Replace_string.cc.s:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.s
 .PHONY : model/Replace_string.cc.s
 
+model/afq-queue-disc.o: model/afq-queue-disc.cc.o
+.PHONY : model/afq-queue-disc.o
+
+# target to build an object file
+model/afq-queue-disc.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o
+.PHONY : model/afq-queue-disc.cc.o
+
+model/afq-queue-disc.i: model/afq-queue-disc.cc.i
+.PHONY : model/afq-queue-disc.i
+
+# target to preprocess a source file
+model/afq-queue-disc.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.i
+.PHONY : model/afq-queue-disc.cc.i
+
+model/afq-queue-disc.s: model/afq-queue-disc.cc.s
+.PHONY : model/afq-queue-disc.s
+
+# target to generate assembly for a file
+model/afq-queue-disc.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.s
+.PHONY : model/afq-queue-disc.cc.s
+
 model/cobalt-queue-disc.o: model/cobalt-queue-disc.cc.o
 .PHONY : model/cobalt-queue-disc.o
 
@@ -550,6 +574,30 @@ model/pie-queue-disc.cc.s:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pie-queue-disc.cc.s
 .PHONY : model/pie-queue-disc.cc.s
 
+model/pifo-queue-disc.o: model/pifo-queue-disc.cc.o
+.PHONY : model/pifo-queue-disc.o
+
+# target to build an object file
+model/pifo-queue-disc.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o
+.PHONY : model/pifo-queue-disc.cc.o
+
+model/pifo-queue-disc.i: model/pifo-queue-disc.cc.i
+.PHONY : model/pifo-queue-disc.i
+
+# target to preprocess a source file
+model/pifo-queue-disc.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.i
+.PHONY : model/pifo-queue-disc.cc.i
+
+model/pifo-queue-disc.s: model/pifo-queue-disc.cc.s
+.PHONY : model/pifo-queue-disc.s
+
+# target to generate assembly for a file
+model/pifo-queue-disc.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.s
+.PHONY : model/pifo-queue-disc.cc.s
+
 model/prio-queue-disc.o: model/prio-queue-disc.cc.o
 .PHONY : model/prio-queue-disc.o
 
@@ -645,6 +693,30 @@ model/sp-pifo.s: model/sp-pifo.cc.s
 model/sp-pifo.cc.s:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s
 .PHONY : model/sp-pifo.cc.s
+
+model/sppifo-queue-disc.o: model/sppifo-queue-disc.cc.o
+.PHONY : model/sppifo-queue-disc.o
+
+# target to build an object file
+model/sppifo-queue-disc.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o
+.PHONY : model/sppifo-queue-disc.cc.o
+
+model/sppifo-queue-disc.i: model/sppifo-queue-disc.cc.i
+.PHONY : model/sppifo-queue-disc.i
+
+# target to preprocess a source file
+model/sppifo-queue-disc.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.i
+.PHONY : model/sppifo-queue-disc.cc.i
+
+model/sppifo-queue-disc.s: model/sppifo-queue-disc.cc.s
+.PHONY : model/sppifo-queue-disc.s
+
+# target to generate assembly for a file
+model/sppifo-queue-disc.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.s
+.PHONY : model/sppifo-queue-disc.cc.s
 
 model/tbf-queue-disc.o: model/tbf-queue-disc.cc.o
 .PHONY : model/tbf-queue-disc.o
@@ -962,6 +1034,9 @@ help:
 	@echo "... model/Replace_string.o"
 	@echo "... model/Replace_string.i"
 	@echo "... model/Replace_string.s"
+	@echo "... model/afq-queue-disc.o"
+	@echo "... model/afq-queue-disc.i"
+	@echo "... model/afq-queue-disc.s"
 	@echo "... model/cobalt-queue-disc.o"
 	@echo "... model/cobalt-queue-disc.i"
 	@echo "... model/cobalt-queue-disc.s"
@@ -992,6 +1067,9 @@ help:
 	@echo "... model/pie-queue-disc.o"
 	@echo "... model/pie-queue-disc.i"
 	@echo "... model/pie-queue-disc.s"
+	@echo "... model/pifo-queue-disc.o"
+	@echo "... model/pifo-queue-disc.i"
+	@echo "... model/pifo-queue-disc.s"
 	@echo "... model/prio-queue-disc.o"
 	@echo "... model/prio-queue-disc.i"
 	@echo "... model/prio-queue-disc.s"
@@ -1004,6 +1082,9 @@ help:
 	@echo "... model/sp-pifo.o"
 	@echo "... model/sp-pifo.i"
 	@echo "... model/sp-pifo.s"
+	@echo "... model/sppifo-queue-disc.o"
+	@echo "... model/sppifo-queue-disc.i"
+	@echo "... model/sppifo-queue-disc.s"
 	@echo "... model/tbf-queue-disc.o"
 	@echo "... model/tbf-queue-disc.i"
 	@echo "... model/tbf-queue-disc.s"

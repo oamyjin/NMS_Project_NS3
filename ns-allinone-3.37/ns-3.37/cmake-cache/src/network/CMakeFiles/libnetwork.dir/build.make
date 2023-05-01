@@ -122,6 +122,7 @@ libnetwork_EXTERNAL_OBJECTS = \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/mac48-address.cc.o" \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/mac64-address.cc.o" \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/mac8-address.cc.o" \
+"/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/prio-queue.cc.o" \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/net-device-queue-interface.cc.o" \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/output-stream-wrapper.cc.o" \
 "/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/network/CMakeFiles/libnetwork-obj.dir/utils/packet-burst.cc.o" \
@@ -193,6 +194,7 @@ libnetwork_EXTERNAL_OBJECTS = \
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/mac48-address.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/mac64-address.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/mac8-address.cc.o
+/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/prio-queue.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/net-device-queue-interface.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/output-stream-wrapper.cc.o
 /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/lib/libns3.37-network-default.dylib: src/network/CMakeFiles/libnetwork-obj.dir/utils/packet-burst.cc.o

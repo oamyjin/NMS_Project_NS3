@@ -341,28 +341,12 @@ src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/traffic-control-
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libtraffic-control-obj.dir/model/traffic-control-layer.cc.s"
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/traffic-control-layer.cc -o CMakeFiles/libtraffic-control-obj.dir/model/traffic-control-layer.cc.s
 
-src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/flags.make
-src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc
-src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
-src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
-src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o"
-	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o -MF CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o.d -o CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc
-
-src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.i"
-	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -E /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc > CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.i
-
-src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s"
-	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc -o CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s
-
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/flags.make
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o: /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/Flow_pl.cc
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o"
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o -MF CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o.d -o CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/Flow_pl.cc
 
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.i: cmake_force
@@ -378,7 +362,7 @@ src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.c
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o"
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o -MF CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o.d -o CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/Replace_string.cc
 
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.i: cmake_force
@@ -388,6 +372,70 @@ src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.c
 src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.s"
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/Replace_string.cc -o CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.s
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/flags.make
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o -MF CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o.d -o CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.i"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -E /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc > CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.i
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sp-pifo.cc -o CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.s
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/flags.make
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o: /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/pifo-queue-disc.cc
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o -MF CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o.d -o CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/pifo-queue-disc.cc
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.i"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -E /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/pifo-queue-disc.cc > CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.i
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.s"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/pifo-queue-disc.cc -o CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.s
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/flags.make
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o: /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sppifo-queue-disc.cc
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o -MF CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o.d -o CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sppifo-queue-disc.cc
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.i"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -E /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sppifo-queue-disc.cc > CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.i
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.s"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sppifo-queue-disc.cc -o CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.s
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/flags.make
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o: /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/afq-queue-disc.cc
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o: CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx.pch
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -MD -MT src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o -MF CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o.d -o CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o -c /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/afq-queue-disc.cc
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.i"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -E /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/afq-queue-disc.cc > CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.i
+
+src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.s"
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/src/traffic-control && /Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -Winvalid-pch -Xarch_arm64 -include/Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache/CMakeFiles/stdlib_pch.dir/cmake_pch_arm64.hxx -S /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/afq-queue-disc.cc -o CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.s
 
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/helper/queue-disc-container.cc.o
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/helper/traffic-control-helper.cc.o
@@ -406,9 +454,12 @@ libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.di
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/red-queue-disc.cc.o
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/tbf-queue-disc.cc.o
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/traffic-control-layer.cc.o
-libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Flow_pl.cc.o
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/Replace_string.cc.o
+libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sp-pifo.cc.o
+libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/pifo-queue-disc.cc.o
+libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/sppifo-queue-disc.cc.o
+libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/model/afq-queue-disc.cc.o
 libtraffic-control-obj: src/traffic-control/CMakeFiles/libtraffic-control-obj.dir/build.make
 .PHONY : libtraffic-control-obj
 
