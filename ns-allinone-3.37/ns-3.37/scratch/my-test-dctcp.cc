@@ -1,596 +1,574 @@
 /*
- * Copyright (c) 2017-20 NITK Surathkal
- * Copyright (c) 2020 Tom Henderson (better alignment with experiment)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation;
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Authors: Shravya K.S. <shravya.ks0@gmail.com>
- *          Apoorva Bhargava <apoorvabhargava13@gmail.com>
- *          Shikha Bakshi <shikhabakshi912@gmail.com>
- *          Mohit P. Tahiliani <tahiliani@nitk.edu.in>
- *          Tom Henderson <tomh@tomh.org>
- */
+fattree topo
+with queuedisc
 
-// The network topology used in this example is based on Fig. 17 described in
-// Mohammad Alizadeh, Albert Greenberg, David A. Maltz, Jitendra Padhye,
-// Parveen Patel, Balaji Prabhakar, Sudipta Sengupta, and Murari Sridharan.
-// "Data Center TCP (DCTCP)." In ACM SIGCOMM Computer Communication Review,
-// Vol. 40, No. 4, pp. 63-74. ACM, 2010.
-
-// The topology is roughly as follows
-//
-//  S1         S3
-//  |           |  (1 Gbps)
-//  T1 ------- T2 -- R1
-//  |           |  (1 Gbps)
-//  S2         R2
-//
-// The link between switch T1 and T2 is 10 Gbps.  All other
-// links are 1 Gbps.  In the SIGCOMM paper, there is a Scorpion switch
-// between T1 and T2, but it doesn't contribute another bottleneck.
-//
-// S1 and S3 each have 10 senders sending to receiver R1 (20 total)
-// S2 (20 senders) sends traffic to R2 (20 receivers)
-//
-// This sets up two bottlenecks: 1) T1 -> T2 interface (30 senders
-// using the 10 Gbps link) and 2) T2 -> R1 (20 senders using 1 Gbps link)
-//
-// RED queues configured for ECN marking are used at the bottlenecks.
-//
-// Figure 17 published results are that each sender in S1 gets 46 Mbps
-// and each in S3 gets 54 Mbps, while each S2 sender gets 475 Mbps, and
-// that these are within 10% of their fair-share throughputs (Jain index
-// of 0.99).
-//
-// This program runs the program by default for five seconds.  The first
-// second is devoted to flow startup (all 40 TCP flows are stagger started
-// during this period).  There is a three second convergence time where
-// no measurement data is taken, and then there is a one second measurement
-// interval to gather raw throughput for each flow.  These time intervals
-// can be changed at the command line.
-//
-// The program outputs six files.  The first three:
-// * dctcp-example-s1-r1-throughput.dat
-// * dctcp-example-s2-r2-throughput.dat
-// * dctcp-example-s3-r1-throughput.dat
-// provide per-flow throughputs (in Mb/s) for each of the forty flows, summed
-// over the measurement window.  The fourth file,
-// * dctcp-example-fairness.dat
-// provides average throughputs for the three flow paths, and computes
-// Jain's fairness index for each flow group (i.e. across each group of
-// 10, 20, and 10 flows).  It also sums the throughputs across each bottleneck.
-// The fifth and sixth:
-// * dctcp-example-t1-length.dat
-// * dctcp-example-t2-length.dat
-// report on the bottleneck queue length (in packets and microseconds
-// of delay) at 10 ms intervals during the measurement window.
-//
-// By default, the throughput averages are 23 Mbps for S1 senders, 471 Mbps
-// for S2 senders, and 74 Mbps for S3 senders, and the Jain index is greater
-// than 0.99 for each group of flows.  The average queue delay is about 1ms
-// for the T2->R2 bottleneck, and about 200us for the T1->T2 bottleneck.
-//
-// The RED parameters (min_th and max_th) are set to the same values as
-// reported in the paper, but we observed that throughput distributions
-// and queue delays are very sensitive to these parameters, as was also
-// observed in the paper; it is likely that the paper's throughput results
-// could be achieved by further tuning of the RED parameters.  However,
-// the default results show that DCTCP is able to achieve high link
-// utilization and low queueing delay and fairness across competing flows
-// sharing the same path.
+Version description:
+    IP assignemnt is done
+    ecmp by flow is down
+    input with port
+*/
 
 #include "ns3/applications-module.h"
 #include "ns3/core-module.h"
+#include "ns3/flow-monitor-helper.h"
 #include "ns3/internet-module.h"
+#include "ns3/internet-apps-module.h"
+#include "ns3/ipv4-global-routing-helper.h"
+#include "ns3/netanim-module.h"
 #include "ns3/network-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/traffic-control-module.h"
-
-#include <iomanip>
-#include <iostream>
+#include "ns3/flow-id-tag.h"
 
 using namespace ns3;
+using namespace std;
 
-std::stringstream filePlotQueue1;
-std::stringstream filePlotQueue2;
-std::ofstream rxS1R1Throughput;
-std::ofstream rxS2R2Throughput;
-std::ofstream rxS3R1Throughput;
-std::ofstream fairnessIndex;
-std::ofstream t1QueueLength;
-std::ofstream t2QueueLength;
-std::vector<uint64_t> rxS1R1Bytes;
-std::vector<uint64_t> rxS2R2Bytes;
-std::vector<uint64_t> rxS3R1Bytes;
+NS_LOG_COMPONENT_DEFINE("FATTREE_SIMULATION");
 
-void
-PrintProgress(Time interval)
+const uint32_t CoreNum = 4;
+const uint32_t PodNum = 4;
+const uint32_t AggPerPod = 2;
+const uint32_t TorPerPod = 2;
+const uint32_t ServerPerTor = 32;
+const uint32_t ServerPerPod = ServerPerTor * TorPerPod;
+const uint32_t NodeNumPerPod = ServerPerPod + TorPerPod + AggPerPod;
+const uint32_t ServerTotalNum = ServerPerPod * PodNum;
+
+const char* Node2Tor_Capacity = "10Gbps"; // 10Gbps
+const char* Node2Tor_Delay = "3us"; //10ns
+const char* Tor2Agg_Capacity = "40Gbps";
+const char* Tor2Agg_Delay = "1us";
+const char* Agg2Core_Capacity = "40Gbps";
+const char* Agg2Core_Delay = "1us";
+const char* AppDataRate = "10Gbps";  // 10Gbps
+
+double simulator_stop_time = 10.0;
+bool ECMProuting = true;
+const uint32_t PacketSize = 1448;
+
+Ipv4Address serverAddress[ServerTotalNum];
+NodeContainer pods[PodNum];
+NodeContainer core;
+ifstream flowf;
+
+// only for ip assignment
+const char* mask_core = "255.255.255.0";
+const char* mask_pod = "255.255.255.0";
+const char* mask_server = "255.255.255.0";
+
+struct FlowInput
 {
-    std::cout << "Progress to " << std::fixed << std::setprecision(1)
-              << Simulator::Now().GetSeconds() << " seconds simulation time" << std::endl;
-    Simulator::Schedule(interval, &PrintProgress, interval);
+    uint32_t src, dst, maxPacketCount, port, dport;
+    double start_time, stop_time;
+    uint32_t idx;
+};
+
+FlowInput flow_input = {0};
+uint32_t flow_num;
+uint32_t totalPktSize = 0;
+uint32_t total_send = 0;
+map<uint32_t, uint32_t> flow_weights;
+int totalFlowNum = 0; // flow number in weight.txt
+
+/**
+ * Define Application Here
+ */
+class MyApp : public Application
+{
+  public:
+    MyApp();
+    virtual ~MyApp();
+    /**
+     * Register this type.
+     * \return The TypeId.
+     */
+    static TypeId GetTypeId(void);
+    void Setup(Ptr<Socket> socket,
+               Address address,
+               uint32_t packetSize,
+               uint32_t nPackets,
+               DataRate dataRate,
+               uint32_t flowId,
+               double stoptime);
+
+  private:
+    virtual void StartApplication(void);
+    virtual void StopApplication(void);
+    void ScheduleTx(void);
+    void SendPacket(void);
+    Ptr<Socket> m_socket;
+    Address m_peer;
+    uint32_t m_packetSize;
+    uint32_t m_nPackets;
+    DataRate m_dataRate;
+    EventId m_sendEvent;
+    bool m_running;
+    uint32_t m_packetsSent;
+    uint32_t m_flowId;
+    double m_stoptime;
+};
+
+MyApp::MyApp()
+    : m_socket(0),
+      m_peer(),
+      m_packetSize(0),
+      m_nPackets(0),
+      m_dataRate(0),
+      m_sendEvent(),
+      m_running(false),
+      m_packetsSent(0),
+      m_stoptime(0.0)
+{
+}
+
+MyApp::~MyApp()
+{
+    m_socket = 0;
+}
+
+/* static */
+TypeId
+MyApp::GetTypeId(void)
+{
+    static TypeId tid =
+        TypeId("MyApp").SetParent<Application>().SetGroupName("Tutorial").AddConstructor<MyApp>();
+    return tid;
 }
 
 void
-TraceS1R1Sink(std::size_t index, Ptr<const Packet> p, const Address& a)
+MyApp::Setup(Ptr<Socket> socket,
+             Address address,
+             uint32_t packetSize,
+             uint32_t nPackets,
+             DataRate dataRate,
+             uint32_t flowId,
+             double stoptime)
 {
-    rxS1R1Bytes[index] += p->GetSize();
+    m_socket = socket;
+    m_peer = address;
+    m_packetSize = packetSize;
+    m_nPackets = nPackets;
+    m_dataRate = dataRate;
+    m_flowId = flowId;
+    m_stoptime = stoptime;
 }
 
 void
-TraceS2R2Sink(std::size_t index, Ptr<const Packet> p, const Address& a)
+MyApp::StartApplication(void)
 {
-    rxS2R2Bytes[index] += p->GetSize();
+    m_running = true;
+    m_packetsSent = 0;
+    m_socket->Bind();
+    m_socket->Connect(m_peer);
+    SendPacket();
 }
 
 void
-TraceS3R1Sink(std::size_t index, Ptr<const Packet> p, const Address& a)
+MyApp::StopApplication(void)
 {
-    rxS3R1Bytes[index] += p->GetSize();
-}
-
-void
-InitializeCounters()
-{
-    for (std::size_t i = 0; i < 10; i++)
+    m_running = false;
+    if (m_sendEvent.IsRunning())
     {
-        rxS1R1Bytes[i] = 0;
+        Simulator::Cancel(m_sendEvent);
     }
-    for (std::size_t i = 0; i < 20; i++)
+    if (m_socket)
     {
-        rxS2R2Bytes[i] = 0;
-    }
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        rxS3R1Bytes[i] = 0;
+        m_socket->Close();
     }
 }
 
 void
-PrintThroughput(Time measurementWindow)
+MyApp::SendPacket()
 {
-    for (std::size_t i = 0; i < 10; i++)
+    Ptr<Packet> packet = Create<Packet>(m_packetSize);
+    //add tag
+    FlowIdTag tag;
+    tag.SetFlowId(m_flowId);
+    tag.SetFlowWeight(flow_weights[m_flowId]);
+    tag.SetIsFwd(true);
+    Packet* packet_ptr = GetPointer(packet);
+    packet_ptr->AddPacketTag(tag);
+    cout << "Send(packet)" << endl;
+    m_socket->Send(packet);
+    cout << "Send[flowid:" << tag.GetFlowId() << " flow_weight:" << tag.GetFlowWeight() << " m_packetsSent:" << m_packetsSent << " m_nPackets:" << m_nPackets << " pktsize:" << packet->GetSize() <<"]" << endl;
+
+    total_send++;
+    m_packetsSent++;
+    if (m_packetsSent < m_nPackets)
     {
-        rxS1R1Throughput << measurementWindow.GetSeconds() << "s " << i << " "
-                         << (rxS1R1Bytes[i] * 8) / (measurementWindow.GetSeconds()) / 1e6
-                         << std::endl;
-    }
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        rxS2R2Throughput << Simulator::Now().GetSeconds() << "s " << i << " "
-                         << (rxS2R2Bytes[i] * 8) / (measurementWindow.GetSeconds()) / 1e6
-                         << std::endl;
-    }
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        rxS3R1Throughput << Simulator::Now().GetSeconds() << "s " << i << " "
-                         << (rxS3R1Bytes[i] * 8) / (measurementWindow.GetSeconds()) / 1e6
-                         << std::endl;
+        ScheduleTx();
     }
 }
 
-// Jain's fairness index:  https://en.wikipedia.org/wiki/Fairness_measure
 void
-PrintFairness(Time measurementWindow)
+MyApp::ScheduleTx(void)
 {
-    double average = 0;
-    uint64_t sumSquares = 0;
-    uint64_t sum = 0;
-    double fairness = 0;
-    for (std::size_t i = 0; i < 10; i++)
+    if (m_running)
     {
-        sum += rxS1R1Bytes[i];
-        sumSquares += (rxS1R1Bytes[i] * rxS1R1Bytes[i]);
+        Time tNext(Seconds(m_packetSize * 8 / static_cast<double>(m_dataRate.GetBitRate())));
+        m_sendEvent = Simulator::Schedule(tNext, &MyApp::SendPacket, this);
     }
-    average = ((sum / 10) * 8 / measurementWindow.GetSeconds()) / 1e6;
-    fairness = static_cast<double>(sum * sum) / (10 * sumSquares);
-    fairnessIndex << "Average throughput for S1-R1 flows: " << std::fixed << std::setprecision(2)
-                  << average << " Mbps; fairness: " << std::fixed << std::setprecision(3)
-                  << fairness << std::endl;
-    average = 0;
-    sumSquares = 0;
-    sum = 0;
-    fairness = 0;
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        sum += rxS2R2Bytes[i];
-        sumSquares += (rxS2R2Bytes[i] * rxS2R2Bytes[i]);
-    }
-    average = ((sum / 20) * 8 / measurementWindow.GetSeconds()) / 1e6;
-    fairness = static_cast<double>(sum * sum) / (20 * sumSquares);
-    fairnessIndex << "Average throughput for S2-R2 flows: " << std::fixed << std::setprecision(2)
-                  << average << " Mbps; fairness: " << std::fixed << std::setprecision(3)
-                  << fairness << std::endl;
-    average = 0;
-    sumSquares = 0;
-    sum = 0;
-    fairness = 0;
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        sum += rxS3R1Bytes[i];
-        sumSquares += (rxS3R1Bytes[i] * rxS3R1Bytes[i]);
-    }
-    average = ((sum / 10) * 8 / measurementWindow.GetSeconds()) / 1e6;
-    fairness = static_cast<double>(sum * sum) / (10 * sumSquares);
-    fairnessIndex << "Average throughput for S3-R1 flows: " << std::fixed << std::setprecision(2)
-                  << average << " Mbps; fairness: " << std::fixed << std::setprecision(3)
-                  << fairness << std::endl;
-    sum = 0;
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        sum += rxS1R1Bytes[i];
-    }
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        sum += rxS2R2Bytes[i];
-    }
-    fairnessIndex << "Aggregate user-level throughput for flows through T1: "
-                  << static_cast<double>(sum * 8) / 1e9 << " Gbps" << std::endl;
-    sum = 0;
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        sum += rxS3R1Bytes[i];
-    }
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        sum += rxS1R1Bytes[i];
-    }
-    fairnessIndex << "Aggregate user-level throughput for flows to R1: "
-                  << static_cast<double>(sum * 8) / 1e9 << " Gbps" << std::endl;
 }
 
 void
-CheckT1QueueSize(Ptr<QueueDisc> queue)
+ReadFlowInput()
 {
-    // 1500 byte packets
-    uint32_t qSize = queue->GetNPackets();
-    Time backlog = Seconds(static_cast<double>(qSize * 1500 * 8) / 1e10); // 10 Gb/s
-    // report size in units of packets and ms
-    t1QueueLength << std::fixed << std::setprecision(2) << Simulator::Now().GetSeconds() << " "
-                  << qSize << " " << backlog.GetMicroSeconds() << std::endl;
-    // check queue size every 1/100 of a second
-    Simulator::Schedule(MilliSeconds(10), &CheckT1QueueSize, queue);
+	cout << "==== ReadFlowInput ====" << endl;
+    char line[200];           // storage for each line
+    flowf.getline(line, 100); // get each line
+    while (strlen(line) == 0)
+    {
+        flowf.getline(line, 100);
+    }
+    int in_cnt = sscanf(line,
+                        "%d %d %d %d %d %lf %lf",
+                        &(flow_input.src),
+                        &(flow_input.port),
+                        &(flow_input.dst),
+                        &(flow_input.dport),
+                        &(flow_input.maxPacketCount),
+                        &(flow_input.start_time),
+                        &(flow_input.stop_time));
+    if (in_cnt == 6)
+    { // no input of stop_time
+        flow_input.stop_time = 0;
+    }
+    if (flow_input.src != 0)
+    {
+        if (flow_input.idx < flow_num)
+        {
+            totalPktSize += flow_input.maxPacketCount;
+            cout << "flow_input.src:" << flow_input.src << " flow_input.dst:" << flow_input.dst
+                 << endl;
+            stringstream path;
+            path << "scratch/MyResult/Rx/rx" << flow_input.src << ".dat"; // plotResult
+            std::ofstream thr0(path.str(), std::ios::out | std::ios::app);
+            thr0 << flow_input.start_time << " " << 0 << endl; //<< " tx:" << localThroutx  << endl;
+        }
+    }
 }
 
 void
-CheckT2QueueSize(Ptr<QueueDisc> queue)
+ScheduleFlowInputs()
 {
-    uint32_t qSize = queue->GetNPackets();
-    Time backlog = Seconds(static_cast<double>(qSize * 1500 * 8) / 1e9); // 1 Gb/s
-    // report size in units of packets and ms
-    t2QueueLength << std::fixed << std::setprecision(2) << Simulator::Now().GetSeconds() << " "
-                  << qSize << " " << backlog.GetMicroSeconds() << std::endl;
-    // check queue size every 1/100 of a second
-    Simulator::Schedule(MilliSeconds(10), &CheckT2QueueSize, queue);
+	cout << "==== ScheduleFlowInputs ====" << endl;
+    while (flow_input.idx < flow_num && Seconds(flow_input.start_time) == Simulator::Now())
+    {
+        cout << "flow_input.idx:" << flow_input.idx << " src:" << flow_input.src << " sip:" << serverAddress[flow_input.src - 1] << " port:" << flow_input.port
+             << " dst:" << flow_input.dst << " dip:" << serverAddress[flow_input.dst - 1] << " dport:" << flow_input.dport << endl;
+        // dst server
+        Address sinkAddress(InetSocketAddress(serverAddress[flow_input.dst - 1], flow_input.dport));
+        PacketSinkHelper sinkHelper("ns3::TcpSocketFactory",
+                                    InetSocketAddress(Ipv4Address::GetAny(), flow_input.dport));
+        cout << "\tflow_input.dst - 1:" << flow_input.dst - 1 << " (flow_input.dst - 1) / NodeNumPerPod:" << (flow_input.dst - 1) / NodeNumPerPod << " " << (flow_input.dst - 1) % NodeNumPerPod << endl;
+        ApplicationContainer sinkApp = sinkHelper.Install(
+            pods[(flow_input.dst - 1) / ServerPerPod].Get((flow_input.dst - 1) % ServerPerPod));
+        sinkApp.Start(Seconds(0));
+        sinkApp.Stop(Seconds(simulator_stop_time));
+        // src server
+        TypeId tid = TypeId::LookupByName("ns3::TcpDctcp"); //TcpNewReno
+        Config::Set("/NodeList/*/$ns3::TcpL4Protocol/SocketType", TypeIdValue(tid));
+        Ptr<Socket> ns3TcpSocket = Socket::CreateSocket(
+            pods[(flow_input.src - 1) / ServerPerPod].Get((flow_input.src - 1) % ServerPerPod),
+            TcpSocketFactory::GetTypeId());
+        ns3TcpSocket->SetAttribute("SndBufSize", ns3::UintegerValue(1438000000));
+        Ptr<MyApp> app = CreateObject<MyApp>();
+        app->Setup(
+            ns3TcpSocket,
+            sinkAddress,
+            PacketSize,
+            flow_input.maxPacketCount,
+            DataRate(AppDataRate),
+            flow_input.idx,
+            flow_input.stop_time);
+        pods[(flow_input.src - 1) / NodeNumPerPod]
+            .Get((flow_input.src - 1) % NodeNumPerPod)
+            ->AddApplication(app);
+        app->SetStartTime(Seconds(flow_input.start_time) - Simulator::Now());
+        cout << "start_time:" << flow_input.start_time << " stop_time:" << flow_input.stop_time
+             << endl;
+        if (flow_input.stop_time != 0)
+        {
+            app->SetStopTime(Seconds(flow_input.stop_time - Simulator::Now().GetSeconds()));
+        }
+        // get the next flow input
+        flow_input.idx++;
+        if (flow_input.idx < flow_num)
+        {
+            ReadFlowInput();
+        }
+    }
+
+    // schedule the next time to run this function
+    if (flow_input.idx < flow_num)
+    {
+        Simulator::Schedule(Seconds(flow_input.start_time) - Simulator::Now(), ScheduleFlowInputs);
+    }
+    else
+    { // no more flows, close the file
+        flowf.close();
+    }
 }
 
 int
 main(int argc, char* argv[])
 {
-    std::string outputFilePath = ".";
-    std::string tcpTypeId = "TcpDctcp";
-    Time flowStartupWindow = Seconds(1);
-    Time convergenceTime = Seconds(3);
-    Time measurementWindow = Seconds(1);
-    bool enableSwitchEcn = true;
-    Time progressInterval = MilliSeconds(100);
+	CommandLine cmd;
+    cmd.Parse (argc, argv);
+    Time::SetResolution (Time::NS);
+    char line[200];
+	flowf.open("scratch/traffic_20.txt"); //traffic_3.txt //traffic_5.txt //traffic_7.txt //traffic_9.txt //flow_test.txt
+	flowf.getline(line, 100);
+	sscanf(line, "%d", &(flow_num));
+    cout << "flow_num:" << flow_num << endl;
 
-    CommandLine cmd(__FILE__);
-    cmd.AddValue("tcpTypeId", "ns-3 TCP TypeId", tcpTypeId);
-    cmd.AddValue("flowStartupWindow",
-                 "startup time window (TCP staggered starts)",
-                 flowStartupWindow);
-    cmd.AddValue("convergenceTime", "convergence time", convergenceTime);
-    cmd.AddValue("measurementWindow", "measurement window", measurementWindow);
-    cmd.AddValue("enableSwitchEcn", "enable ECN at switches", enableSwitchEcn);
-    cmd.Parse(argc, argv);
+    // LogComponentEnable ("TrafficControlLayer", LOG_LEVEL_INFO);
+    // LogComponentEnable ("SppifoQueueDisc", LOG_LEVEL_INFO);
+    //LogComponentEnable ("PifoQueueDisc", LOG_LEVEL_INFO);
+    //LogComponentEnable ("QueueDisc", LOG_LEVEL_INFO);
+    // LogComponentEnable ("AFQQueueDisc", LOG_LEVEL_INFO);
 
-    Config::SetDefault("ns3::TcpL4Protocol::SocketType", StringValue("ns3::" + tcpTypeId));
+    /*
+    Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue(Seconds (0.0000)));//000600 //0.00002412 //delayed ack time out default is 200ms
+    Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.0000132)));// 0000132 //0.00000804 RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
+    Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 5RTT = 5*8.04 = 40.2us
+    Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 syn timeout 5rtt
+    */
+    //Config::SetDefault ("ns3::TcpSocketBase::ClockGranularity", TimeValue(MilliSeconds (0.00804)));//RTT
 
-    Time startTime = Seconds(0);
-    Time stopTime = flowStartupWindow + convergenceTime + measurementWindow;
+    Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue(PacketSize));//default SegmentSize is 536 Bytes
+    Config::SetDefault("ns3::Ipv4GlobalRouting::RandomEcmpRouting", BooleanValue(ECMProuting));
+    Config::SetDefault ("ns3::TcpSocket::DataRetries", UintegerValue(100));
+    Config::SetDefault ("ns3::TcpSocket::ConnCount", UintegerValue(100));
+    //ns3::PacketMetadata::Enable ();
+    
 
-    Time clientStartTime = startTime;
+    PointToPointHelper Node2Tor;
+    Node2Tor.SetDeviceAttribute("DataRate", StringValue(Node2Tor_Capacity));
+    Node2Tor.SetChannelAttribute("Delay", StringValue(Node2Tor_Delay));
+    Node2Tor.SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize("1p")));
+    PointToPointHelper Tor2Agg;
+    Tor2Agg.SetDeviceAttribute("DataRate", StringValue(Tor2Agg_Capacity));
+    Tor2Agg.SetChannelAttribute("Delay", StringValue(Tor2Agg_Delay));
+    Tor2Agg.SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize("1p")));
+    PointToPointHelper Agg2Core;
+    Agg2Core.SetDeviceAttribute("DataRate", StringValue(Agg2Core_Capacity));
+    Agg2Core.SetChannelAttribute("Delay", StringValue(Agg2Core_Delay));
+    Agg2Core.SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize("1p")));
 
-    rxS1R1Bytes.reserve(10);
-    rxS2R2Bytes.reserve(20);
-    rxS3R1Bytes.reserve(10);
-
-    NodeContainer S1;
-    NodeContainer S2;
-    NodeContainer S3;
-    NodeContainer R2;
-    Ptr<Node> T1 = CreateObject<Node>();
-    Ptr<Node> T2 = CreateObject<Node>();
-    Ptr<Node> R1 = CreateObject<Node>();
-    S1.Create(10);
-    S2.Create(20);
-    S3.Create(10);
-    R2.Create(20);
-
-    Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(1448));
-    Config::SetDefault("ns3::TcpSocket::DelAckCount", UintegerValue(2));
-    GlobalValue::Bind("ChecksumEnabled", BooleanValue(false));
-
-    // Set default parameters for RED queue disc
-    // Config::SetDefault("ns3::RedQueueDisc::UseEcn", BooleanValue(enableSwitchEcn));
-    // // ARED may be used but the queueing delays will increase; it is disabled
-    // // here because the SIGCOMM paper did not mention it
-    // // Config::SetDefault ("ns3::RedQueueDisc::ARED", BooleanValue (true));
-    // // Config::SetDefault ("ns3::RedQueueDisc::Gentle", BooleanValue (true));
-    // Config::SetDefault("ns3::RedQueueDisc::UseHardDrop", BooleanValue(false));
-    // Config::SetDefault("ns3::RedQueueDisc::MeanPktSize", UintegerValue(1500));
-    // // Triumph and Scorpion switches used in DCTCP Paper have 4 MB of buffer
-    // // If every packet is 1500 bytes, 2666 packets can be stored in 4 MB
-    // Config::SetDefault("ns3::RedQueueDisc::MaxSize", QueueSizeValue(QueueSize("2666p")));
-    // // DCTCP tracks instantaneous queue length only; so set QW = 1
-    // Config::SetDefault("ns3::RedQueueDisc::QW", DoubleValue(1));
-    // Config::SetDefault("ns3::RedQueueDisc::MinTh", DoubleValue(20));
-    // Config::SetDefault("ns3::RedQueueDisc::MaxTh", DoubleValue(60));
-
-    PointToPointHelper pointToPointSR;
-    pointToPointSR.SetDeviceAttribute("DataRate", StringValue("1Gbps"));
-    pointToPointSR.SetChannelAttribute("Delay", StringValue("10us"));
-
-    PointToPointHelper pointToPointT;
-    pointToPointT.SetDeviceAttribute("DataRate", StringValue("10Gbps"));
-    pointToPointT.SetChannelAttribute("Delay", StringValue("10us"));
-
-    // Create a total of 62 links.
-    std::vector<NetDeviceContainer> S1T1;
-    S1T1.reserve(10);
-    std::vector<NetDeviceContainer> S2T1;
-    S2T1.reserve(20);
-    std::vector<NetDeviceContainer> S3T2;
-    S3T2.reserve(10);
-    std::vector<NetDeviceContainer> R2T2;
-    R2T2.reserve(20);
-    NetDeviceContainer T1T2 = pointToPointT.Install(T1, T2);
-    NetDeviceContainer R1T2 = pointToPointSR.Install(R1, T2);
-
-    for (std::size_t i = 0; i < 10; i++)
+	cout << "==== Create Core" << CoreNum << " ====" << endl;
+    // create node containers
+    core.Create(CoreNum);
+	cout << "==== Create Pod" << PodNum << "*" << NodeNumPerPod << " ====" << endl;
+    for (int i = 0; i < PodNum; i++)
     {
-        Ptr<Node> n = S1.Get(i);
-        S1T1.push_back(pointToPointSR.Install(n, T1));
-    }
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        Ptr<Node> n = S2.Get(i);
-        S2T1.push_back(pointToPointSR.Install(n, T1));
-    }
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        Ptr<Node> n = S3.Get(i);
-        S3T2.push_back(pointToPointSR.Install(n, T2));
-    }
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        Ptr<Node> n = R2.Get(i);
-        R2T2.push_back(pointToPointSR.Install(n, T2));
+        pods[i].Create(NodeNumPerPod);
     }
 
-    InternetStackHelper stack;
-    stack.InstallAll();
+	cout << "==== Install InternetStack ====" << endl;
+    InternetStackHelper Stack;
+    for (int i = 0; i < PodNum; i++)
+    {
+        Stack.Install(pods[i]);
+    }
+    Stack.Install(core);
 
-    TrafficControlHelper tchRed10;
-    // MinTh = 50, MaxTh = 150 recommended in ACM SIGCOMM 2010 DCTCP Paper
-    // This yields a target (MinTh) queue depth of 60us at 10 Gb/s
-    tchRed10.SetRootQueueDisc("ns3::SpPifo");
-    // tchRed10.SetRootQueueDisc("ns3::RedQueueDisc",
-    //                           "LinkBandwidth",
-    //                           StringValue("10Gbps"),
-    //                           "LinkDelay",
-    //                           StringValue("10us"),
-    //                           "MinTh",
-    //                           DoubleValue(50),
-    //                           "MaxTh",
-    //                           DoubleValue(150));
-    QueueDiscContainer queueDiscs1 = tchRed10.Install(T1T2);
+	cout << "==== Install NetDevice ====" << endl;
+    // Creating Topology, connecting by NIC between nodes
+    NetDeviceContainer podDev[PodNum][NodeNumPerPod];
+	cout << "\tpodDev" << "[" << PodNum << "][" << NodeNumPerPod << "]" << endl;
+    // server[0 ~ ServerPerPod-1]
+	// tor[ServerPerPod ~ ServerPerPod+TorPerPod-1] 
+    // agg[ServerPerPod+TorPerPod ~ NodeNumPerPod-1]
+    for (int p = 0; p < PodNum; p++)
+    {
+		cout << "\tpod:" << p << endl;
+        // server to tor
+        for (int t = 0; t < TorPerPod; t++)
+        {
+            int tor_id = ServerPerPod + t;
+            for (int n = 0; n < ServerPerTor; n++)
+            {
+                int server_id = t * ServerPerTor + n;
+				cout << "\t\tnet_dev_id:" << server_id << " [server_id:" << server_id << " tor_id:" << tor_id << "]" << endl;
+                podDev[p][server_id] =
+                    Node2Tor.Install(pods[p].Get(server_id), pods[p].Get(tor_id));
+            }
+        }
+        // tor to agg
+        for (int a = 0; a < AggPerPod; a++)
+        {
+            int agg_id = ServerPerPod + TorPerPod + a;
+            for (int t = 0; t < TorPerPod; t++)
+            {
+                int tor_id = ServerPerPod + t;
+                int node_id = ServerPerPod + a * AggPerPod + t;
+				cout << "\t\tnet_dev_id:" << node_id << " [tor_id:" << tor_id  << " agg_id:" << agg_id << "]" << endl;
+                podDev[p][node_id] = Tor2Agg.Install(pods[p].Get(tor_id), pods[p].Get(agg_id));
+            }
+        }
+    }
+    // Core router connections: agg to core
+    NetDeviceContainer coreDev[CoreNum][PodNum];
+    int agg_group = 0;
+    for (int c = 0; c < CoreNum; c++)
+    {
+		cout << "\tcore:" << c << endl;
+        if (c % (CoreNum / AggPerPod) == 0)
+        {
+            agg_group++;
+        }
+        for (int p = 0; p < PodNum; p++)
+        {
+            int agg_id = ServerPerPod + TorPerPod + agg_group - 1;
+			cout << "\t\tpod:" << p << " agg_id:" << agg_id << endl;
+            coreDev[c][p] = Agg2Core.Install(pods[p].Get(agg_id), core.Get(c));
+        }
+    }
 
-    TrafficControlHelper tchRed1;
-    // MinTh = 20, MaxTh = 60 recommended in ACM SIGCOMM 2010 DCTCP Paper
-    // This yields a target queue depth of 250us at 1 Gb/s
-    tchRed1.SetRootQueueDisc("ns3::SpPifo");
-    // tchRed1.SetRootQueueDisc("ns3::RedQueueDisc",
-    //                          "LinkBandwidth",
-    //                          StringValue("1Gbps"),
-    //                          "LinkDelay",
-    //                          StringValue("10us"),
-    //                          "MinTh",
-    //                          DoubleValue(20),
-    //                          "MaxTh",
-    //                          DoubleValue(60));
-    QueueDiscContainer queueDiscs2 = tchRed1.Install(R1T2.Get(1));
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        tchRed1.Install(S1T1[i].Get(1));
-    }
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        tchRed1.Install(S2T1[i].Get(1));
-    }
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        tchRed1.Install(S3T2[i].Get(1));
-    }
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        tchRed1.Install(R2T2[i].Get(1));
-    }
-
+	cout << "==== Assign Ipv4Address ====" << endl;
+    // Assign IP to each node
     Ipv4AddressHelper address;
-    std::vector<Ipv4InterfaceContainer> ipS1T1;
-    ipS1T1.reserve(10);
-    std::vector<Ipv4InterfaceContainer> ipS2T1;
-    ipS2T1.reserve(20);
-    std::vector<Ipv4InterfaceContainer> ipS3T2;
-    ipS3T2.reserve(10);
-    std::vector<Ipv4InterfaceContainer> ipR2T2;
-    ipR2T2.reserve(20);
-    address.SetBase("172.16.1.0", "255.255.255.0");
-    Ipv4InterfaceContainer ipT1T2 = address.Assign(T1T2);
-    address.SetBase("192.168.0.0", "255.255.255.0");
-    Ipv4InterfaceContainer ipR1T2 = address.Assign(R1T2);
-    address.SetBase("10.1.1.0", "255.255.255.0");
-    for (std::size_t i = 0; i < 10; i++)
+    Ipv4InterfaceContainer pods_Iface[PodNum][NodeNumPerPod];
+    for (int p = 0; p < PodNum; p++)
     {
-        ipS1T1.push_back(address.Assign(S1T1[i]));
-        address.NewNetwork();
+		cout << "\tPod" << p << endl;
+        // server to tor
+        for (int s = 0; s < ServerPerPod; s++)
+        {
+            ostringstream subset;
+            // Server-Tor: 10.(p+1).(server+1).0
+            subset << "10." << p + 1 << "." << s + 1 << ".0";
+            address.SetBase(subset.str().c_str(), mask_server);
+            pods_Iface[p][s] = address.Assign(podDev[p][s]);
+            //cout << "server_id_to_ip:" << node_id_to_ip(p*ServerPerPod+s) << endl;
+            serverAddress[p*ServerPerPod+s] = pods_Iface[p][s].GetAddress(0);
+			cout << "\t\tserver" << p*ServerPerPod+s << ":" << pods_Iface[p][s].GetAddress(0) << " tor_ip:" << pods_Iface[p][s].GetAddress(1) << endl;
+        }
+        // tor to agg
+        for (int a = 0; a < AggPerPod; a++)
+        {
+            for (int t = 0; t < TorPerPod; t++)
+            {
+                int net_dev_id = ServerPerPod + a * AggPerPod + t;
+                ostringstream subset;
+                //10.(p+1).(serverPerPod+a*10+t+1).1
+                subset << "10." << p + 1 << "." << ServerPerPod + a*10 + t + 1 << ".0";
+                address.SetBase(subset.str().c_str(), mask_pod);
+                pods_Iface[p][net_dev_id] = address.Assign(podDev[p][net_dev_id]);
+				cout << "\t\tnet_dev_id" << net_dev_id << ":" << pods_Iface[p][net_dev_id].GetAddress(0) << " " << pods_Iface[p][net_dev_id].GetAddress(1) << "  (tor_id:" << ServerPerPod + t << " agg_id:" << ServerPerPod + TorPerPod + a << ")" << endl;
+            }
+        }
     }
-    address.SetBase("10.2.1.0", "255.255.255.0");
-    for (std::size_t i = 0; i < 20; i++)
+    cout << "core ip" << endl;
+    // Core router Ifaces
+    Ipv4InterfaceContainer core_Iface[CoreNum][PodNum];
+    for (int c = 0; c < CoreNum; c++)
     {
-        ipS2T1.push_back(address.Assign(S2T1[i]));
-        address.NewNetwork();
-    }
-    address.SetBase("10.3.1.0", "255.255.255.0");
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        ipS3T2.push_back(address.Assign(S3T2[i]));
-        address.NewNetwork();
-    }
-    address.SetBase("10.4.1.0", "255.255.255.0");
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        ipR2T2.push_back(address.Assign(R2T2[i]));
-        address.NewNetwork();
+        for (int p = 0; p < PodNum; p++)
+        {
+            ostringstream subset;
+            // 10.(c+1).(p+1).0
+            subset << "10.0" << "." << 10*(c+1) + p + 1 << ".0";
+            //subset << PodNum + 1 << "0." << c + 1 << "." << p + 1 << ".0";
+            //cout << "subset:" << subset.str().c_str() << " mask_core:" << mask_core << " c:" << c << " p:" << p << endl;
+            address.SetBase(subset.str().c_str(), mask_core);
+            core_Iface[c][p] = address.Assign(coreDev[c][p]);
+            cout << "\t\tcore_id" << c << ":" << core_Iface[c][p].GetAddress(0) << " " << core_Iface[c][p].GetAddress(1) << "  (c:" << c << " p:" << p << ")" << endl;
+        }
     }
 
+    // unintall traffic control
+    TrafficControlHelper tch;
+    tch.Uninstall(podDev[0][20]); //server21-tor
+    /*
+    for (int i = 0; i < PodNum; i++){
+        for (int j = 0; j < NodeNumPerPod; j++){
+            tch.Uninstall(podDev[i][j]);
+        }
+    }
+    for (int i = 0; i < CoreNum; i++){
+        for (int j = 0; j < PodNum; j++){
+            tch.Uninstall(coreDev[i][j]);
+        }
+    }*/
+    tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("60p")); //;"MinTh", UintegerValue(10)
+    //tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("10000p"));
+    //tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
+    //tch.SetRootQueueDisc("ns3::FifoQueueDisc", "MaxSize", StringValue("300p"));
+    tch.Install(podDev[0][20].Get(1)); //server21-tor, on the tor side
+    /*
+    for (int i = 0; i < PodNum; i++){
+        for (int j = 0; j < NodeNumPerPod; j++){
+            //tch.Install(podDev[i][j]);
+            tch.Install(podDev[i][j].Get(0));
+            tch.Install(podDev[i][j].Get(1));
+        }
+    }
+    for (int i = 0; i < CoreNum; i++){
+        for (int j = 0; j < PodNum; j++){
+            //tch.Install(coreDev[i][j]);
+            tch.Install(coreDev[i][j].Get(0));
+            tch.Install(coreDev[i][j].Get(1));
+        }
+    }*/
+
+    // Routing tables
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
+    
+    // Ptr<OutputStreamWrapper> routingStream =
+    // Create<OutputStreamWrapper>("MyResult/global-routing-multi-switch-plus-router.routes",
+    //                                 std::ios::out);
+    // Ipv4GlobalRoutingHelper g;
+    // g.PrintRoutingTableAllAt(Seconds(1), routingStream);
 
-    // Each sender in S2 sends to a receiver in R2
-    std::vector<Ptr<PacketSink>> r2Sinks;
-    r2Sinks.reserve(20);
-    for (std::size_t i = 0; i < 20; i++)
+	cout << "==== Read Weights ====" << endl;
+    ifstream infile;
+    infile.open("scratch/weights.txt");
+    infile >> totalFlowNum;
+    for (int i = 0; i < totalFlowNum; i++)
     {
-        uint16_t port = 50000 + i;
-        Address sinkLocalAddress(InetSocketAddress(Ipv4Address::GetAny(), port));
-        PacketSinkHelper sinkHelper("ns3::TcpSocketFactory", sinkLocalAddress);
-        ApplicationContainer sinkApp = sinkHelper.Install(R2.Get(i));
-        Ptr<PacketSink> packetSink = sinkApp.Get(0)->GetObject<PacketSink>();
-        r2Sinks.push_back(packetSink);
-        sinkApp.Start(startTime);
-        sinkApp.Stop(stopTime);
+        uint32_t temp = 0;
+        infile >> temp;
+        flow_weights[(uint32_t)i] = temp;
+    }
+    infile.close();
 
-        OnOffHelper clientHelper1("ns3::TcpSocketFactory", Address());
-        clientHelper1.SetAttribute("OnTime",
-                                   StringValue("ns3::ConstantRandomVariable[Constant=1]"));
-        clientHelper1.SetAttribute("OffTime",
-                                   StringValue("ns3::ConstantRandomVariable[Constant=0]"));
-        clientHelper1.SetAttribute("DataRate", DataRateValue(DataRate("1Gbps")));
-        clientHelper1.SetAttribute("PacketSize", UintegerValue(1000));
-
-        ApplicationContainer clientApps1;
-        AddressValue remoteAddress(InetSocketAddress(ipR2T2[i].GetAddress(0), port));
-        clientHelper1.SetAttribute("Remote", remoteAddress);
-        clientApps1.Add(clientHelper1.Install(S2.Get(i)));
-        clientApps1.Start(i * flowStartupWindow / 20 + clientStartTime + MilliSeconds(i * 5));
-        clientApps1.Stop(stopTime);
+	cout << "==== Start Schedule ====" << endl;
+    // Applications
+    flow_input.idx = 0;
+    if (flow_num > 0)
+    {
+        ReadFlowInput();
+        Simulator::Schedule(Seconds(flow_input.start_time) - Simulator::Now(), ScheduleFlowInputs);
     }
 
-    // Each sender in S1 and S3 sends to R1
-    std::vector<Ptr<PacketSink>> s1r1Sinks;
-    std::vector<Ptr<PacketSink>> s3r1Sinks;
-    s1r1Sinks.reserve(10);
-    s3r1Sinks.reserve(10);
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        uint16_t port = 50000 + i;
-        Address sinkLocalAddress(InetSocketAddress(Ipv4Address::GetAny(), port));
-        PacketSinkHelper sinkHelper("ns3::TcpSocketFactory", sinkLocalAddress);
-        ApplicationContainer sinkApp = sinkHelper.Install(R1);
-        Ptr<PacketSink> packetSink = sinkApp.Get(0)->GetObject<PacketSink>();
-        if (i < 10)
-        {
-            s1r1Sinks.push_back(packetSink);
-        }
-        else
-        {
-            s3r1Sinks.push_back(packetSink);
-        }
-        sinkApp.Start(startTime);
-        sinkApp.Stop(stopTime);
+    //Node2Tor.EnablePcapAll ("MyResult/FatTree");
+    //Node2Tor.EnablePcapAll("MyResult/DCN_FatTree_Pcap");
+    //AsciiTraceHelper ascii;
+    //Node2Tor.EnableAsciiAll (ascii.CreateFileStream ("MyResult/myfirst.tr"));
 
-        OnOffHelper clientHelper1("ns3::TcpSocketFactory", Address());
-        clientHelper1.SetAttribute("OnTime",
-                                   StringValue("ns3::ConstantRandomVariable[Constant=1]"));
-        clientHelper1.SetAttribute("OffTime",
-                                   StringValue("ns3::ConstantRandomVariable[Constant=0]"));
-        clientHelper1.SetAttribute("DataRate", DataRateValue(DataRate("1Gbps")));
-        clientHelper1.SetAttribute("PacketSize", UintegerValue(1000));
+	//Flow monitor
+	Ptr<FlowMonitor> flowMonitor;
+	FlowMonitorHelper flowHelper;
+	flowMonitor = flowHelper.InstallAll();
 
-        ApplicationContainer clientApps1;
-        AddressValue remoteAddress(InetSocketAddress(ipR1T2.GetAddress(0), port));
-        clientHelper1.SetAttribute("Remote", remoteAddress);
-        if (i < 10)
-        {
-            clientApps1.Add(clientHelper1.Install(S1.Get(i)));
-            clientApps1.Start(i * flowStartupWindow / 10 + clientStartTime + MilliSeconds(i * 5));
-        }
-        else
-        {
-            clientApps1.Add(clientHelper1.Install(S3.Get(i - 10)));
-            clientApps1.Start((i - 10) * flowStartupWindow / 10 + clientStartTime +
-                              MilliSeconds(i * 5));
-        }
-
-        clientApps1.Stop(stopTime);
-    }
-
-    rxS1R1Throughput.open("dctcp-example-s1-r1-throughput.dat", std::ios::out);
-    rxS1R1Throughput << "#Time(s) flow thruput(Mb/s)" << std::endl;
-    rxS2R2Throughput.open("dctcp-example-s2-r2-throughput.dat", std::ios::out);
-    rxS2R2Throughput << "#Time(s) flow thruput(Mb/s)" << std::endl;
-    rxS3R1Throughput.open("dctcp-example-s3-r1-throughput.dat", std::ios::out);
-    rxS3R1Throughput << "#Time(s) flow thruput(Mb/s)" << std::endl;
-    fairnessIndex.open("dctcp-example-fairness.dat", std::ios::out);
-    t1QueueLength.open("dctcp-example-t1-length.dat", std::ios::out);
-    t1QueueLength << "#Time(s) qlen(pkts) qlen(us)" << std::endl;
-    t2QueueLength.open("dctcp-example-t2-length.dat", std::ios::out);
-    t2QueueLength << "#Time(s) qlen(pkts) qlen(us)" << std::endl;
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        s1r1Sinks[i]->TraceConnectWithoutContext("Rx", MakeBoundCallback(&TraceS1R1Sink, i));
-    }
-    for (std::size_t i = 0; i < 20; i++)
-    {
-        r2Sinks[i]->TraceConnectWithoutContext("Rx", MakeBoundCallback(&TraceS2R2Sink, i));
-    }
-    for (std::size_t i = 0; i < 10; i++)
-    {
-        s3r1Sinks[i]->TraceConnectWithoutContext("Rx", MakeBoundCallback(&TraceS3R1Sink, i));
-    }
-    Simulator::Schedule(flowStartupWindow + convergenceTime, &InitializeCounters);
-    Simulator::Schedule(flowStartupWindow + convergenceTime + measurementWindow,
-                        &PrintThroughput,
-                        measurementWindow);
-    Simulator::Schedule(flowStartupWindow + convergenceTime + measurementWindow,
-                        &PrintFairness,
-                        measurementWindow);
-    Simulator::Schedule(progressInterval, &PrintProgress, progressInterval);
-    Simulator::Schedule(flowStartupWindow + convergenceTime, &CheckT1QueueSize, queueDiscs1.Get(0));
-    Simulator::Schedule(flowStartupWindow + convergenceTime, &CheckT2QueueSize, queueDiscs2.Get(0));
-    Simulator::Stop(stopTime + TimeStep(1));
-
+    Simulator::Stop(Seconds(simulator_stop_time));
     Simulator::Run();
+	flowMonitor->SerializeToXmlFile("MyResult/FlowPerformance.xml", true, true);
+    /*AsciiTraceHelper ascii;
+    Node2Tor.EnableAsciiAll(ascii.CreateFileStream("MyResult/Node2Tor-static-routing-slash32.tr"));
+    Node2Tor.EnablePcapAll("Node2Tor-static-routing-slash32");
+    Tor2Agg.EnableAsciiAll(ascii.CreateFileStream("MyResult/Tor2Agg-static-routing-slash32.tr"));
+    Tor2Agg.EnablePcapAll("Tor2Agg-static-routing-slash32");
+    Agg2Core.EnableAsciiAll(ascii.CreateFileStream("MyResult/Agg2Core-static-routing-slash32.tr"));
+    Agg2Core.EnablePcapAll("Agg2Core-static-routing-slash32");*/
+    cout << "totalPktSize:" << totalPktSize << endl;
+    cout << "total_send:" << total_send << endl;
 
-    rxS1R1Throughput.close();
-    rxS2R2Throughput.close();
-    rxS3R1Throughput.close();
-    fairnessIndex.close();
-    t1QueueLength.close();
-    t2QueueLength.close();
+    NS_LOG_INFO("Running the Simulation.");
+    NS_LOG_INFO("Done.");
     Simulator::Destroy();
+
     return 0;
 }

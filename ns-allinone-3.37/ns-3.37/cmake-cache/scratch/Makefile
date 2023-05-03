@@ -173,6 +173,20 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+scratch/CMakeFiles/scratch_my-dctcp-example.dir/rule:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch/CMakeFiles/scratch_my-dctcp-example.dir/rule
+.PHONY : scratch/CMakeFiles/scratch_my-dctcp-example.dir/rule
+
+# Convenience name for target.
+scratch_my-dctcp-example: scratch/CMakeFiles/scratch_my-dctcp-example.dir/rule
+.PHONY : scratch_my-dctcp-example
+
+# fast build rule for target.
+scratch_my-dctcp-example/fast:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-dctcp-example.dir/build.make scratch/CMakeFiles/scratch_my-dctcp-example.dir/build
+.PHONY : scratch_my-dctcp-example/fast
+
+# Convenience name for target.
 scratch/CMakeFiles/scratch_my-queue-discs-benchmark.dir/rule:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch/CMakeFiles/scratch_my-queue-discs-benchmark.dir/rule
 .PHONY : scratch/CMakeFiles/scratch_my-queue-discs-benchmark.dir/rule
@@ -297,6 +311,30 @@ scratch_subdir_scratch-subdir: scratch/CMakeFiles/scratch_subdir_scratch-subdir.
 scratch_subdir_scratch-subdir/fast:
 	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_subdir_scratch-subdir.dir/build.make scratch/CMakeFiles/scratch_subdir_scratch-subdir.dir/build
 .PHONY : scratch_subdir_scratch-subdir/fast
+
+my-dctcp-example.o: my-dctcp-example.cc.o
+.PHONY : my-dctcp-example.o
+
+# target to build an object file
+my-dctcp-example.cc.o:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-dctcp-example.dir/build.make scratch/CMakeFiles/scratch_my-dctcp-example.dir/my-dctcp-example.cc.o
+.PHONY : my-dctcp-example.cc.o
+
+my-dctcp-example.i: my-dctcp-example.cc.i
+.PHONY : my-dctcp-example.i
+
+# target to preprocess a source file
+my-dctcp-example.cc.i:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-dctcp-example.dir/build.make scratch/CMakeFiles/scratch_my-dctcp-example.dir/my-dctcp-example.cc.i
+.PHONY : my-dctcp-example.cc.i
+
+my-dctcp-example.s: my-dctcp-example.cc.s
+.PHONY : my-dctcp-example.s
+
+# target to generate assembly for a file
+my-dctcp-example.cc.s:
+	cd /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/cmake-cache && $(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-dctcp-example.dir/build.make scratch/CMakeFiles/scratch_my-dctcp-example.dir/my-dctcp-example.cc.s
+.PHONY : my-dctcp-example.cc.s
 
 my-queue-discs-benchmark.o: my-queue-discs-benchmark.cc.o
 .PHONY : my-queue-discs-benchmark.o
@@ -551,6 +589,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... scratch_my-dctcp-example"
 	@echo "... scratch_my-queue-discs-benchmark"
 	@echo "... scratch_my-test"
 	@echo "... scratch_my-test-dctcp"
@@ -560,6 +599,9 @@ help:
 	@echo "... scratch_queue-discs-test"
 	@echo "... scratch_scratch-simulator"
 	@echo "... scratch_subdir_scratch-subdir"
+	@echo "... my-dctcp-example.o"
+	@echo "... my-dctcp-example.i"
+	@echo "... my-dctcp-example.s"
 	@echo "... my-queue-discs-benchmark.o"
 	@echo "... my-queue-discs-benchmark.i"
 	@echo "... my-queue-discs-benchmark.s"

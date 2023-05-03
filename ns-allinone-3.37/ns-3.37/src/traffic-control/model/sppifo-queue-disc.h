@@ -62,8 +62,13 @@ class SppifoQueueDisc : public QueueDisc
     bool CheckConfig() override;
     void InitializeParams() override;
 
+    uint32_t GetTotalNPackets();
+
     uint32_t m_fifo_num = 8; // number of fifos
     uint32_t m_bounds[50] = {0}; // max 50 FIFOs
+    bool m_useEcn = false;            //!< True if ECN is used (packets are marked instead of being dropped)
+    uint32_t m_minTh = 10;         //!< Minimum threshold for (number of packets)
+
 };
 
 } // namespace ns3

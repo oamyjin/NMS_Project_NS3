@@ -5464,6 +5464,19 @@ wifi-ofdm-eht-validation/fast:
 .PHONY : wifi-ofdm-eht-validation/fast
 
 #=============================================================================
+# Target rules for targets named scratch_my-dctcp-example
+
+# Build rule for target.
+scratch_my-dctcp-example: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch_my-dctcp-example
+.PHONY : scratch_my-dctcp-example
+
+# fast build rule for target.
+scratch_my-dctcp-example/fast:
+	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-dctcp-example.dir/build.make scratch/CMakeFiles/scratch_my-dctcp-example.dir/build
+.PHONY : scratch_my-dctcp-example/fast
+
+#=============================================================================
 # Target rules for targets named scratch_my-queue-discs-benchmark
 
 # Build rule for target.
@@ -6029,6 +6042,7 @@ help:
 	@echo "... sample-random-variable-stream"
 	@echo "... sample-show-progress"
 	@echo "... sample-simulator"
+	@echo "... scratch_my-dctcp-example"
 	@echo "... scratch_my-queue-discs-benchmark"
 	@echo "... scratch_my-test"
 	@echo "... scratch_my-test-dctcp"

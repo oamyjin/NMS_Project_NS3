@@ -1217,7 +1217,7 @@ QueueDisc::UpdateFlowTable (Ptr<QueueDiscItem> item)
     uint32_t flowId = tag.GetFlowId();
     uint32_t weight = tag.GetFlowWeight();
     uint32_t rank = item->GetPriority();
-    std::cout << m_devQueueIface << " UpdateFlowTable flowId:" << flowId << " m_flow_table[flowId]:" << m_flow_table[flowId] << std::endl;
+    NS_LOG_DEBUG(m_devQueueIface << " UpdateFlowTable flowId:" << flowId << " m_flow_table[flowId]:" << m_flow_table[flowId]);
     m_flow_table[flowId] = rank + weight;
 }
 
@@ -1239,7 +1239,7 @@ QueueDisc::RankComputation (Ptr<QueueDiscItem> item)
             //     m_flow_table[flowId] = 0;
             // }
             rank = std::max(m_current_round, m_flow_table[flowId]);
-            std::cout << Simulator::Now().GetSeconds() << " " << m_devQueueIface << " m_current_round:" << m_current_round << " m_flow_table[flowId]:" << m_flow_table[flowId] << " rank:" << rank << " flowId:" << tag.GetFlowId() << " weight:" << weight << std::endl;
+            NS_LOG_DEBUG(Simulator::Now().GetSeconds() << " " << m_devQueueIface << " m_current_round:" << m_current_round << " m_flow_table[flowId]:" << m_flow_table[flowId] << " rank:" << rank << " flowId:" << tag.GetFlowId() << " weight:" << weight);
             //m_flow_table[flowId] = rank + weight; // update the last finish time in flow table 
             break;
 

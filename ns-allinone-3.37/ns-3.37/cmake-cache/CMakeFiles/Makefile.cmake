@@ -722,6 +722,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "examples/wireless/CMakeFiles/wifi-vht-network.dir/DependInfo.cmake"
   "examples/wireless/CMakeFiles/wifi-wired-bridging.dir/DependInfo.cmake"
   "examples/wireless/CMakeFiles/wifi-ofdm-eht-validation.dir/DependInfo.cmake"
+  "scratch/CMakeFiles/scratch_my-dctcp-example.dir/DependInfo.cmake"
   "scratch/CMakeFiles/scratch_my-queue-discs-benchmark.dir/DependInfo.cmake"
   "scratch/CMakeFiles/scratch_my-test-dctcp.dir/DependInfo.cmake"
   "scratch/CMakeFiles/scratch_my-test-tcp-single-node.dir/DependInfo.cmake"

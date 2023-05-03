@@ -43,11 +43,21 @@ SppifoQueueDisc::GetTypeId()
                           QueueSizeValue(QueueSize("60p")),
                           MakeQueueSizeAccessor(&QueueDisc::SetMaxSize, &QueueDisc::GetMaxSize),
                           MakeQueueSizeChecker())
-            // .AddAttribute("FifoNum",
-            //               "The number of FIFOs",
-            //               UintegerValue(8),
-            //               MakeUintegerAccessor(&SppifoQueueDisc::GetFifoNum, &SppifoQueueDisc::GetFifoNum),
-            //               MakeUintegerChecker<uint32_t>())
+            .AddAttribute("FifoNum",
+                          "The number of FIFOs",
+                          UintegerValue(8),
+                          MakeUintegerAccessor(&SppifoQueueDisc::m_fifo_num),
+                          MakeUintegerChecker<uint32_t>())
+            .AddAttribute("UseEcn",
+                          "True to use ECN (packets are marked instead of being dropped)",
+                          BooleanValue(false),
+                          MakeBooleanAccessor(&SppifoQueueDisc::m_useEcn),
+                          MakeBooleanChecker())
+            .AddAttribute("MinTh",
+                          "Minimum number threshold of packets",
+                          DoubleValue(5),
+                          MakeUintegerAccessor(&SppifoQueueDisc::m_minTh),
+                          MakeUintegerChecker<uint32_t>())
             ;
     return tid;
 }
@@ -65,7 +75,7 @@ SppifoQueueDisc::SppifoQueueDisc()
         AddInternalQueue(factory.Create<InternalQueue>());
     }
 
-    std::cout << "SpPifoQueueDisc Created " << GetNInternalQueues() << " " << GetMaxSize() << std::endl;
+    std::cout << "SpPifoQueueDisc Created " << GetNInternalQueues() << " " << GetMaxSize() << " m_minTh:" << m_minTh << std::endl;
 }
 
 SppifoQueueDisc::~SppifoQueueDisc()
@@ -78,7 +88,6 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
 {
     NS_LOG_FUNCTION(this << item);
     NS_LOG_DEBUG("DoEnqueue");
-    std::cout << "DoEnqueue" << std::endl;
 
     uint32_t rank = RankComputation(item);
     
@@ -161,7 +170,11 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
 
     NS_LOG_LOGIC("Number packets " << GetInternalQueue(0)->GetNPackets());
     NS_LOG_LOGIC("Number bytes " << GetInternalQueue(0)->GetNBytes());
-
+    
+    if (m_useEcn && GetTotalNPackets() > m_minTh)
+    {
+        Mark(item, "SP-Pifo ECN mark");
+    }
     return retval;
 }
 
@@ -170,14 +183,13 @@ SppifoQueueDisc::DoDequeue()
 {
     NS_LOG_FUNCTION(this);
     NS_LOG_DEBUG("DoDequeue");
-    std::cout << "DoDequeue" << std::endl;
     
     Ptr<QueueDiscItem> item;
     for (int i = 0; i < static_cast<int>(GetNInternalQueues()); i++)
     {
         if (GetInternalQueue(i)->GetNPackets() > 0)
         {
-            std::cout << "i:" << i << std::endl;
+            NS_LOG_DEBUG("i:" << i );
             item = GetInternalQueue(i)->Dequeue();
             UpdateCurrentRound(item);
             break;
@@ -232,6 +244,18 @@ void
 SppifoQueueDisc::InitializeParams()
 {
     NS_LOG_FUNCTION(this);
+}
+
+
+uint32_t
+SppifoQueueDisc::GetTotalNPackets()
+{
+    uint32_t total = 0;
+    for(int i = 0; i < m_fifo_num; i++)
+    {
+        total += GetInternalQueue(i)->GetNPackets();
+    }
+    return total;
 }
 
 } // namespace ns3

@@ -35,7 +35,7 @@ const uint32_t NodeNumPerPod = ServerPerPod + TorPerPod + AggPerPod;
 const uint32_t ServerTotalNum = ServerPerPod * PodNum;
 
 const char* Node2Tor_Capacity = "10Gbps"; // 10Gbps
-const char* Node2Tor_Delay = "3us"; //10ns
+const char* Node2Tor_Delay = "10ns"; //10ns
 const char* Tor2Agg_Capacity = "40Gbps";
 const char* Tor2Agg_Delay = "1us";
 const char* Agg2Core_Capacity = "40Gbps";
@@ -271,7 +271,7 @@ ScheduleFlowInputs()
         Ptr<Socket> ns3TcpSocket = Socket::CreateSocket(
             pods[(flow_input.src - 1) / ServerPerPod].Get((flow_input.src - 1) % ServerPerPod),
             TcpSocketFactory::GetTypeId());
-        ns3TcpSocket->SetAttribute("SndBufSize", ns3::UintegerValue(1438000000));
+        //ns3TcpSocket->SetAttribute("SndBufSize", ns3::UintegerValue(1438000000));
         Ptr<MyApp> app = CreateObject<MyApp>();
         app->Setup(
             ns3TcpSocket,
@@ -289,6 +289,7 @@ ScheduleFlowInputs()
              << endl;
         if (flow_input.stop_time != 0)
         {
+            std::cout << "stop_time:" << flow_input.stop_time << std::endl;
             app->SetStopTime(Seconds(flow_input.stop_time - Simulator::Now().GetSeconds()));
         }
         // get the next flow input
@@ -317,7 +318,7 @@ main(int argc, char* argv[])
     cmd.Parse (argc, argv);
     Time::SetResolution (Time::NS);
     char line[200];
-	flowf.open("scratch/traffic_20.txt"); //traffic_3.txt //traffic_5.txt //traffic_7.txt //traffic_9.txt //flow_test.txt
+	flowf.open("scratch/traffic_4flows.txt"); //traffic_3.txt //traffic_5.txt //traffic_7.txt //traffic_9.txt //flow_test.txt
 	flowf.getline(line, 100);
 	sscanf(line, "%d", &(flow_num));
     cout << "flow_num:" << flow_num << endl;
@@ -332,7 +333,8 @@ main(int argc, char* argv[])
     Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.0000132)));// 0000132 //0.00000804 RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
     Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 5RTT = 5*8.04 = 40.2us
     Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 syn timeout 5rtt
-    //Config::SetDefault ("ns3::TcpSocketBase::ClockGranularity", TimeValue(MilliSeconds (0.00804)));//RTT
+    
+    //Config::SetDefault ("ns3::TcpSocketBase::ClockGranularity", TimeValue(MilliSeconds (0.0000132)));//RTT
 
     Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue(PacketSize));//default SegmentSize is 536 Bytes
     Config::SetDefault("ns3::Ipv4GlobalRouting::RandomEcmpRouting", BooleanValue(ECMProuting));
@@ -490,7 +492,7 @@ main(int argc, char* argv[])
             tch.Uninstall(coreDev[i][j]);
         }
     }*/
-    //tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("300p"));
+    //tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("60p")); //;"MinTh", UintegerValue(10)
     tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("10000p"));
     //tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
     //tch.SetRootQueueDisc("ns3::FifoQueueDisc", "MaxSize", StringValue("300p"));

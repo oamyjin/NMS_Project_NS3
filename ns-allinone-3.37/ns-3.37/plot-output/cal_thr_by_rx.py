@@ -95,7 +95,7 @@ if __name__ == "__main__":
     #plt.title('SPPIFO Scheduler')
     
     # show a legend on the plot
-    #plt.legend()
+    plt.legend()
     
     # save fig
     plt.savefig(fig_name) 
