@@ -34,15 +34,15 @@ const uint32_t ServerPerPod = ServerPerTor * TorPerPod;
 const uint32_t NodeNumPerPod = ServerPerPod + TorPerPod + AggPerPod;
 const uint32_t ServerTotalNum = ServerPerPod * PodNum;
 
-const char* Node2Tor_Capacity = "10Gbps";
-const char* Node2Tor_Delay = "10ns";
+const char* Node2Tor_Capacity = "10Gbps"; // 10Gbps
+const char* Node2Tor_Delay = "3us"; //10ns
 const char* Tor2Agg_Capacity = "40Gbps";
 const char* Tor2Agg_Delay = "1us";
 const char* Agg2Core_Capacity = "40Gbps";
 const char* Agg2Core_Delay = "1us";
-const char* AppDataRate = "10Gbps";
+const char* AppDataRate = "10Gbps";  // 10Gbps
 
-double simulator_stop_time = 5.0;
+double simulator_stop_time = 10.0;
 bool ECMProuting = true;
 const uint32_t PacketSize = 1448;
 
@@ -241,7 +241,7 @@ ReadFlowInput()
             cout << "flow_input.src:" << flow_input.src << " flow_input.dst:" << flow_input.dst
                  << endl;
             stringstream path;
-            path << "scratch/GBResult/Rx/rx" << flow_input.src << ".dat"; // plotResult
+            path << "scratch/MyResult/Rx/rx" << flow_input.src << ".dat"; // plotResult
             std::ofstream thr0(path.str(), std::ios::out | std::ios::app);
             thr0 << flow_input.start_time << " " << 0 << endl; //<< " tx:" << localThroutx  << endl;
         }
@@ -324,14 +324,14 @@ main(int argc, char* argv[])
 
     // LogComponentEnable ("TrafficControlLayer", LOG_LEVEL_INFO);
     // LogComponentEnable ("SppifoQueueDisc", LOG_LEVEL_INFO);
-    LogComponentEnable ("PifoQueueDisc", LOG_LEVEL_INFO);
-    LogComponentEnable ("QueueDisc", LOG_LEVEL_INFO);
+    //LogComponentEnable ("PifoQueueDisc", LOG_LEVEL_INFO);
+    //LogComponentEnable ("QueueDisc", LOG_LEVEL_INFO);
     // LogComponentEnable ("AFQQueueDisc", LOG_LEVEL_INFO);
 
-    Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue(Seconds (0.00002412)));//0.00180 //delayed ack time out default is 200ms
-    Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.00000804))); //RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
-    Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000402))); // 5RTT = 5*8.04 = 40.2us
-    Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000402)));// syn timeout 5rtt
+    Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue(Seconds (0.0000)));//000600 //0.00002412 //delayed ack time out default is 200ms
+    Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.0000132)));// 0000132 //0.00000804 RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
+    Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 5RTT = 5*8.04 = 40.2us
+    Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 syn timeout 5rtt
     //Config::SetDefault ("ns3::TcpSocketBase::ClockGranularity", TimeValue(MilliSeconds (0.00804)));//RTT
 
     Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue(PacketSize));//default SegmentSize is 536 Bytes
@@ -478,7 +478,8 @@ main(int argc, char* argv[])
 
     // unintall traffic control
     TrafficControlHelper tch;
-    //tch.Uninstall(podDev[0][0]);
+    tch.Uninstall(podDev[0][20]); //server21-tor
+    /*
     for (int i = 0; i < PodNum; i++){
         for (int j = 0; j < NodeNumPerPod; j++){
             tch.Uninstall(podDev[i][j]);
@@ -488,33 +489,33 @@ main(int argc, char* argv[])
         for (int j = 0; j < PodNum; j++){
             tch.Uninstall(coreDev[i][j]);
         }
-    }
-    //tch.SetRootQueueDisc ("ns3::AFQ");
-    //tch.SetRootQueueDisc ("ns3::SpPifo");
-    //tch.SetRootQueueDisc("ns3::SppifoQueueDisc");
-    //tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("100p"));
+    }*/
+    //tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("300p"));
+    tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("10000p"));
     //tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
-    tch.SetRootQueueDisc("ns3::FifoQueueDisc");
+    //tch.SetRootQueueDisc("ns3::FifoQueueDisc", "MaxSize", StringValue("300p"));
+    tch.Install(podDev[0][20].Get(1)); //server21-tor, on the tor side
+    /*
     for (int i = 0; i < PodNum; i++){
         for (int j = 0; j < NodeNumPerPod; j++){
-            tch.Install(podDev[i][j]);
-            //tch.Install(podDev[i][j].Get(0));
-            //tch.Install(podDev[i][j].Get(1));
+            //tch.Install(podDev[i][j]);
+            tch.Install(podDev[i][j].Get(0));
+            tch.Install(podDev[i][j].Get(1));
         }
     }
     for (int i = 0; i < CoreNum; i++){
         for (int j = 0; j < PodNum; j++){
-            tch.Install(coreDev[i][j]);
-            //tch.Install(coreDev[i][j].Get(0));
-            //tch.Install(coreDev[i][j].Get(1));
+            //tch.Install(coreDev[i][j]);
+            tch.Install(coreDev[i][j].Get(0));
+            tch.Install(coreDev[i][j].Get(1));
         }
-    }
+    }*/
 
     // Routing tables
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
     
     // Ptr<OutputStreamWrapper> routingStream =
-    // Create<OutputStreamWrapper>("GBResult/global-routing-multi-switch-plus-router.routes",
+    // Create<OutputStreamWrapper>("MyResult/global-routing-multi-switch-plus-router.routes",
     //                                 std::ios::out);
     // Ipv4GlobalRoutingHelper g;
     // g.PrintRoutingTableAllAt(Seconds(1), routingStream);
@@ -540,10 +541,10 @@ main(int argc, char* argv[])
         Simulator::Schedule(Seconds(flow_input.start_time) - Simulator::Now(), ScheduleFlowInputs);
     }
 
-    //Node2Tor.EnablePcapAll ("GBResult/FatTree");
-    //Node2Tor.EnablePcapAll("GBResult/DCN_FatTree_Pcap");
+    //Node2Tor.EnablePcapAll ("MyResult/FatTree");
+    //Node2Tor.EnablePcapAll("MyResult/DCN_FatTree_Pcap");
     //AsciiTraceHelper ascii;
-    //Node2Tor.EnableAsciiAll (ascii.CreateFileStream ("GBResult/myfirst.tr"));
+    //Node2Tor.EnableAsciiAll (ascii.CreateFileStream ("MyResult/myfirst.tr"));
 
 	//Flow monitor
 	Ptr<FlowMonitor> flowMonitor;
@@ -552,13 +553,13 @@ main(int argc, char* argv[])
 
     Simulator::Stop(Seconds(simulator_stop_time));
     Simulator::Run();
-	flowMonitor->SerializeToXmlFile("GBResult/FlowPerformance.xml", true, true);
+	flowMonitor->SerializeToXmlFile("MyResult/FlowPerformance.xml", true, true);
     /*AsciiTraceHelper ascii;
-    Node2Tor.EnableAsciiAll(ascii.CreateFileStream("GBResult/Node2Tor-static-routing-slash32.tr"));
+    Node2Tor.EnableAsciiAll(ascii.CreateFileStream("MyResult/Node2Tor-static-routing-slash32.tr"));
     Node2Tor.EnablePcapAll("Node2Tor-static-routing-slash32");
-    Tor2Agg.EnableAsciiAll(ascii.CreateFileStream("GBResult/Tor2Agg-static-routing-slash32.tr"));
+    Tor2Agg.EnableAsciiAll(ascii.CreateFileStream("MyResult/Tor2Agg-static-routing-slash32.tr"));
     Tor2Agg.EnablePcapAll("Tor2Agg-static-routing-slash32");
-    Agg2Core.EnableAsciiAll(ascii.CreateFileStream("GBResult/Agg2Core-static-routing-slash32.tr"));
+    Agg2Core.EnableAsciiAll(ascii.CreateFileStream("MyResult/Agg2Core-static-routing-slash32.tr"));
     Agg2Core.EnablePcapAll("Agg2Core-static-routing-slash32");*/
     cout << "totalPktSize:" << totalPktSize << endl;
     cout << "total_send:" << total_send << endl;

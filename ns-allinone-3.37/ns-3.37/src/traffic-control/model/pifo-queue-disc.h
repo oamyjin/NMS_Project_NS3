@@ -60,6 +60,8 @@ private:
   virtual Ptr<const QueueDiscItem> DoPeek (void) override;
   virtual bool CheckConfig (void) override;
   virtual void InitializeParams (void) override;
+
+  //uint32_t m_max_rank = 0; // max rank in the pifo queue
 };
 
 } // namespace ns3

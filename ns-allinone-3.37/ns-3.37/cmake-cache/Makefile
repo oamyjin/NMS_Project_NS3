@@ -5464,6 +5464,19 @@ wifi-ofdm-eht-validation/fast:
 .PHONY : wifi-ofdm-eht-validation/fast
 
 #=============================================================================
+# Target rules for targets named scratch_my-queue-discs-benchmark
+
+# Build rule for target.
+scratch_my-queue-discs-benchmark: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch_my-queue-discs-benchmark
+.PHONY : scratch_my-queue-discs-benchmark
+
+# fast build rule for target.
+scratch_my-queue-discs-benchmark/fast:
+	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-queue-discs-benchmark.dir/build.make scratch/CMakeFiles/scratch_my-queue-discs-benchmark.dir/build
+.PHONY : scratch_my-queue-discs-benchmark/fast
+
+#=============================================================================
 # Target rules for targets named scratch_my-test-dctcp
 
 # Build rule for target.
@@ -5475,6 +5488,19 @@ scratch_my-test-dctcp: cmake_check_build_system
 scratch_my-test-dctcp/fast:
 	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-dctcp.dir/build.make scratch/CMakeFiles/scratch_my-test-dctcp.dir/build
 .PHONY : scratch_my-test-dctcp/fast
+
+#=============================================================================
+# Target rules for targets named scratch_my-test-tcp-single-node
+
+# Build rule for target.
+scratch_my-test-tcp-single-node: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 scratch_my-test-tcp-single-node
+.PHONY : scratch_my-test-tcp-single-node
+
+# fast build rule for target.
+scratch_my-test-tcp-single-node/fast:
+	$(MAKE) $(MAKESILENT) -f scratch/CMakeFiles/scratch_my-test-tcp-single-node.dir/build.make scratch/CMakeFiles/scratch_my-test-tcp-single-node.dir/build
+.PHONY : scratch_my-test-tcp-single-node/fast
 
 #=============================================================================
 # Target rules for targets named scratch_my-test-tcp
@@ -6003,9 +6029,11 @@ help:
 	@echo "... sample-random-variable-stream"
 	@echo "... sample-show-progress"
 	@echo "... sample-simulator"
+	@echo "... scratch_my-queue-discs-benchmark"
 	@echo "... scratch_my-test"
 	@echo "... scratch_my-test-dctcp"
 	@echo "... scratch_my-test-tcp"
+	@echo "... scratch_my-test-tcp-single-node"
 	@echo "... scratch_my-test-udp"
 	@echo "... scratch_queue-discs-test"
 	@echo "... scratch_scratch-simulator"

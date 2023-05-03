@@ -212,7 +212,7 @@ def main(argv):
                 sys.stdout.flush()
     print(" done.")
 
-    file_out = open("GBResult/flow_result_data.json", "w")
+    file_out = open("MyResult/flow_result_data.json", "w")
     all_flow_data_result = []
     for sim in sim_list:
         for flow in sim.flows:

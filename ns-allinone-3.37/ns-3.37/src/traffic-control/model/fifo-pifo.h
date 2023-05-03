@@ -19,7 +19,7 @@ namespace ns3
 class FifoPifo : public QueueDisc
 {
   private:
-    static const int DEFAULT_VOLUME = 30;      // fifo size
+    static const int DEFAULT_VOLUME = 1000;      // fifo size
     static const int RANK_RANGE = 1000;        // max rank difference value
     static const int DEFAULT_WEIGHT = 2;       // weight
     static const int DEFAULT_BURSTNESS = 1000; // burstness

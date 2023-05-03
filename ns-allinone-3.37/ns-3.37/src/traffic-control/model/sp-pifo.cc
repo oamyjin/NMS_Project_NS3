@@ -109,7 +109,7 @@ SpPifo::insertNewFlowPtr(string fid, int fno, int weight, int burstness)
     Flowlist.push_back(fid);
     string key = convertKeyValue(fid);
     Flow_pl* newFlowPtr = new Flow_pl(fid, fno, weight, burstness);
-    std::ofstream thr1("GBResult/weight.dat", std::ios::out | std::ios::app);
+    std::ofstream thr1("MyResult/weight.dat", std::ios::out | std::ios::app);
     thr1 << fno << " " << weight << endl;
     newFlowPtr->setStartTime(Simulator::Now().GetSeconds());
     this->flowMap.insert(pair<string, Flow_pl*>(key, newFlowPtr));
@@ -214,7 +214,7 @@ SpPifo::DoEnqueue(Ptr<QueueDiscItem> item)
                 enpkt += 1;
                 size += 1; // trace size in sp-pifo
 
-                std::ofstream thr("GBResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
+                std::ofstream thr("MyResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
                 thr << rank << ": ";
                 for (int k = 0; k < DEFAULT_PQ; k++)
                 {
@@ -249,7 +249,7 @@ SpPifo::DoEnqueue(Ptr<QueueDiscItem> item)
                 Packet* packet = GetPointer(item->GetPacket());
                 packet->PeekPacketTag(tag);
                 stringstream path;
-                path << "GBResult/pktsDelay_flows/flow_" << currFlow->getFlowNo()
+                path << "MyResult/pktsDelay_flows/flow_" << currFlow->getFlowNo()
                      << "_pktdelay.dat"; // plotResult
                 std::ofstream thr4(path.str(), std::ios::out | std::ios::app);
                 // thr4 << header.GetSequenceNumber().GetValue() << " " << tag.GetUid() << " -1"
@@ -259,7 +259,7 @@ SpPifo::DoEnqueue(Ptr<QueueDiscItem> item)
                 DropBeforeEnqueue(item, "Fifo overflow");
 
                 drop += 1;
-                std::ofstream thr1("GBResult/SpPifodrop.dat", std::ios::out | std::ios::app);
+                std::ofstream thr1("MyResult/SpPifodrop.dat", std::ios::out | std::ios::app);
                 thr1 << Simulator::Now().GetSeconds() << " " << drop << endl;
                 return false;
             }
@@ -280,7 +280,7 @@ SpPifo::DoEnqueue(Ptr<QueueDiscItem> item)
                     fifoenque += 1;
                     enpkt += 1;
 
-                    std::ofstream thr("GBResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
+                    std::ofstream thr("MyResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
                     thr << rank << ": ";
                     for (int k = 0; k < DEFAULT_PQ; k++)
                     {
@@ -304,7 +304,7 @@ SpPifo::DoEnqueue(Ptr<QueueDiscItem> item)
                     }
                     thr << endl;
                     this->Record("EnqueuedPktsList.txt", item);
-                    std::ofstream thr2("GBResult/size.dat", std::ios::out | std::ios::app);
+                    std::ofstream thr2("MyResult/size.dat", std::ios::out | std::ios::app);
                     thr2 << Simulator::Now().GetSeconds() << " " << size << endl;
                     return true;
                 }
@@ -313,7 +313,7 @@ SpPifo::DoEnqueue(Ptr<QueueDiscItem> item)
                 {
                     DropBeforeEnqueue(item, "Reason for droppin item");
                     drop += 1;
-                    std::ofstream thr1("GBResult/SpPifodrop.dat", std::ios::out | std::ios::app);
+                    std::ofstream thr1("MyResult/SpPifodrop.dat", std::ios::out | std::ios::app);
                     thr1 << Simulator::Now().GetSeconds() << " " << drop << endl;
                     return false;
                 }
@@ -366,15 +366,15 @@ SpPifo::DoDequeue()
         inv_count += 1;
         inv_mag += inversion;
     }
-    std::ofstream thr2("GBResult/inversion_record.dat", std::ios::out);
+    std::ofstream thr2("MyResult/inversion_record.dat", std::ios::out);
     thr2 << "count: " << inv_count << "  magnitude: " << inv_mag << endl;
 
-    std::ofstream thr("GBResult/CountStat.dat", std::ios::out);
+    std::ofstream thr("MyResult/CountStat.dat", std::ios::out);
     thr << Simulator::Now().GetSeconds() << " enque:" << enque << " deque:" << deque
         << " fifoenque:" << fifoenque << " fifodeque:" << fifodeque << " drop:" << drop
         << " flowNo:" << flowNo << std::endl;
 
-    std::ofstream thr3("GBResult/size.dat", std::ios::out | std::ios::app);
+    std::ofstream thr3("MyResult/size.dat", std::ios::out | std::ios::app);
     thr3 << Simulator::Now().GetSeconds() << " " << size << endl;
 
     // remove packet tag
@@ -389,7 +389,7 @@ SpPifo::Record(string fname, Ptr<QueueDiscItem> item)
     item->GetPacket()->PeekPacketTag(tag);
     int dp = tag.GetDepartureRound();
 
-    string path = "GBResult/pktsList/";
+    string path = "MyResult/pktsList/";
     path.append(fname);
 
     FILE* fp;

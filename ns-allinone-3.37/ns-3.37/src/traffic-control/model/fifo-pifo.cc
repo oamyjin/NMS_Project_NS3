@@ -282,7 +282,7 @@ FifoPifo::DoDequeue()
     //     this->Record("DequeuedPktsList.txt", GetPointer(item));
     // }
 
-    std::ofstream thr("GBResult/size.dat", std::ios::out | std::ios::app);
+    std::ofstream thr("MyResult/size.dat", std::ios::out | std::ios::app);
     thr << Simulator::Now().GetSeconds() << " " << size << endl;
 
     // update the map which records all pkts currently in the scheduler
@@ -294,10 +294,10 @@ FifoPifo::DoDequeue()
         inv_count += 1;
         inv_mag += inversion;
     }
-    std::ofstream thr2("GBResult/inversion_record.dat", std::ios::out);
+    std::ofstream thr2("MyResult/inversion_record.dat", std::ios::out);
     thr2 << "count: " << inv_count << "  magnitude: " << inv_mag << endl;
 
-    std::ofstream thr3("GBResult/CountStat.dat", std::ios::out);
+    std::ofstream thr3("MyResult/CountStat.dat", std::ios::out);
     dequed += 1;
     thr3 << Simulator::Now().GetSeconds() << " enque:" << enque << " deque:" << deque
          << " enqued:" << enqued << " dequed:" << dequed << " drop:" << drop << " drop_rate:" << 0.01*drop/enque << " flowNo:" << flowNo
@@ -324,7 +324,7 @@ FifoPifo::Record(string fname, Ptr<QueueDiscItem> item)
     item->GetPacket()->PeekPacketTag(tag);
     int dp = tag.GetDepartureRound();
 
-    string path = "GBResult/pktsList/";
+    string path = "MyResult/pktsList/";
     path.append(fname);
 
     FILE* fp;

@@ -1268,4 +1268,6 @@ scratch/CMakeFiles/scratch_my-test-udp.dir/my-test-udp.cc.o: \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/include/ns3/pifo-queue-disc.h \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/pifo-queue-disc.h \
   /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/include/ns3/sppifo-queue-disc.h \
-  /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sppifo-queue-disc.h
+  /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/sppifo-queue-disc.h \
+  /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/build/include/ns3/afq-queue-disc.h \
+  /Users/jiajin/Desktop/NMS/project/NMS_Project_NS3/ns-allinone-3.37/ns-3.37/src/traffic-control/model/afq-queue-disc.h

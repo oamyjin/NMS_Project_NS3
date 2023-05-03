@@ -164,7 +164,7 @@ AFQ::DoEnqueue(Ptr<QueueDiscItem> item)
         GearboxPktTag(currFlow->getFlowNo(), uid, departureRound, Simulator::Now().GetSeconds()));
 
 
-    // std::ofstream thr ("GBResult/pktsList/rankVtDifference.dat", std::ios::out | std::ios::app);
+    // std::ofstream thr ("MyResult/pktsList/rankVtDifference.dat", std::ios::out | std::ios::app);
     // thr << departureRound - currentRound << " ";
 
     if (departureRound > ((currentRound / GRANULARITY_PER_FIFO) * GRANULARITY_PER_FIFO +
@@ -179,7 +179,7 @@ AFQ::DoEnqueue(Ptr<QueueDiscItem> item)
         drop += 1;
         int maxRange = (currentRound / GRANULARITY_PER_FIFO) * GRANULARITY_PER_FIFO +
                        (GRANULARITY_PER_FIFO * FIFO_PER_LEVEL) - 1;
-        std::ofstream thr3("GBResult/pktsList/drop.dat", std::ios::out | std::ios::app);
+        std::ofstream thr3("MyResult/pktsList/drop.dat", std::ios::out | std::ios::app);
         thr3 << Simulator::Now().GetSeconds() << " dp:" << departureRound << " max:" << maxRange
              << " diff:" << departureRound - maxRange << " vt:" << currentRound
              << " fid:" << currFlow->getFlowNo() << endl;
@@ -199,7 +199,7 @@ AFQ::DoEnqueue(Ptr<QueueDiscItem> item)
         DropBeforeEnqueue(item, "Reason for dropping item");
 
         drop += 1;
-        std::ofstream thr3("GBResult/pktsList/drop.dat", std::ios::out | std::ios::app);
+        std::ofstream thr3("MyResult/pktsList/drop.dat", std::ios::out | std::ios::app);
         thr3 << Simulator::Now().GetSeconds() << " " << 0 << endl;
         dropCount = dropCount + 1;
         dropCountC = dropCountC + 1;
@@ -215,7 +215,7 @@ AFQ::DoEnqueue(Ptr<QueueDiscItem> item)
         // Drop(item);
         DropBeforeEnqueue(item, "Reason for dropping item");
 
-        std::ofstream thr5("GBResult/pktsList/drop.dat", std::ios::out | std::ios::app);
+        std::ofstream thr5("MyResult/pktsList/drop.dat", std::ios::out | std::ios::app);
         thr5 << Simulator::Now().GetSeconds() << " " << 0 << endl;
         drop += 1;
         dropCount = dropCount + 1;
@@ -262,9 +262,9 @@ AFQ::FifoEnqueue(QueueDiscItem* item, int index, int level)
         // Drop(re);
         DropBeforeEnqueue(re, "Reason for dropping item");
 
-        std::ofstream thr5("GBResult/pktsList/drop.dat", std::ios::out | std::ios::app);
+        std::ofstream thr5("MyResult/pktsList/drop.dat", std::ios::out | std::ios::app);
         thr5 << Simulator::Now().GetSeconds() << " " << 0 << endl;
-        std::ofstream thr6("GBResult/pktsList/Level0_fifo_drop.dat", std::ios::out | std::ios::app);
+        std::ofstream thr6("MyResult/pktsList/Level0_fifo_drop.dat", std::ios::out | std::ios::app);
         thr6 << (index - levels[0].getEarliestFifo() + FIFO_PER_LEVEL) % FIFO_PER_LEVEL << " ";
         drop += 1;
         dropCount = dropCount + 1;
@@ -332,10 +332,10 @@ AFQ::DoDequeue()
         inv_count += 1;
         inv_mag += inversion;
     }
-    std::ofstream thr2("GBResult/inversion_record.dat", std::ios::out);
+    std::ofstream thr2("MyResult/inversion_record.dat", std::ios::out);
     thr2 << "count: " << inv_count << "  magnitude: " << inv_mag << endl;
 
-    std::ofstream thr3("GBResult/CountStat.dat", std::ios::out);
+    std::ofstream thr3("MyResult/CountStat.dat", std::ios::out);
     thr3 << Simulator::Now().GetSeconds() << " drop:" << drop << " dropCountA:" << dropCountA
          << " dropCountB:" << dropCountB << " flowNo:" << flowNo << std::endl;
     // remove packet tag
@@ -484,7 +484,7 @@ AFQ::Record(string fname, int departureRound, Ptr<QueueDiscItem> item)
     // int uid = tag.GetUid();
     int dp = tag.GetDepartureRound();
     // int uid = tag.GetUid();
-    string path = "GBResult/pktsList/";
+    string path = "MyResult/pktsList/";
     path.append(fname);
     FILE* fp;
     ////cout<<path<<endl;
@@ -516,19 +516,19 @@ AFQ::Record(string fname, int departureRound, Ptr<QueueDiscItem> item)
 
     FILE* fpl0;
 
-    fpl0 = fopen("GBResult/pktsList/Level0", "a+"); // open and write
+    fpl0 = fopen("MyResult/pktsList/Level0", "a+"); // open and write
     fprintf(fpl0, "%f", Simulator::Now().GetSeconds());
     fprintf(fpl0, "\t%d", levels[0].getFifoMaxNPackets());
     fprintf(fpl0, "\n");
     fclose(fpl0);
     /*FILE *fpl1;
-    fpl1 = fopen("GBResult/pktsList/Level1", "a+"); //open and write
+    fpl1 = fopen("MyResult/pktsList/Level1", "a+"); //open and write
     fprintf(fpl1, "%f", Simulator::Now().GetSeconds());
     fprintf(fpl1, "\t%d", levels[1].getFifoMaxNPackets());
     fprintf(fpl1, "\n");
     fclose(fpl1);
     FILE *fpl2;
-    fpl2 = fopen("GBResult/pktsList/Level2", "a+"); //open and write
+    fpl2 = fopen("MyResult/pktsList/Level2", "a+"); //open and write
     fprintf(fpl2, "%f", Simulator::Now().GetSeconds());
     fprintf(fpl2, "\t%d", levels[2].getFifoMaxNPackets());
     fprintf(fpl2, "\n");
@@ -538,7 +538,7 @@ AFQ::Record(string fname, int departureRound, Ptr<QueueDiscItem> item)
 void
 AFQ::RecordFlow(string flowlabel, int departureRound)
 {
-    string path = "GBResult/pktsList/";
+    string path = "MyResult/pktsList/";
     path.append(flowlabel);
     FILE* fp;
     ////cout<<path<<endl;
@@ -593,7 +593,7 @@ AFQ::tagRecord(int flowiid, int uid, int departureRound, Ptr<QueueDiscItem> item
     // int uid = tag.GetUid();
     FILE* fp2;
 
-    string path = "GBResult/pktsList/tagRecord";
+    string path = "MyResult/pktsList/tagRecord";
     // path.append(to_string(flowiid));
     path.append(".txt");
     fp2 = fopen(path.data(), "a+"); // open and write

@@ -236,7 +236,7 @@ ReadFlowInput()
             cout << "flow_input.src:" << flow_input.src << " flow_input.dst:" << flow_input.dst
                  << endl;
             stringstream path;
-            path << "scratch/GBResult/Rx/rx" << flow_input.src << ".dat"; // plotResult
+            path << "scratch/MyResult/Rx/rx" << flow_input.src << ".dat"; // plotResult
             std::ofstream thr0(path.str(), std::ios::out | std::ios::app);
             thr0 << flow_input.start_time << " " << 0 << endl; //<< " tx:" << localThroutx  << endl;
         }
@@ -292,13 +292,13 @@ main(int argc, char* argv[])
     cmd.Parse (argc, argv);
     Time::SetResolution (Time::NS);
     char line[200];
-	flowf.open("scratch/traffic_4flows.txt"); //traffic_3.txt //traffic_5.txt //traffic_7.txt //traffic_9.txt //flow_test.txt
+	flowf.open("scratch/traffic_20.txt"); //traffic_3.txt //traffic_5.txt //traffic_7.txt //traffic_9.txt //flow_test.txt
 	flowf.getline(line, 100);
 	sscanf(line, "%d", &(flow_num));
     cout << "flow_num:" << flow_num << endl;
 
-    LogComponentEnable ("TrafficControlLayer", LOG_LEVEL_INFO);
-    LogComponentEnable ("FifoPifo", LOG_LEVEL_INFO);
+    //LogComponentEnable ("TrafficControlLayer", LOG_LEVEL_INFO);
+    //LogComponentEnable ("FifoPifo", LOG_LEVEL_INFO);
 
     Config::SetDefault ("ns3::TcpSocket::SegmentSize", UintegerValue(PacketSize));//default SegmentSize is 536 Bytes
     Config::SetDefault("ns3::Ipv4GlobalRouting::RandomEcmpRouting", BooleanValue(ECMProuting));
@@ -454,8 +454,12 @@ main(int argc, char* argv[])
             tch.Uninstall(coreDev[i][j]);
         }
     }
-    //tch.SetRootQueueDisc ("ns3::SpPifo");
-    tch.SetRootQueueDisc ("ns3::FifoPifo");
+    
+    //tch.SetRootQueueDisc("ns3::SppifoQueueDisc");
+    tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("10000p"));
+    //tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
+    //tch.SetRootQueueDisc("ns3::FifoQueueDisc");
+
     for (int i = 0; i < PodNum; i++){
         for (int j = 0; j < NodeNumPerPod; j++){
             tch.Install(podDev[i][j].Get(0));
@@ -476,7 +480,7 @@ main(int argc, char* argv[])
     Ipv4GlobalRoutingHelper::PopulateRoutingTables();
     
     // Ptr<OutputStreamWrapper> routingStream =
-    // Create<OutputStreamWrapper>("GBResult/global-routing-multi-switch-plus-router.routes",
+    // Create<OutputStreamWrapper>("MyResult/global-routing-multi-switch-plus-router.routes",
     //                                 std::ios::out);
     // Ipv4GlobalRoutingHelper g;
     // g.PrintRoutingTableAllAt(Seconds(1), routingStream);
@@ -490,10 +494,10 @@ main(int argc, char* argv[])
         Simulator::Schedule(Seconds(flow_input.start_time) - Simulator::Now(), ScheduleFlowInputs);
     }
 
-    //Node2Tor.EnablePcapAll ("GBResult/FatTree");
-    //Node2Tor.EnablePcapAll("GBResult/DCN_FatTree_Pcap");
+    //Node2Tor.EnablePcapAll ("MyResult/FatTree");
+    //Node2Tor.EnablePcapAll("MyResult/DCN_FatTree_Pcap");
     //AsciiTraceHelper ascii;
-    //Node2Tor.EnableAsciiAll (ascii.CreateFileStream ("GBResult/myfirst.tr"));
+    //Node2Tor.EnableAsciiAll (ascii.CreateFileStream ("MyResult/myfirst.tr"));
 
 	//Flow monitor
 	Ptr<FlowMonitor> flowMonitor;
@@ -502,13 +506,13 @@ main(int argc, char* argv[])
 
     Simulator::Stop(Seconds(simulator_stop_time));
     Simulator::Run();
-	flowMonitor->SerializeToXmlFile("GBResult/FlowPerformance.xml", true, true);
+	flowMonitor->SerializeToXmlFile("MyResult/FlowPerformance.xml", true, true);
     /*AsciiTraceHelper ascii;
-    Node2Tor.EnableAsciiAll(ascii.CreateFileStream("GBResult/Node2Tor-static-routing-slash32.tr"));
+    Node2Tor.EnableAsciiAll(ascii.CreateFileStream("MyResult/Node2Tor-static-routing-slash32.tr"));
     Node2Tor.EnablePcapAll("Node2Tor-static-routing-slash32");
-    Tor2Agg.EnableAsciiAll(ascii.CreateFileStream("GBResult/Tor2Agg-static-routing-slash32.tr"));
+    Tor2Agg.EnableAsciiAll(ascii.CreateFileStream("MyResult/Tor2Agg-static-routing-slash32.tr"));
     Tor2Agg.EnablePcapAll("Tor2Agg-static-routing-slash32");
-    Agg2Core.EnableAsciiAll(ascii.CreateFileStream("GBResult/Agg2Core-static-routing-slash32.tr"));
+    Agg2Core.EnableAsciiAll(ascii.CreateFileStream("MyResult/Agg2Core-static-routing-slash32.tr"));
     Agg2Core.EnablePcapAll("Agg2Core-static-routing-slash32");*/
     cout << "totalPktSize:" << totalPktSize << endl;
     cout << "total_send:" << total_send << endl;

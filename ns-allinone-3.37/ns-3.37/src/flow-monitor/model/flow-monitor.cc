@@ -268,6 +268,14 @@ FlowMonitor::ReportLastRx(Ptr<FlowProbe> probe,
     stats.timeLastRxPacket = now;
     stats.timesForwarded += tracked->second.timesForwarded;
 
+    // Jiajin Add
+    if (packetSize > 1000){
+        std::stringstream path;
+        path << "MyResult/rx_log/flow_" << flowId << ".txt";
+        std::ofstream thr(path.str(), std::ios::out | std::ios::app);
+        thr << now.GetSeconds() << " flowRxBytes:" << stats.rxBytes << " pktId:" << packetId << " pktSize:" << packetSize << " PktDelay:" << delay << std::endl;  
+    }
+
     NS_LOG_DEBUG("ReportLastTx: removing tracked packet (flowId=" << flowId << ", packetId="
                                                                   << packetId << ").");
 

@@ -99,6 +99,7 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
             if (retval)
             {
                 band = i;
+                UpdateFlowTable(item);
             }
             break;
         }
@@ -116,6 +117,7 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
                     {
                         m_bounds[j] -= cost;
                     }
+                    UpdateFlowTable(item);
                 }
                 break;
             }

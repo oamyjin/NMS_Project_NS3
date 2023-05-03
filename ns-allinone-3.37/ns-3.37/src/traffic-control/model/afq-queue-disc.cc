@@ -46,7 +46,7 @@ AFQQueueDisc::GetTypeId()
             .AddConstructor<AFQQueueDisc>()
             .AddAttribute("MaxSize",
                           "The maximum number of packets accepted by this queue disc.",
-                          QueueSizeValue(QueueSize("20p")),
+                          QueueSizeValue(QueueSize("60p")),
                           MakeQueueSizeAccessor(&QueueDisc::SetMaxSize, &QueueDisc::GetMaxSize),
                           MakeQueueSizeChecker()) 
             ;
@@ -99,10 +99,12 @@ AFQQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
     if (!retval)
     {
         NS_LOG_WARN("Packet enqueue failed. Check the size of the internal queues");
+        return false;
     }
 
     NS_LOG_LOGIC("Number packets band " << band << ": " << GetInternalQueue(band)->GetNPackets());
 
+    UpdateFlowTable(item);
     return retval;
 }
 

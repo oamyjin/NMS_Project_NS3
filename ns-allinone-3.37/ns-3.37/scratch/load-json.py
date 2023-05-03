@@ -1,7 +1,7 @@
 import json
   
 # Opening JSON file
-f = open('GBResult/flow_result_data.json')
+f = open('MyResult/flow_result_data.json')
   
 # returns JSON object as 
 # a dictionary

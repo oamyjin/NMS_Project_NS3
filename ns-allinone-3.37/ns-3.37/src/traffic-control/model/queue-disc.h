@@ -570,6 +570,8 @@ class QueueDisc : public Object
      * \return rank
      */
     uint32_t RankComputation (Ptr<QueueDiscItem> item);
+
+    void UpdateFlowTable (Ptr<QueueDiscItem> item);
      
     /**
      * update th ecurrent round by setting as the rank of the dequeued packet
@@ -836,7 +838,7 @@ class QueueDisc : public Object
     ChildQueueDiscMarkFunctor m_childQueueDiscMarkFunctor;
     
     /// current system virtual time
-    uint32_t m_current_round;
+    uint32_t m_current_round = 0;
     /// uint32_t flowId, uint32_t last_finish_time
     std::map<uint32_t, uint32_t> m_flow_table;
 };

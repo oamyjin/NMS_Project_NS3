@@ -79,26 +79,31 @@ PifoQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   NS_LOG_DEBUG("PifoQueueDisc::DoEnqueue");
   NS_LOG_FUNCTION (this << item);
   NS_LOG_DEBUG(GetCurrentSize () << " " << GetMaxSize ());
-  if (GetCurrentSize () >= GetMaxSize ())
-    {
-      NS_LOG_LOGIC ("Queue disc limit exceeded -- dropping packet");
-      DropBeforeEnqueue (item, LIMIT_EXCEEDED_DROP);
-      return false;
-    }
+  std::cout << "PifoQueueDisc::DoEnqueue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets () << std::endl;
 
-  int32_t rank = RankComputation(item); // implement in QueueDisc
+  if (GetCurrentSize () >= GetMaxSize ())
+  {
+    NS_LOG_LOGIC ("Queue disc limit exceeded -- dropping packet");
+    DropBeforeEnqueue (item, LIMIT_EXCEEDED_DROP);
+    return false;
+  }
+
+  uint32_t rank = RankComputation(item); // implement in QueueDisc
   bool retval = GetInternalPrioQueue (0)->Enqueue (item);
 
   // If PrioQueue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
   // internal prio queue because QueueDisc::AddInternalPrioQueue sets the trace callback
 
   if (!retval)
-    {
-      NS_LOG_WARN ("Packet enqueue failed. Check the size of the internal priority queue");
-    }
+  {
+    NS_LOG_WARN ("Packet enqueue failed. Check the size of the internal priority queue");
+    return false;
+  }
 
   NS_LOG_LOGIC ("Number packets in priority queue::" << GetInternalPrioQueue (0)->GetNPackets ());
 
+  UpdateFlowTable(item);
+  std::cout << "Enqueued" << std::endl;
   return retval;
 }
 
@@ -107,24 +112,28 @@ PifoQueueDisc::DoDequeue (void)
 {
   NS_LOG_DEBUG("PifoQueueDisc::DoDequeue");
   NS_LOG_FUNCTION (this);
+  std::cout << "PifoQueueDisc::DoDequeue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets () << std::endl;
 
   Ptr<QueueDiscItem> item;
 
   if ((item = GetInternalPrioQueue (0)->Dequeue ()) != 0)
+  {
+    bool retval = UpdateCurrentRound(item); // implement in QueueDisc
+    if (!retval)
     {
-      bool retval = UpdateCurrentRound(item); // implement in QueueDisc
-      if (!retval)
-      {
-        NS_LOG_WARN ("Update current round failed when deque " << item);
-      }
-
-      NS_LOG_LOGIC ("Popped from priority queue: " << item);
-      NS_LOG_LOGIC ("Number packets priority queue: " << GetInternalPrioQueue (0)->GetNPackets ());
-      return item;
+      NS_LOG_WARN ("Update current round failed when deque " << item);
     }
-  
-  NS_LOG_LOGIC ("PrioQueue empty");
-  return item;
+
+    NS_LOG_LOGIC ("Popped from priority queue: " << item);
+    NS_LOG_LOGIC ("Number packets priority queue: " << GetInternalPrioQueue (0)->GetNPackets ());
+    std::cout << "Dequeued" << std::endl;
+    return item;
+  }
+  else
+  {
+    NS_LOG_LOGIC ("PrioQueue empty");
+    return nullptr;
+  }
 }
 
 Ptr<const QueueDiscItem>

@@ -40,7 +40,7 @@ SppifoQueueDisc::GetTypeId()
             .AddConstructor<SppifoQueueDisc>()
             .AddAttribute("MaxSize",
                           "The max queue size",
-                          QueueSizeValue(QueueSize("10p")),
+                          QueueSizeValue(QueueSize("60p")),
                           MakeQueueSizeAccessor(&QueueDisc::SetMaxSize, &QueueDisc::GetMaxSize),
                           MakeQueueSizeChecker())
             // .AddAttribute("FifoNum",
@@ -78,6 +78,7 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
 {
     NS_LOG_FUNCTION(this << item);
     NS_LOG_DEBUG("DoEnqueue");
+    std::cout << "DoEnqueue" << std::endl;
 
     uint32_t rank = RankComputation(item);
     
@@ -85,7 +86,7 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
     for (int i = GetNInternalQueues() - 1; i >= 0; i--)
     {
         // push up
-        std::ofstream thr("GBResult/queuebound.txt", std::ios::out | std::ios::app);
+        std::ofstream thr("MyResult/queuebound.txt", std::ios::out | std::ios::app);
         thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << " Qsize:" << GetMaxSize().GetValue() << std::endl;
         if (rank >= m_bounds[i])
         {
@@ -96,23 +97,27 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
                 if (retval)
                 {
                     m_bounds[i] = rank;
+                    UpdateFlowTable(item);
                 }
-                else{
+                else
+                {
                     NS_LOG_WARN ("Packet enqueue failed. Check the size of the internal fifo queue");
+                    return false;
                 }
                 break;
             }
-            else{
+            else
+            {
                 DropBeforeEnqueue(item, "Fifo overflow");
                 NS_LOG_LOGIC("FIFO Queue full -- dropping pkt");
-                std::ofstream thr("GBResult/overflow.txt", std::ios::out | std::ios::app);
+                std::ofstream thr("MyResult/overflow.txt", std::ios::out | std::ios::app);
                 thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << std::endl;
-                break;
+                return false;
             }
         }
         else
         {
-            std::ofstream thr("GBResult/queuebound.txt", std::ios::out | std::ios::app);
+            std::ofstream thr("MyResult/queuebound.txt", std::ios::out | std::ios::app);
             thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << "======" << std::endl;
             if (i == 0)
             { 
@@ -127,14 +132,24 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
                     {
                         m_bounds[j] -= cost;
                     }
+                    if (retval)
+                    {
+                        UpdateFlowTable(item);
+                    }
+                    else
+                    {
+                        NS_LOG_LOGIC("FIFO Enqueue failed");
+                        return false;
+                    }
                     break;
                 }
-                else{
+                else
+                {
                     DropBeforeEnqueue(item, "Fifo overflow");
                     NS_LOG_LOGIC("FIFO Queue full -- dropping pkt");
-                    std::ofstream thr("GBResult/overflow.txt", std::ios::out | std::ios::app);
+                    std::ofstream thr("MyResult/overflow.txt", std::ios::out | std::ios::app);
                     thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << std::endl;
-                    break;
+                    return false;
                 }
             }
         }
@@ -155,22 +170,19 @@ SppifoQueueDisc::DoDequeue()
 {
     NS_LOG_FUNCTION(this);
     NS_LOG_DEBUG("DoDequeue");
-    if (GetCurrentSize().GetValue() <= 0){
-        NS_LOG_LOGIC("Queue empty");
-        return nullptr;
-    }
-
+    std::cout << "DoDequeue" << std::endl;
+    
     Ptr<QueueDiscItem> item;
-
     for (int i = 0; i < static_cast<int>(GetNInternalQueues()); i++)
     {
         if (GetInternalQueue(i)->GetNPackets() > 0)
         {
+            std::cout << "i:" << i << std::endl;
             item = GetInternalQueue(i)->Dequeue();
             UpdateCurrentRound(item);
+            break;
         }
     }
-
     if (!item)
     {
         NS_LOG_LOGIC("Queue empty");

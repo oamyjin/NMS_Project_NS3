@@ -92,7 +92,7 @@ namespace ns3 {
 	Flowlist.push_back(fid);
         string key = convertKeyValue(fid); 
         Flow_pl* newFlowPtr = new Flow_pl(fid, fno, weight, burstness);
-	std::ofstream thr1 ("GBResult/weight.dat", std::ios::out | std::ios::app);
+	std::ofstream thr1 ("MyResult/weight.dat", std::ios::out | std::ios::app);
 	thr1 << fno << " " << weight << endl;
 	newFlowPtr->setStartTime(Simulator::Now().GetSeconds());
         this->flowMap.insert(pair<string, Flow_pl*>(key, newFlowPtr));
@@ -168,7 +168,7 @@ namespace ns3 {
 				enpkt += 1;
 				size += 1; // trace size in sp-pifo
 				
-				std::ofstream thr ("GBResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
+				std::ofstream thr ("MyResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
 				thr << rank << ": ";
 				for (int k = 0; k < DEFAULT_PQ; k++){
 					thr << bounds[k] << " ";
@@ -176,13 +176,13 @@ namespace ns3 {
 				thr << " =up> ";
 				
 				this->Record("EnqueuedPktsList.txt", item);
-				/*std::ofstream thr3 ("GBResult/pktsList/Enque_bound8.dat", std::ios::out | std::ios::app);
+				/*std::ofstream thr3 ("MyResult/pktsList/Enque_bound8.dat", std::ios::out | std::ios::app);
 				thr3 << "(" << rank - bounds[7] << "," << i << "," << currFlow->getFlowNo() << ")" << " ";
-				std::ofstream thr4 ("GBResult/pktsList/Size.dat", std::ios::out | std::ios::app);
+				std::ofstream thr4 ("MyResult/pktsList/Size.dat", std::ios::out | std::ios::app);
 				thr4 << "(" << i << "," << this->GetQueueSize(i) << "," << currFlow->getFlowNo() << ")" << " ";
-				std::ofstream thr5 ("GBResult/pktsList/SizePlot7.dat", std::ios::out | std::ios::app);
+				std::ofstream thr5 ("MyResult/pktsList/SizePlot7.dat", std::ios::out | std::ios::app);
 				thr5 << Simulator::Now().GetSeconds() << " " << this->GetQueueSize(7) << endl;
-				std::ofstream thr6 ("GBResult/pktsList/SizePlot6.dat", std::ios::out | std::ios::app);
+				std::ofstream thr6 ("MyResult/pktsList/SizePlot6.dat", std::ios::out | std::ios::app);
 				thr6 << Simulator::Now().GetSeconds() << " " << this->GetQueueSize(6) << endl;*/
 				
 
@@ -206,7 +206,7 @@ namespace ns3 {
 						FifoPrint(i);
 					}
 				}
-				std::ofstream thr2 ("GBResult/size.dat", std::ios::out | std::ios::app);
+				std::ofstream thr2 ("MyResult/size.dat", std::ios::out | std::ios::app);
 				thr2 << Simulator::Now().GetSeconds() << " " << size << endl;
 				return true;
 			}
@@ -216,14 +216,14 @@ namespace ns3 {
 				TcpHeader header;
 			    	GetPointer(item)->GetPacket()->PeekHeader(header);
 				stringstream path;
-				path << "GBResult/pktsDelay_flows/flow_" << currFlow->getFlowNo() << "_pktdelay.dat"; //plotResult
+				path << "MyResult/pktsDelay_flows/flow_" << currFlow->getFlowNo() << "_pktdelay.dat"; //plotResult
 				std::ofstream thr4 (path.str(), std::ios::out | std::ios::app);
 				thr4 << header.GetSequenceNumber().GetValue() << " " << tag.GetUid() << " -1" << endl;
 
 
 				Drop(item);
 				drop += 1;
-				std::ofstream thr1 ("GBResult/SpPifodrop.dat", std::ios::out | std::ios::app);
+				std::ofstream thr1 ("MyResult/SpPifodrop.dat", std::ios::out | std::ios::app);
 				thr1 << Simulator::Now().GetSeconds() << " " << drop << endl;
 				return false;
 			}
@@ -242,7 +242,7 @@ namespace ns3 {
 					enpkt += 1;
 
 					
-					std::ofstream thr ("GBResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
+					std::ofstream thr ("MyResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
 					thr << rank << ": ";
 					for (int k = 0; k < DEFAULT_PQ; k++){
 						thr << bounds[k] << " ";
@@ -258,14 +258,14 @@ namespace ns3 {
 
 					size += 1;
 
-					//std::ofstream thr ("GBResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
+					//std::ofstream thr ("MyResult/SpPifoQBounds.dat", std::ios::out | std::ios::app);
 					//thr << rank << ": ";
 					for (int k = 0; k < DEFAULT_PQ; k++){
 						thr << bounds[k] << " ";
 					}
 					thr << endl;
 					this->Record("EnqueuedPktsList.txt", item);
-					/*std::ofstream thr3 ("GBResult/pktsList/Enque_bound8.dat", std::ios::out | std::ios::app);
+					/*std::ofstream thr3 ("MyResult/pktsList/Enque_bound8.dat", std::ios::out | std::ios::app);
 					thr3 << Simulator::Now().GetSeconds() << rank - bounds[7] << endl;*/		
 
 					//if (currFlow->getFlowNo() == 9){
@@ -275,7 +275,7 @@ namespace ns3 {
 							FifoPrint(i);
 						}
 					}
-					std::ofstream thr2 ("GBResult/size.dat", std::ios::out | std::ios::app);
+					std::ofstream thr2 ("MyResult/size.dat", std::ios::out | std::ios::app);
 					thr2 << Simulator::Now().GetSeconds() << " " << size << endl;
 					return true;
 				}
@@ -285,13 +285,13 @@ namespace ns3 {
 					TcpHeader header;
 				    	GetPointer(item)->GetPacket()->PeekHeader(header);
 					stringstream path;
-					path << "GBResult/pktsDelay_flows/flow_" << currFlow->getFlowNo() + 1 << "_pktdelay.dat"; //plotResult
+					path << "MyResult/pktsDelay_flows/flow_" << currFlow->getFlowNo() + 1 << "_pktdelay.dat"; //plotResult
 					std::ofstream thr4 (path.str(), std::ios::out | std::ios::app);
 					thr4 << header.GetSequenceNumber().GetValue() << " " << tag.GetUid() << " -1" << endl;
 
 					Drop(item);
 					drop += 1;
-					std::ofstream thr1 ("GBResult/SpPifodrop.dat", std::ios::out | std::ios::app);
+					std::ofstream thr1 ("MyResult/SpPifodrop.dat", std::ios::out | std::ios::app);
 					thr1 << Simulator::Now().GetSeconds() << " " << drop << endl;
 					return false;
 				}	
@@ -335,7 +335,7 @@ namespace ns3 {
 	TcpHeader header;
     	GetPointer(item)->GetPacket()->PeekHeader(header);
 	stringstream path;
-        path << "GBResult/pktsDelay_flows/flow_" << tag.GetFlowNo() << "_pktdelay.dat"; //plotResult
+        path << "MyResult/pktsDelay_flows/flow_" << tag.GetFlowNo() << "_pktdelay.dat"; //plotResult
 	std::ofstream thr4 (path.str(), std::ios::out | std::ios::app);
 	thr4 << header.GetSequenceNumber().GetValue() << " " << tag.GetUid() << " " << Simulator::Now().GetSeconds() - tag.GetEnqueTimeStamp() << endl;
 
@@ -346,13 +346,13 @@ namespace ns3 {
 		inv_count += 1;
 		inv_mag += inversion;
 	}
-	std::ofstream thr2 ("GBResult/inversion_record.dat", std::ios::out);
+	std::ofstream thr2 ("MyResult/inversion_record.dat", std::ios::out);
 	thr2 << "count: " << inv_count << "  magnitude: " << inv_mag << endl;
 
-	std::ofstream thr ("GBResult/CountStat.dat", std::ios::out);
+	std::ofstream thr ("MyResult/CountStat.dat", std::ios::out);
 	thr <<  Simulator::Now().GetSeconds() << " enque:" << enque << " deque:" << deque << " fifoenque:" << fifoenque << " fifodeque:" << fifodeque << " drop:" << drop << " flowNo:" << flowNo << std::endl;
 
-	std::ofstream thr3 ("GBResult/size.dat", std::ios::out | std::ios::app);
+	std::ofstream thr3 ("MyResult/size.dat", std::ios::out | std::ios::app);
 	thr3 << Simulator::Now().GetSeconds() << " " << size << endl;
 
 	//if (tag.GetFlowNo() == 9){
@@ -372,7 +372,7 @@ namespace ns3 {
         item->GetPacket()->PeekPacketTag(tag);
 	int dp = tag.GetDepartureRound();
 	
-	string path = "GBResult/pktsList/";
+	string path = "MyResult/pktsList/";
 	path.append(fname);
 	
 	FILE *fp;

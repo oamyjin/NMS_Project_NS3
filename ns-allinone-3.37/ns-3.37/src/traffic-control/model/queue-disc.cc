@@ -1208,6 +1208,18 @@ QueueDisc::Transmit(Ptr<QueueDiscItem> item)
     }
     return true;
 }
+void
+QueueDisc::UpdateFlowTable (Ptr<QueueDiscItem> item)
+{
+    FlowIdTag tag;
+    Packet* packet = GetPointer(item->GetPacket());
+    packet->PeekPacketTag(tag);
+    uint32_t flowId = tag.GetFlowId();
+    uint32_t weight = tag.GetFlowWeight();
+    uint32_t rank = item->GetPriority();
+    std::cout << m_devQueueIface << " UpdateFlowTable flowId:" << flowId << " m_flow_table[flowId]:" << m_flow_table[flowId] << std::endl;
+    m_flow_table[flowId] = rank + weight;
+}
 
 uint32_t
 QueueDisc::RankComputation (Ptr<QueueDiscItem> item)
@@ -1222,8 +1234,13 @@ QueueDisc::RankComputation (Ptr<QueueDiscItem> item)
     switch (m_scheAlog)
     {
         case SchedulingAlgorithm::STFQ:
+            // if (m_flow_table.find(flowId) == m_flow_table.end())
+            // {
+            //     m_flow_table[flowId] = 0;
+            // }
             rank = std::max(m_current_round, m_flow_table[flowId]);
-            m_flow_table[flowId] = rank + weight; // update the last finish time in flow table 
+            std::cout << Simulator::Now().GetSeconds() << " " << m_devQueueIface << " m_current_round:" << m_current_round << " m_flow_table[flowId]:" << m_flow_table[flowId] << " rank:" << rank << " flowId:" << tag.GetFlowId() << " weight:" << weight << std::endl;
+            //m_flow_table[flowId] = rank + weight; // update the last finish time in flow table 
             break;
 
         case SchedulingAlgorithm::LSTF:
@@ -1259,15 +1276,15 @@ QueueDisc::UpdateCurrentRound (Ptr<QueueDiscItem> item)
     if (tag.GetIsFwd())
     {
         std::stringstream path;
-        path << "GBResult/cr_update_" << m_devQueueIface << ".txt";
+        path << "MyResult/cr_update_log/cr_update_" << m_devQueueIface << ".txt";
         std::ofstream thr(path.str(), std::ios::out | std::ios::app);
         if (before <= m_current_round)
         {
-            thr << Simulator::Now().GetSeconds() << " " << m_current_round << " " << tag.GetFlowId() << std::endl;
+            thr << Simulator::Now().GetSeconds() << " vt:" << before << "->" << m_current_round << " flowId:" << tag.GetFlowId() << std::endl;
         }
         else
         {
-            thr << Simulator::Now().GetSeconds() << " " << m_current_round << " " << tag.GetFlowId() << " Inversion" << std::endl;
+            thr << Simulator::Now().GetSeconds() << " vt:" << before << "->" << m_current_round << " flowId:" << tag.GetFlowId() << " Inversion" << std::endl;
         }
     }
 

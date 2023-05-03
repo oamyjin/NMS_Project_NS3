@@ -43,16 +43,16 @@ namespace ns3 {
 		packet->PeekPacketTag(tag);
 		//cout<<"flow number"<<tag.GetFlowNo()<<endl;
 		//int flowNo = tag.GetFlowNo();
-		fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/GBResult/pktsList/tagRecord.txt"); 
+		fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/MyResult/pktsList/tagRecord.txt"); 
 		//fstream fixstream;
 		/*if(flowNo == 1){
-			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/GBResult/pktsList/tagRecord1.txt"); 
+			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/MyResult/pktsList/tagRecord1.txt"); 
 		}
 		else if(flowNo == 2){
-			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/GBResult/pktsList/tagRecord2.txt"); 
+			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/MyResult/pktsList/tagRecord2.txt"); 
 		}
 		else if(flowNo == 3){
-			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/GBResult/pktsList/tagRecord3.txt"); 
+			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/MyResult/pktsList/tagRecord3.txt"); 
 		}
 		else{cout<<"error"<<endl;}*/
 		// fstream 默认以读写方式打开文件,支持对同一文件同时读写操作
@@ -181,13 +181,13 @@ namespace ns3 {
 
 	/*int Replace_string::metadata_access_time(){
 		if(flowNo = 1){
-			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/GBResult/pktsList/tagRecord1.txt"); 
+			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/MyResult/pktsList/tagRecord1.txt"); 
 		}
 		else if(flowNo = 2){
-			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/GBResult/pktsList/tagRecord2.txt"); 
+			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/MyResult/pktsList/tagRecord2.txt"); 
 		}
 		else if(flowNo = 3){
-			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/GBResult/pktsList/tagRecord3.txt"); 
+			fstream fixstream("/home/pc/ns-allinone-3.26/ns-3.26/MyResult/pktsList/tagRecord3.txt"); 
 		}
 		else{cout<<"error"<<endl;}
 		// fstream 默认以读写方式打开文件,支持对同一文件同时读写操作
@@ -208,7 +208,7 @@ namespace ns3 {
 
 
 	bool Replace_string::UpdateRankDifferenceFile(int rankDiff){
-		fstream fixstream("GBResult/pktsList/rankVtDifference.txt"); 
+		fstream fixstream("MyResult/pktsList/rankVtDifference.txt"); 
 		if(!fixstream){  
   			cout<<"cannot open rankVtDifference.txt"<<'\n';  
   			exit(1);  
