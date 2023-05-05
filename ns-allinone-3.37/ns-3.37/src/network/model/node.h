@@ -78,6 +78,15 @@ class Node : public Object
     uint32_t GetId() const;
 
     /**
+     * \returns the weight.
+     *
+     * For flow weight
+     */
+    uint32_t GetWeight() const;
+
+    void SetWeight(uint32_t weight);
+
+    /**
      * In the future, ns3 nodes may have clock that returned a local time
      * different from the virtual time Simulator::Now().
      * This function is currently a placeholder to ease the development of this feature.
@@ -303,6 +312,9 @@ class Node : public Object
     std::vector<Ptr<Application>> m_applications;         //!< Applications associated to this node
     ProtocolHandlerList m_handlers;                       //!< Protocol handlers in the node
     DeviceAdditionListenerList m_deviceAdditionListeners; //!< Device addition listeners in the node
+
+    // Jiajin Add
+    uint32_t m_weight;
 };
 
 } // namespace ns3

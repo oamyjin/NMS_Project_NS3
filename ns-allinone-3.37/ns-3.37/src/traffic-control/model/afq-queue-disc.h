@@ -70,8 +70,12 @@ class AFQQueueDisc : public QueueDisc
     /**
      * queue bounds
      */
-    uint16_t m_fifo_num = 8; // number of fifos
-    uint16_t m_granularity = 40; //granularity per fifo
+    uint16_t m_fifo_num = 1; // number of fifos
+    uint16_t m_granularity = 10000; //granularity per fifo
+    uint32_t m_dropA = 0;
+    uint32_t m_dropB = 0;
+    uint32_t m_eq = 0;
+    uint32_t m_dq = 0;
 
     bool DoEnqueue(Ptr<QueueDiscItem> item) override;
     Ptr<QueueDiscItem> DoDequeue() override;

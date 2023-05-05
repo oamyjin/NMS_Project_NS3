@@ -79,7 +79,7 @@ PifoQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   NS_LOG_DEBUG("PifoQueueDisc::DoEnqueue");
   NS_LOG_FUNCTION (this << item);
   NS_LOG_DEBUG(GetCurrentSize () << " " << GetMaxSize ());
-  std::cout << "PifoQueueDisc::DoEnqueue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets () << std::endl;
+  NS_LOG_DEBUG("PifoQueueDisc::DoEnqueue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets ());
 
   if (GetCurrentSize () >= GetMaxSize ())
   {
@@ -103,7 +103,7 @@ PifoQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   NS_LOG_LOGIC ("Number packets in priority queue::" << GetInternalPrioQueue (0)->GetNPackets ());
 
   UpdateFlowTable(item);
-  std::cout << "Enqueued" << std::endl;
+  
   return retval;
 }
 
@@ -112,7 +112,7 @@ PifoQueueDisc::DoDequeue (void)
 {
   NS_LOG_DEBUG("PifoQueueDisc::DoDequeue");
   NS_LOG_FUNCTION (this);
-  std::cout << "PifoQueueDisc::DoDequeue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets () << std::endl;
+  NS_LOG_DEBUG("PifoQueueDisc::DoDequeue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets ());
 
   Ptr<QueueDiscItem> item;
 
@@ -126,7 +126,6 @@ PifoQueueDisc::DoDequeue (void)
 
     NS_LOG_LOGIC ("Popped from priority queue: " << item);
     NS_LOG_LOGIC ("Number packets priority queue: " << GetInternalPrioQueue (0)->GetNPackets ());
-    std::cout << "Dequeued" << std::endl;
     return item;
   }
   else

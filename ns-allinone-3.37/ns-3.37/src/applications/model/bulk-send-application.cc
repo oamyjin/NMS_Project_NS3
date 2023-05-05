@@ -31,6 +31,9 @@
 #include "ns3/tcp-socket-factory.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/uinteger.h"
+#include "ns3/flow-id-tag.h"
+#include <sstream>
+#include <string>
 
 namespace ns3
 {
@@ -246,11 +249,29 @@ BulkSendApplication::SendData(const Address& from, const Address& to)
             // Trace before adding header, for consistency with PacketSink
             m_txTraceWithSeqTsSize(packet, from, to, header);
             packet->AddHeader(header);
+            // Jiajin Add FlowIdTag
+            FlowIdTag tag;
+            //tag.SetFlowId(GetPktFlowId(from));
+            tag.SetFlowId(GetNode()->GetId());
+            tag.SetFlowWeight(GetNode()->GetWeight());
+            tag.SetIsFwd(true);
+            Packet* packet_ptr = GetPointer(packet);
+            packet_ptr->AddPacketTag(tag);
         }
         else
         {
             packet = Create<Packet>(toSend);
+            // Jiajin Add FlowIdTag
+            FlowIdTag tag;
+            //tag.SetFlowId(GetPktFlowId(from));
+            tag.SetFlowId(GetNode()->GetId());
+            tag.SetFlowWeight(GetNode()->GetWeight());
+            tag.SetIsFwd(true);
+            Packet* packet_ptr = GetPointer(packet);
+            packet_ptr->AddPacketTag(tag);
         }
+
+        //std::cout << "from:" << from << " to:" << to << std::endl;
 
         int actual = m_socket->Send(packet);
         if ((unsigned)actual == toSend)
@@ -328,6 +349,31 @@ BulkSendApplication::DataSend(Ptr<Socket> socket, uint32_t)
         socket->GetPeerName(to);
         SendData(from, to);
     }
+}
+
+uint32_t 
+BulkSendApplication::GetPktFlowId(const Address& from)
+{
+    std::stringstream ss;
+    ss << from;
+    std::string from_str;
+    ss >> from_str;
+    for(auto it = m_addr_fid_mapping.cbegin(); it != m_addr_fid_mapping.cend(); ++it)
+    {
+        std::cout << it->first << " " << it->second << "\n";
+    }
+    if (m_addr_fid_mapping.find(from_str) == m_addr_fid_mapping.end())
+    {
+        std::cout << "m_num_flows:" << m_num_flows << std::endl;
+        m_num_flows++;
+        std::cout << " m_num_flows:" << m_num_flows << std::endl;
+        m_addr_fid_mapping.insert(std::pair<std::string, uint32_t>(from_str, m_num_flows));
+        std::cout << " from_str:" << from_str << " m_num_flows:" << m_num_flows << std::endl;
+    }
+    uint32_t fid = m_addr_fid_mapping[from_str];
+    std::cout << "m_num_flows:" << m_num_flows << " fid:" << fid << " from_str:" << from_str << std::endl;
+    std::cout << "Node:" << GetNode()->GetId() << std::endl;
+    return fid;
 }
 
 } // Namespace ns3

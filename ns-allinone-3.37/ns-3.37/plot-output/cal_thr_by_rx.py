@@ -27,7 +27,7 @@ def find_idx(time, pre_thr_time, thr_time):
 
 
 if __name__ == "__main__":
-    period = 0.00012
+    period = 0.1
     sche = ['MyResult/throuput.png', 'MyResult/rx_log/']
 
     fig_name = sche[0] 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
             thr_time = time[0] + period
             while thr_time <= time[-1]:
                 idx_pre_thr, idx_thr = find_idx(time, thr_time - period, thr_time)
-                thr = 8 * (rx[idx_thr] - rx[idx_pre_thr]) / (period * 1024 * 1024 * 1024) # Gbps
+                thr = 8 * (rx[idx_thr] - rx[idx_pre_thr]) / (period * 1024 * 1024) # Mbps
                 thr_time += period
                 x.append(thr_time)
                 y.append(thr)
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     # naming the x axis
     plt.xlabel('Time (s)')
     # naming the y axis
-    plt.ylabel('Throughput (Gbps)')
+    plt.ylabel('Throughput (Mbps)')
     # giving a title to my graph
     #plt.title('SPPIFO Scheduler')
     

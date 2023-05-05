@@ -34,13 +34,13 @@ const uint32_t ServerPerPod = ServerPerTor * TorPerPod;
 const uint32_t NodeNumPerPod = ServerPerPod + TorPerPod + AggPerPod;
 const uint32_t ServerTotalNum = ServerPerPod * PodNum;
 
-const char* Node2Tor_Capacity = "10Gbps"; // 10Gbps
-const char* Node2Tor_Delay = "10ns"; //10ns
+const char* Node2Tor_Capacity = "10Mbps"; // 10Gbps
+const char* Node2Tor_Delay = "10ms"; //10ns
 const char* Tor2Agg_Capacity = "40Gbps";
 const char* Tor2Agg_Delay = "1us";
 const char* Agg2Core_Capacity = "40Gbps";
 const char* Agg2Core_Delay = "1us";
-const char* AppDataRate = "10Gbps";  // 10Gbps
+const char* AppDataRate = "10Mbps";  // 10Gbps
 
 double simulator_stop_time = 10.0;
 bool ECMProuting = true;
@@ -271,7 +271,7 @@ ScheduleFlowInputs()
         Ptr<Socket> ns3TcpSocket = Socket::CreateSocket(
             pods[(flow_input.src - 1) / ServerPerPod].Get((flow_input.src - 1) % ServerPerPod),
             TcpSocketFactory::GetTypeId());
-        //ns3TcpSocket->SetAttribute("SndBufSize", ns3::UintegerValue(1438000000));
+        ns3TcpSocket->SetAttribute("SndBufSize", ns3::UintegerValue(1438000000));
         Ptr<MyApp> app = CreateObject<MyApp>();
         app->Setup(
             ns3TcpSocket,
@@ -281,8 +281,8 @@ ScheduleFlowInputs()
             DataRate(AppDataRate),
             flow_input.idx,
             flow_input.stop_time);
-        pods[(flow_input.src - 1) / NodeNumPerPod]
-            .Get((flow_input.src - 1) % NodeNumPerPod)
+        pods[(flow_input.src - 1) / ServerPerPod] //NodeNumPerPod
+            .Get((flow_input.src - 1) % ServerPerPod) //NodeNumPerPod
             ->AddApplication(app);
         app->SetStartTime(Seconds(flow_input.start_time) - Simulator::Now());
         cout << "start_time:" << flow_input.start_time << " stop_time:" << flow_input.stop_time
@@ -318,7 +318,7 @@ main(int argc, char* argv[])
     cmd.Parse (argc, argv);
     Time::SetResolution (Time::NS);
     char line[200];
-	flowf.open("scratch/traffic_4flows.txt"); //traffic_3.txt //traffic_5.txt //traffic_7.txt //traffic_9.txt //flow_test.txt
+	flowf.open("scratch/traffic_20.txt"); //traffic_3.txt //traffic_5.txt //traffic_7.txt //traffic_9.txt //flow_test.txt
 	flowf.getline(line, 100);
 	sscanf(line, "%d", &(flow_num));
     cout << "flow_num:" << flow_num << endl;
@@ -326,13 +326,14 @@ main(int argc, char* argv[])
     // LogComponentEnable ("TrafficControlLayer", LOG_LEVEL_INFO);
     // LogComponentEnable ("SppifoQueueDisc", LOG_LEVEL_INFO);
     //LogComponentEnable ("PifoQueueDisc", LOG_LEVEL_INFO);
-    //LogComponentEnable ("QueueDisc", LOG_LEVEL_INFO);
+    LogComponentEnable ("QueueDisc", LOG_LEVEL_INFO);
     // LogComponentEnable ("AFQQueueDisc", LOG_LEVEL_INFO);
 
-    Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue(Seconds (0.0000)));//000600 //0.00002412 //delayed ack time out default is 200ms
-    Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.0000132)));// 0000132 //0.00000804 RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
-    Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 5RTT = 5*8.04 = 40.2us
-    Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 syn timeout 5rtt
+    //Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue(Seconds (0.0000)));//000600 //0.00002412 //delayed ack time out default is 200ms
+    //Config::SetDefault("ns3::TcpSocket::DelAckCount", UintegerValue(2));
+    //Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.0000132)));// 0000132 //0.00000804 RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
+    //Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 5RTT = 5*8.04 = 40.2us
+    //Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 syn timeout 5rtt
     
     //Config::SetDefault ("ns3::TcpSocketBase::ClockGranularity", TimeValue(MilliSeconds (0.0000132)));//RTT
 
@@ -343,6 +344,10 @@ main(int argc, char* argv[])
     //ns3::PacketMetadata::Enable ();
     
 
+    PointToPointHelper Sw2Serever;
+    Sw2Serever.SetDeviceAttribute("DataRate", StringValue("1Mbps"));
+    Sw2Serever.SetChannelAttribute("Delay", StringValue("1ms"));
+    Sw2Serever.SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize("1p")));
     PointToPointHelper Node2Tor;
     Node2Tor.SetDeviceAttribute("DataRate", StringValue(Node2Tor_Capacity));
     Node2Tor.SetChannelAttribute("Delay", StringValue(Node2Tor_Delay));
@@ -391,8 +396,14 @@ main(int argc, char* argv[])
             {
                 int server_id = t * ServerPerTor + n;
 				cout << "\t\tnet_dev_id:" << server_id << " [server_id:" << server_id << " tor_id:" << tor_id << "]" << endl;
-                podDev[p][server_id] =
-                    Node2Tor.Install(pods[p].Get(server_id), pods[p].Get(tor_id));
+                if (server_id!=20)
+                {
+                    podDev[p][server_id] = Node2Tor.Install(pods[p].Get(server_id), pods[p].Get(tor_id));
+                }
+                else
+                {
+                    podDev[p][server_id] = Sw2Serever.Install(pods[p].Get(server_id), pods[p].Get(tor_id));
+                }
             }
         }
         // tor to agg
@@ -493,8 +504,8 @@ main(int argc, char* argv[])
         }
     }*/
     //tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("60p")); //;"MinTh", UintegerValue(10)
-    tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("10000p"));
-    //tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
+    //tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("300p"));
+    tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
     //tch.SetRootQueueDisc("ns3::FifoQueueDisc", "MaxSize", StringValue("300p"));
     tch.Install(podDev[0][20].Get(1)); //server21-tor, on the tor side
     /*

@@ -841,6 +841,9 @@ class QueueDisc : public Object
     uint32_t m_current_round = 0;
     /// uint32_t flowId, uint32_t last_finish_time
     std::map<uint32_t, uint32_t> m_flow_table;
+    std::map<uint32_t, uint32_t> m_flow_id_mapping;
+    uint32_t m_num_fwd_flows = 0;
+    uint32_t my_cnt = 0;
 };
 
 /**

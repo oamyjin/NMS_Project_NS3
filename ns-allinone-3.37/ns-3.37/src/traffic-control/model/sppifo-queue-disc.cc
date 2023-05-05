@@ -22,6 +22,8 @@
 #include "ns3/drop-tail-queue.h"
 #include "ns3/log.h"
 #include "ns3/object-factory.h"
+#include "ns3/flow-id-tag.h"
+#include "ns3/simulator.h"
 
 namespace ns3
 {
@@ -55,7 +57,7 @@ SppifoQueueDisc::GetTypeId()
                           MakeBooleanChecker())
             .AddAttribute("MinTh",
                           "Minimum number threshold of packets",
-                          DoubleValue(5),
+                          DoubleValue(10),
                           MakeUintegerAccessor(&SppifoQueueDisc::m_minTh),
                           MakeUintegerChecker<uint32_t>())
             ;
@@ -90,44 +92,53 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
     NS_LOG_DEBUG("DoEnqueue");
 
     uint32_t rank = RankComputation(item);
-    
+
+    FlowIdTag tag;
+    Packet* packet = GetPointer(item->GetPacket());
+    packet->PeekPacketTag(tag);
+
     bool retval = false;
     for (int i = GetNInternalQueues() - 1; i >= 0; i--)
     {
         // push up
         std::ofstream thr("MyResult/queuebound.txt", std::ios::out | std::ios::app);
-        thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << " Qsize:" << GetMaxSize().GetValue() << std::endl;
+        thr << Simulator::Now().GetSeconds() << " EQ i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << " fid:" << tag.GetFlowId() 
+            << " q7Size:" << GetInternalQueue(m_fifo_num-1)->GetNPackets() << "(" << m_bounds[m_fifo_num-1] 
+            << ") q6Size:" << GetInternalQueue(m_fifo_num-2)->GetNPackets() << "(" << m_bounds[m_fifo_num-2]
+            << " q5Size:" << GetInternalQueue(m_fifo_num-3)->GetNPackets() << "(" << m_bounds[m_fifo_num-3]
+            << " Maxsize:" << GetMaxSize().GetValue() << std::endl;
         if (rank >= m_bounds[i])
         {
             if (GetInternalQueue(i)->GetNPackets() < GetMaxSize().GetValue())
             {
-                NS_LOG_DEBUG("queue " << i << " push up");
+                //tag.SetFlowId(tag.GetFlowId());
+                //packet->AddPacketTag(tag);
+                NS_LOG_DEBUG("queue " << i << " push up" << " packetFlowId:" << tag.GetFlowId() << " pkt:" << packet << " pktSize:" << packet->GetSize() << " tag:" << &tag);
                 retval = GetInternalQueue(i)->Enqueue(item);
-                if (retval)
+                NS_LOG_DEBUG("retval:" << retval << " " << Simulator::Now().GetSeconds());
+                if (retval == true)
                 {
                     m_bounds[i] = rank;
                     UpdateFlowTable(item);
+                    return true;
                 }
                 else
                 {
-                    NS_LOG_WARN ("Packet enqueue failed. Check the size of the internal fifo queue");
+                    NS_LOG_DEBUG ("Packet enqueue failed. Check the size of the internal fifo queue");
                     return false;
                 }
-                break;
             }
             else
             {
                 DropBeforeEnqueue(item, "Fifo overflow");
                 NS_LOG_LOGIC("FIFO Queue full -- dropping pkt");
                 std::ofstream thr("MyResult/overflow.txt", std::ios::out | std::ios::app);
-                thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << std::endl;
+                thr << Simulator::Now().GetSeconds() << " i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << std::endl;
                 return false;
             }
         }
         else
         {
-            std::ofstream thr("MyResult/queuebound.txt", std::ios::out | std::ios::app);
-            thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << "======" << std::endl;
             if (i == 0)
             { 
                 if (GetInternalQueue(i)->GetNPackets() < GetMaxSize().GetValue()) // TODO check fifo size
@@ -135,29 +146,29 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
                     retval = GetInternalQueue(i)->Enqueue(item);
                     // push down
                     NS_LOG_DEBUG("PUSH DOWN " << m_bounds[0] << " " << rank << "!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    uint32_t cost = m_bounds[0] - rank;
-                    m_bounds[0] = rank;
-                    for (int j = 1; j < static_cast<int>(GetNInternalQueues()); j++)
-                    {
-                        m_bounds[j] -= cost;
-                    }
                     if (retval)
                     {
+                        uint32_t cost = m_bounds[0] - rank;
+                        m_bounds[0] = rank;
+                        for (int j = 1; j < static_cast<int>(GetNInternalQueues()); j++)
+                        {
+                            m_bounds[j] -= cost;
+                        }
                         UpdateFlowTable(item);
+                        return true;
                     }
                     else
                     {
                         NS_LOG_LOGIC("FIFO Enqueue failed");
                         return false;
                     }
-                    break;
                 }
                 else
                 {
                     DropBeforeEnqueue(item, "Fifo overflow");
                     NS_LOG_LOGIC("FIFO Queue full -- dropping pkt");
                     std::ofstream thr("MyResult/overflow.txt", std::ios::out | std::ios::app);
-                    thr << "i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << std::endl;
+                    thr << Simulator::Now().GetSeconds() << " i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << std::endl;
                     return false;
                 }
             }
@@ -167,9 +178,6 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
 
     // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
     // internal queue because QueueDisc::AddInternalQueue sets the trace callback
-
-    NS_LOG_LOGIC("Number packets " << GetInternalQueue(0)->GetNPackets());
-    NS_LOG_LOGIC("Number bytes " << GetInternalQueue(0)->GetNBytes());
     
     if (m_useEcn && GetTotalNPackets() > m_minTh)
     {
@@ -184,23 +192,43 @@ SppifoQueueDisc::DoDequeue()
     NS_LOG_FUNCTION(this);
     NS_LOG_DEBUG("DoDequeue");
     
+    int band = -1;
     Ptr<QueueDiscItem> item;
-    for (int i = 0; i < static_cast<int>(GetNInternalQueues()); i++)
+
+    for (uint32_t i = 0; i < GetNInternalQueues(); i++)
     {
-        if (GetInternalQueue(i)->GetNPackets() > 0)
+        if (GetInternalQueue(i)->GetNPackets() != 0)
         {
-            NS_LOG_DEBUG("i:" << i );
-            item = GetInternalQueue(i)->Dequeue();
-            UpdateCurrentRound(item);
+            NS_LOG_DEBUG("i:" << i);
+            band = i;
+            item = GetInternalQueue(band)->Dequeue();
             break;
         }
     }
-    if (!item)
+    if (band != -1)
     {
-        NS_LOG_LOGIC("Queue empty");
-        return nullptr;
+        bool retval = UpdateCurrentRound(item); // implement in QueueDisc
+        if (!retval)
+        {
+            NS_LOG_WARN ("Update current round failed when deque " << item);
+        }
+        NS_LOG_LOGIC("Popped from band " << band << ": " << item);
+        NS_LOG_LOGIC("Number packets band " << band << ": " << GetInternalQueue(band)->GetNPackets());
+        FlowIdTag tag;
+        Packet* packet = GetPointer(item->GetPacket());
+        packet->PeekPacketTag(tag);
+        std::ofstream thr("MyResult/queuebound.txt", std::ios::out | std::ios::app);
+        thr << Simulator::Now().GetSeconds() << " DQ i:" << band << " bound[i]:" << m_bounds[band] << " rank:" << item->GetPriority() << " fid:" << tag.GetFlowId() 
+            << " q7Size:" << GetInternalQueue(m_fifo_num-1)->GetNPackets() << "(" << m_bounds[m_fifo_num-1] 
+            << ") q6Size:" << GetInternalQueue(m_fifo_num-2)->GetNPackets() << "(" << m_bounds[m_fifo_num-2]
+            << " q5Size:" << GetInternalQueue(m_fifo_num-3)->GetNPackets() << "(" << m_bounds[m_fifo_num-3]
+            << " Maxsize:" << GetMaxSize().GetValue() << std::endl;
+        return item;
     }
-    return item;
+    NS_LOG_DEBUG("band:" << band << " " << item);
+
+    NS_LOG_LOGIC("Queue empty");
+    return nullptr;
 }
 
 Ptr<const QueueDiscItem>

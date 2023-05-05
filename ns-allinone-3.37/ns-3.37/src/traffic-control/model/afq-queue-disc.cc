@@ -28,6 +28,7 @@
 #include "ns3/gearbox-pkt-tag.h"
 #include "ns3/ipv4-queue-disc-item.h"
 #include "ns3/tcp-header.h"
+#include "ns3/Simulator.h"
 
 namespace ns3
 {
@@ -60,7 +61,7 @@ AFQQueueDisc::AFQQueueDisc()
 
     ObjectFactory factory;
     factory.SetTypeId("ns3::DropTailQueue<QueueDiscItem>");
-    factory.Set("MaxSize", QueueSizeValue(GetMaxSize()));
+    factory.Set("MaxSize", QueueSizeValue(QueueSize("60p")));
     for (uint16_t i = 0; i < m_fifo_num; i++)
     {
         AddInternalQueue(factory.Create<InternalQueue>());
@@ -78,19 +79,29 @@ bool
 AFQQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
 {
     NS_LOG_FUNCTION(this << item);
-    NS_LOG_DEBUG("DoEnqueue");
-
+    m_eq += 1;
     uint32_t rank = RankComputation(item);
-    if (rank > ((GetCurrentRound() / m_granularity) * m_granularity + m_granularity * m_fifo_num - 1))
+    NS_LOG_DEBUG("DoEnqueue");
+    std::cout << Simulator::Now().GetSeconds() << " m_eq:" << m_eq << " dropA:" << m_dropA << " dropB:" << m_dropB << " m_dq:" << m_dq << " rank:" << rank << " GetCurrentRound():" << GetCurrentRound() << std::endl;
+
+    if ((rank - GetCurrentRound()) >= ((GetCurrentRound() / m_granularity) * m_granularity + m_granularity * m_fifo_num - 1))
     {
-        NS_LOG_DEBUG("Too large rank " << rank << ", granularity: " << m_granularity << " m_fifo_num:" << m_fifo_num << " currentRound:" << GetCurrentRound());
         DropBeforeEnqueue(item, "Too large rank");
+        m_dropA += 1;        
+        NS_LOG_DEBUG("Too large rank " << rank << ", granularity: " << m_granularity << " m_fifo_num:" << m_fifo_num << " currentRound:" << GetCurrentRound() << " m_dropA:" << m_dropA << " m_dropB:" << m_dropB);
         return false;
     }
     // Calulate Queue Idx
     uint32_t band = rank / m_granularity % m_fifo_num;
-    std::cout << "rank:" << rank << " band:" << band << " m_granularity:" << m_granularity << " Qsize:" << GetMaxSize().GetValue() << std::endl;
+    std::cout << "rank:" << rank << " band:" << band << " m_granularity:" << m_granularity << " bandQSize:" << GetInternalQueue(band)->GetNPackets() <<" QMaxsize:" << GetMaxSize().GetValue() << std::endl;
 
+    if (GetInternalQueue(band)->GetNPackets() >= GetMaxSize().GetValue() - 1)
+    {
+        DropBeforeEnqueue(item, "Too large rank");
+        m_dropB += 1; 
+        NS_LOG_DEBUG("Too large rank " << rank << " band:" << band << " currentRound:" << GetCurrentRound() << " m_dropA:" << m_dropA << " m_dropB:" << m_dropB);
+        return false;
+    }
     bool retval = GetInternalQueue(band)->Enqueue(item);
 
     // If Queue::Enqueue fails, QueueDisc::DropBeforeEnqueue is called by the
@@ -99,6 +110,8 @@ AFQQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
     if (!retval)
     {
         NS_LOG_WARN("Packet enqueue failed. Check the size of the internal queues");
+        m_dropB += 1; 
+        NS_LOG_DEBUG("Too large rank " << rank << " band:" << band << " currentRound:" << GetCurrentRound() << " m_dropA:" << m_dropA << " m_dropB:" << m_dropB);
         return false;
     }
 
@@ -115,7 +128,7 @@ AFQQueueDisc::DoDequeue()
     NS_LOG_DEBUG("DoDequeue");
 
     uint32_t current_band = GetCurrentRound() / m_granularity % m_fifo_num;
-    uint32_t band = -1;
+    int band = -1;
     Ptr<QueueDiscItem> item;
     NS_LOG_DEBUG("current_band:" << current_band << " GetCurrentRound():" << GetCurrentRound());
 
@@ -131,7 +144,9 @@ AFQQueueDisc::DoDequeue()
     }
 
     if (band != -1)
-    {
+    {    
+        std::cout << Simulator::Now().GetSeconds() << " DQ rank:" << item->GetPriority() << " band:" << band  << " bandQSize:" << GetInternalQueue(band)->GetNPackets() <<" QMaxsize:" << GetMaxSize().GetValue() << std::endl;
+
         bool retval = UpdateCurrentRound(item); // implement in QueueDisc
         if (!retval)
         {
@@ -139,6 +154,7 @@ AFQQueueDisc::DoDequeue()
         }
         NS_LOG_LOGIC("Popped from band " << band << ": " << item);
         NS_LOG_LOGIC("Number packets band " << band << ": " << GetInternalQueue(band)->GetNPackets());
+        m_dq += 1;
         return item;
     }
 

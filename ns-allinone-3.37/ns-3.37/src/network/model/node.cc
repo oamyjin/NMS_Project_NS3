@@ -120,6 +120,20 @@ Node::GetId() const
     return m_id;
 }
 
+uint32_t
+Node::GetWeight() const
+{
+    NS_LOG_FUNCTION(this);
+    return m_weight;
+}
+
+void
+Node::SetWeight(uint32_t weight)
+{
+    NS_LOG_FUNCTION(this);
+    m_weight = weight;
+}
+
 Time
 Node::GetLocalTime() const
 {

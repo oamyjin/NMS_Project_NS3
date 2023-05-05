@@ -4382,10 +4382,12 @@ TcpSocketBase::UpdateWindowSize(const TcpHeader& header)
     uint32_t receivedWindow = header.GetWindowSize();
     receivedWindow <<= m_sndWindShift;
     NS_LOG_INFO("Received (scaled) window is " << receivedWindow << " bytes");
+    NS_LOG_DEBUG("Received (scaled) window is " << receivedWindow << " bytes");
     if (m_state < ESTABLISHED)
     {
         m_rWnd = receivedWindow;
         NS_LOG_LOGIC("State less than ESTABLISHED; updating rWnd to " << m_rWnd);
+        NS_LOG_DEBUG("State less than ESTABLISHED; updating rWnd to " << m_rWnd);
         return;
     }
 

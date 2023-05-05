@@ -133,6 +133,11 @@ class BulkSendApplication : public Application
     Ptr<Packet> m_unsentPacket;          //!< Variable to cache unsent packet
     bool m_enableSeqTsSizeHeader{false}; //!< Enable or disable the SeqTsSizeHeader
 
+    // Jiajin Add
+    std::map<std::string, uint32_t> m_addr_fid_mapping;
+    std::map<uint32_t, uint32_t> m_fid_weight_mapping;
+    uint32_t m_num_flows = 0;
+
     /// Traced Callback: sent packets
     TracedCallback<Ptr<const Packet>> m_txTrace;
 
@@ -161,6 +166,8 @@ class BulkSendApplication : public Application
      * \param unused actually unused
      */
     void DataSend(Ptr<Socket> socket, uint32_t unused);
+
+    uint32_t GetPktFlowId(const Address& from);
 };
 
 } // namespace ns3

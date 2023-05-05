@@ -67,7 +67,7 @@ class SppifoQueueDisc : public QueueDisc
     uint32_t m_fifo_num = 8; // number of fifos
     uint32_t m_bounds[50] = {0}; // max 50 FIFOs
     bool m_useEcn = false;            //!< True if ECN is used (packets are marked instead of being dropped)
-    uint32_t m_minTh = 10;         //!< Minimum threshold for (number of packets)
+    uint32_t m_minTh = 20;         //!< Minimum threshold for (number of packets)
 
 };
 

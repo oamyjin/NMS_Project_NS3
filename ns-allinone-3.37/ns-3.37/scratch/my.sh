@@ -3,7 +3,7 @@ sudo rm -rf MyResult
 mkdir MyResult
 mkdir MyResult/rx_log
 mkdir MyResult/cr_update_log
-./ns3 run my-test > MyResult/log.txt
+./ns3 run my-test #> MyResult/log.txt
 #./ns3 run my-test-tcp-single-node
 python scratch/my-flowmon-parse-results-to-json.py MyResult/FlowPerformance.xml
 python plot-output/cal_thr_by_rx.py

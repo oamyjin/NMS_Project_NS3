@@ -781,7 +781,7 @@ QueueDisc::GetWakeMode() const
 void
 QueueDisc::PacketEnqueued(Ptr<const QueueDiscItem> item)
 {
-    NS_LOG_DEBUG("PacketEnqueued");
+    //NS_LOG_DEBUG("PacketEnqueued");
     m_nPackets++;
     m_nBytes += item->GetSize();
     m_stats.nTotalEnqueuedPackets++;
@@ -817,8 +817,8 @@ void
 QueueDisc::DropBeforeEnqueue(Ptr<const QueueDiscItem> item, const char* reason)
 {
     NS_LOG_FUNCTION(this << item << reason);
-    NS_LOG_DEBUG("DropBeforeEnqueue");
-
+    //("DropBeforeEnqueue");
+    my_cnt += 1;
     m_stats.nTotalDroppedPackets++;
     m_stats.nTotalDroppedBytes += item->GetSize();
     m_stats.nTotalDroppedPacketsBeforeEnqueue++;
@@ -846,9 +846,9 @@ QueueDisc::DropBeforeEnqueue(Ptr<const QueueDiscItem> item, const char* reason)
         m_stats.nDroppedBytesBeforeEnqueue[reason] = item->GetSize();
     }
 
-    NS_LOG_DEBUG("Total packets/bytes dropped before enqueue: "
-                 << m_stats.nTotalDroppedPacketsBeforeEnqueue << " / "
-                 << m_stats.nTotalDroppedBytesBeforeEnqueue);
+    //NS_LOG_DEBUG("Total packets/bytes dropped before enqueue: "
+    //             << m_stats.nTotalDroppedPacketsBeforeEnqueue << " / "
+    //             << m_stats.nTotalDroppedBytesBeforeEnqueue);
     NS_LOG_LOGIC("m_traceDropBeforeEnqueue (p)");
     m_traceDrop(item);
     m_traceDropBeforeEnqueue(item, reason);
@@ -897,9 +897,9 @@ QueueDisc::DropAfterDequeue(Ptr<const QueueDiscItem> item, const char* reason)
         m_peeked = true;
     }
 
-    NS_LOG_DEBUG("Total packets/bytes dropped after dequeue: "
-                 << m_stats.nTotalDroppedPacketsAfterDequeue << " / "
-                 << m_stats.nTotalDroppedBytesAfterDequeue);
+    //NS_LOG_DEBUG("Total packets/bytes dropped after dequeue: "
+    //             << m_stats.nTotalDroppedPacketsAfterDequeue << " / "
+    //            << m_stats.nTotalDroppedBytesAfterDequeue);
     NS_LOG_LOGIC("m_traceDropAfterDequeue (p)");
     m_traceDrop(item);
     m_traceDropAfterDequeue(item, reason);
@@ -941,8 +941,8 @@ QueueDisc::Mark(Ptr<QueueDiscItem> item, const char* reason)
         m_stats.nMarkedBytes[reason] = item->GetSize();
     }
 
-    NS_LOG_DEBUG("Total packets/bytes marked: " << m_stats.nTotalMarkedPackets << " / "
-                                                << m_stats.nTotalMarkedBytes);
+    //NS_LOG_DEBUG("Total packets/bytes marked: " << m_stats.nTotalMarkedPackets << " / "
+    //                                            << m_stats.nTotalMarkedBytes);
     m_traceMark(item, reason);
     return true;
 }
@@ -951,14 +951,14 @@ bool
 QueueDisc::Enqueue(Ptr<QueueDiscItem> item)
 {
     NS_LOG_FUNCTION(this << item);
-    NS_LOG_DEBUG("Enqueue");
+    //NS_LOG_DEBUG("Enqueue");
 
     m_stats.nTotalReceivedPackets++;
     m_stats.nTotalReceivedBytes += item->GetSize();
 
     bool retval = DoEnqueue(item);
 
-    NS_LOG_DEBUG("retval:" << retval);
+    //NS_LOG_DEBUG("retval:" << retval);
     if (retval)
     {
         item->SetTimeStamp(Simulator::Now());
@@ -976,7 +976,7 @@ QueueDisc::Enqueue(Ptr<QueueDiscItem> item)
     // Thus, we do not have to call DropBeforeEnqueue here.
 
     // check that the received packet was either enqueued or dropped
-    NS_LOG_DEBUG("m_stats.nTotalReceivedPackets " << m_stats.nTotalReceivedPackets << " m_stats.nTotalDroppedPacketsBeforeEnqueue" << m_stats.nTotalDroppedPacketsBeforeEnqueue << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets);
+    //NS_LOG_DEBUG("m_stats.nTotalReceivedPackets " << m_stats.nTotalReceivedPackets << " m_stats.nTotalDroppedPacketsBeforeEnqueue" << m_stats.nTotalDroppedPacketsBeforeEnqueue << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets);
     NS_ASSERT(m_stats.nTotalReceivedPackets ==
               m_stats.nTotalDroppedPacketsBeforeEnqueue + m_stats.nTotalEnqueuedPackets);
     NS_ASSERT(m_stats.nTotalReceivedBytes ==
@@ -989,6 +989,7 @@ Ptr<QueueDiscItem>
 QueueDisc::Dequeue()
 {
     NS_LOG_FUNCTION(this);
+    //NS_LOG_DEBUG("QueueDisc::Dequeue");
 
     // The QueueDisc::DoPeek method dequeues a packet and keeps it as a requeued
     // packet. Thus, first check whether a peeked packet exists. Otherwise, call
@@ -1006,11 +1007,13 @@ QueueDisc::Dequeue()
             // to update statistics about dequeued packets and fire the dequeue trace.
             m_peeked = false;
             PacketDequeued(item);
+            //NS_LOG_DEBUG("QueueDisc::PacketDequeued(item);" << item);
         }
     }
     else
     {
         item = DoDequeue();
+        //NS_LOG_DEBUG("QueueDisc:: item = DoDequeue();" << item << " nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets << " nTotalDequeuedPackets:" << m_stats.nTotalDequeuedPackets << " nTotalDroppedPackets:" << m_stats.nTotalDroppedPackets);
     }
 
     NS_ASSERT(m_nPackets == m_stats.nTotalEnqueuedPackets - m_stats.nTotalDequeuedPackets);
@@ -1029,6 +1032,7 @@ Ptr<const QueueDiscItem>
 QueueDisc::DoPeek()
 {
     NS_LOG_FUNCTION(this);
+    //NS_LOG_DEBUG("QueueDisc::DoPeek");
 
     if (!m_requeued)
     {
@@ -1101,6 +1105,7 @@ Ptr<QueueDiscItem>
 QueueDisc::DequeuePacket()
 {
     NS_LOG_FUNCTION(this);
+    //NS_LOG_DEBUG("QueueDisc::DequeuePacket");
 
     Ptr<QueueDiscItem> item;
 
@@ -1217,8 +1222,8 @@ QueueDisc::UpdateFlowTable (Ptr<QueueDiscItem> item)
     uint32_t flowId = tag.GetFlowId();
     uint32_t weight = tag.GetFlowWeight();
     uint32_t rank = item->GetPriority();
-    NS_LOG_DEBUG(m_devQueueIface << " UpdateFlowTable flowId:" << flowId << " m_flow_table[flowId]:" << m_flow_table[flowId]);
     m_flow_table[flowId] = rank + weight;
+    NS_LOG_DEBUG(m_devQueueIface << " UpdateFlowTable flowId:" << flowId  << " pkt:" << packet << " m_flow_table[flowId]:" << m_flow_table[flowId] << " rank:" << rank << " weight:" << weight);
 }
 
 uint32_t
@@ -1239,7 +1244,11 @@ QueueDisc::RankComputation (Ptr<QueueDiscItem> item)
             //     m_flow_table[flowId] = 0;
             // }
             rank = std::max(m_current_round, m_flow_table[flowId]);
-            NS_LOG_DEBUG(Simulator::Now().GetSeconds() << " " << m_devQueueIface << " m_current_round:" << m_current_round << " m_flow_table[flowId]:" << m_flow_table[flowId] << " rank:" << rank << " flowId:" << tag.GetFlowId() << " weight:" << weight);
+            NS_LOG_DEBUG(Simulator::Now().GetSeconds() << " " << m_devQueueIface << " tag:" << &tag << " m_current_round:" << m_current_round << " m_flow_table[flowId]:" << m_flow_table[flowId] << " rank:" << rank << " flowId:" << tag.GetFlowId() << " weight:" << weight);
+            // std::stringstream path;
+            // path << "MyResult/cr_update_log/cr_update_" << m_devQueueIface << ".txt";
+            // std::ofstream thr1(path.str(), std::ios::out | std::ios::app);
+            // thr1 << Simulator::Now().GetSeconds() << " vt:" << m_current_round << " m_flow_table[flowId]" << m_flow_table[flowId] << " rank:" << rank << " flowId:" << tag.GetFlowId() << " weight:" << weight << std::endl;
             //m_flow_table[flowId] = rank + weight; // update the last finish time in flow table 
             break;
 
@@ -1251,7 +1260,7 @@ QueueDisc::RankComputation (Ptr<QueueDiscItem> item)
             rank = 0;
     }
     item->SetPriority(rank);
-    NS_LOG_DEBUG("RankComputation " << " flowId:" << flowId << " rank:" << rank << " weight:" << weight << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets);
+    NS_LOG_DEBUG("RankComputation " << " flowId:" << flowId << " rank:" << rank << " m_current_round:" << m_current_round << " weight:" << weight << " m_flow_table[flowId]:" << m_flow_table[flowId] << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets);
     return rank;
 }
 
@@ -1273,18 +1282,19 @@ QueueDisc::UpdateCurrentRound (Ptr<QueueDiscItem> item)
     FlowIdTag tag;
     Packet* packet = GetPointer(item->GetPacket());
     packet->PeekPacketTag(tag);
-    if (tag.GetIsFwd())
+    //if (tag.GetIsFwd())
+    if (packet->GetSize() > 0)
     {
         std::stringstream path;
-        path << "MyResult/cr_update_log/cr_update_" << m_devQueueIface << ".txt";
+        path << "MyResult/cr_update.txt";//_" << m_devQueueIface << ".txt";
         std::ofstream thr(path.str(), std::ios::out | std::ios::app);
         if (before <= m_current_round)
         {
-            thr << Simulator::Now().GetSeconds() << " vt:" << before << "->" << m_current_round << " flowId:" << tag.GetFlowId() << std::endl;
+            thr << Simulator::Now().GetSeconds() << " vt:" << before << "->" << m_current_round << " flowId:" << tag.GetFlowId() << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets << " m_stats.nTotalDroppedPackets:" << m_stats.nTotalDroppedPackets << " nTotalDroppedPacketsBeforeEnqueue:" << m_stats.nTotalDroppedPacketsBeforeEnqueue << " my_cnt:" << my_cnt << std::endl;
         }
         else
         {
-            thr << Simulator::Now().GetSeconds() << " vt:" << before << "->" << m_current_round << " flowId:" << tag.GetFlowId() << " Inversion" << std::endl;
+            thr << Simulator::Now().GetSeconds() << " vt:" << before << "->" << m_current_round << " flowId:" << tag.GetFlowId() << " m_stats.nTotalEnqueuedPackets:" << m_stats.nTotalEnqueuedPackets << " m_stats.nTotalDroppedPackets:" << m_stats.nTotalDroppedPackets  << " nTotalDroppedPacketsBeforeEnqueue:" << m_stats.nTotalDroppedPacketsBeforeEnqueue << " my_cnt:" << my_cnt << " Inversion" << std::endl;
         }
     }
 

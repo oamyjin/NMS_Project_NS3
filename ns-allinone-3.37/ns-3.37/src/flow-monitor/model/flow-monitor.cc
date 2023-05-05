@@ -269,7 +269,7 @@ FlowMonitor::ReportLastRx(Ptr<FlowProbe> probe,
     stats.timesForwarded += tracked->second.timesForwarded;
 
     // Jiajin Add
-    if (packetSize > 1000){
+    if (packetSize > 500){
         std::stringstream path;
         path << "MyResult/rx_log/flow_" << flowId << ".txt";
         std::ofstream thr(path.str(), std::ios::out | std::ios::app);
