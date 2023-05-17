@@ -10,11 +10,14 @@ macOS version: 13.3.1
 
 clang version in Xcode: 14.0.3
 
-## Packet schedulers implementation
+## Setup
+After installation, replace `ns-allinone-3.37/ns-3.37/src` and `ns-allinone-3.37/ns-3.37/scratch`. Also, add `ns-allinone-3.37/ns-3.37/plot-output` and `ns-allinone-3.37/traffic-generator` folders.
+
+### Packet schedulers implementation
 
 PIFO, SP-PIFO, PCQ are implmented as queue disciples in `ns-allinone-3.37/ns-3.37/src/traffic-control/model`.
 
-## Topology with different congestion controls
+### Topology with different congestion controls
 
 We provide different topology files in the `ns-allinone-3.37/ns-3.37/scratch` and different packet schedulers can be selected in topo files.
 
@@ -42,6 +45,7 @@ TCP Cubic: `bash scratch/nms-cubic.sh`
 BBR: `bash scratch/nms-bbr.sh`
 
 DCTCP: `bash scratch/nms-dctcp.sh`
+(To configure different packet scheudlers, modify ns-allinone-3.37/ns-3.37/src/traffic-control-model/red-queue-disc.h with packet scheduler based implementations.)
 
 
 ## Result
