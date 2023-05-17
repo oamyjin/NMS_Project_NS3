@@ -4,7 +4,7 @@ plt.rc('xtick', labelsize=14)
 plt.rc('ytick', labelsize=14) 
 plt.rc('axes', labelsize=15) 
 
-def dir_high_weight_file_names(file_dir):
+def dir_file_names(file_dir):
     file_names = []
     for root, dirs, files in os.walk(file_dir):
         for file in files:
@@ -27,8 +27,8 @@ def find_idx(time, pre_thr_time, thr_time):
 
 
 if __name__ == "__main__":
-    period = 0.1
-    sche = ['MyResult/throuput.png', 'MyResult/rx_log/']
+    period = 0.01
+    sche = ['MyResult/throuput-10ms.png', 'MyResult/rx_log/']
 
     fig_name = sche[0] 
     folders = [sche[1]]
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     flow_id = []
 
     for folder in folders:
-        for file in dir_high_weight_file_names(folder):
+        for file in dir_file_names(folder):
             flow_id.append(int(file[5:-4]))
             print(flow_id)
             lines = open(folder + file, "r").readlines()
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     #plt.title('SPPIFO Scheduler')
     
     # show a legend on the plot
-    plt.legend()
+    # plt.legend(loc = "lower right")
     
     # save fig
     plt.savefig(fig_name) 

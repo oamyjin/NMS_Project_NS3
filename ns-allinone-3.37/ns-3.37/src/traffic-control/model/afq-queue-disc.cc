@@ -28,7 +28,7 @@
 #include "ns3/gearbox-pkt-tag.h"
 #include "ns3/ipv4-queue-disc-item.h"
 #include "ns3/tcp-header.h"
-#include "ns3/Simulator.h"
+#include "ns3/simulator.h"
 
 namespace ns3
 {
@@ -61,7 +61,7 @@ AFQQueueDisc::AFQQueueDisc()
 
     ObjectFactory factory;
     factory.SetTypeId("ns3::DropTailQueue<QueueDiscItem>");
-    factory.Set("MaxSize", QueueSizeValue(QueueSize("60p")));
+    factory.Set("MaxSize", QueueSizeValue(GetMaxSize()));
     for (uint16_t i = 0; i < m_fifo_num; i++)
     {
         AddInternalQueue(factory.Create<InternalQueue>());
@@ -82,9 +82,9 @@ AFQQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
     m_eq += 1;
     uint32_t rank = RankComputation(item);
     NS_LOG_DEBUG("DoEnqueue");
-    std::cout << Simulator::Now().GetSeconds() << " m_eq:" << m_eq << " dropA:" << m_dropA << " dropB:" << m_dropB << " m_dq:" << m_dq << " rank:" << rank << " GetCurrentRound():" << GetCurrentRound() << std::endl;
+    //std::cout << Simulator::Now().GetSeconds() << " m_eq:" << m_eq << " dropA:" << m_dropA << " dropB:" << m_dropB << " m_dq:" << m_dq << " rank:" << rank << " GetCurrentRound():" << GetCurrentRound() << std::endl;
 
-    if ((rank - GetCurrentRound()) >= ((GetCurrentRound() / m_granularity) * m_granularity + m_granularity * m_fifo_num - 1))
+    if (rank > ((GetCurrentRound() / m_granularity) * m_granularity + m_granularity * m_fifo_num - 1))
     {
         DropBeforeEnqueue(item, "Too large rank");
         m_dropA += 1;        
@@ -93,7 +93,7 @@ AFQQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
     }
     // Calulate Queue Idx
     uint32_t band = rank / m_granularity % m_fifo_num;
-    std::cout << "rank:" << rank << " band:" << band << " m_granularity:" << m_granularity << " bandQSize:" << GetInternalQueue(band)->GetNPackets() <<" QMaxsize:" << GetMaxSize().GetValue() << std::endl;
+    //std::cout << "rank:" << rank << " band:" << band << " m_granularity:" << m_granularity << " bandQSize:" << GetInternalQueue(band)->GetNPackets() <<" QMaxsize:" << GetMaxSize().GetValue() << std::endl;
 
     if (GetInternalQueue(band)->GetNPackets() >= GetMaxSize().GetValue() - 1)
     {
@@ -145,7 +145,7 @@ AFQQueueDisc::DoDequeue()
 
     if (band != -1)
     {    
-        std::cout << Simulator::Now().GetSeconds() << " DQ rank:" << item->GetPriority() << " band:" << band  << " bandQSize:" << GetInternalQueue(band)->GetNPackets() <<" QMaxsize:" << GetMaxSize().GetValue() << std::endl;
+        //std::cout << Simulator::Now().GetSeconds() << " DQ rank:" << item->GetPriority() << " band:" << band  << " bandQSize:" << GetInternalQueue(band)->GetNPackets() <<" QMaxsize:" << GetMaxSize().GetValue() << std::endl;
 
         bool retval = UpdateCurrentRound(item); // implement in QueueDisc
         if (!retval)

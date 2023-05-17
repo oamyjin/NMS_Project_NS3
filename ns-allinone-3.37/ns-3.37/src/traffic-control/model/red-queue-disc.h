@@ -312,6 +312,12 @@ class RedQueueDisc : public QueueDisc
     Time m_idleTime; //!< Start of current idle period
 
     Ptr<UniformRandomVariable> m_uv; //!< rng stream
+
+    // Jiajin Add
+    uint32_t GetTotalNPackets();
+    uint32_t m_fifo_num = 8; // number of fifos
+    uint16_t m_granularity = 20; //granularity per fifo
+    uint32_t max_rank_gap = 0;
 };
 
 }; // namespace ns3

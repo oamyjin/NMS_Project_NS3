@@ -42,6 +42,9 @@
 #include "ns3/trace-source-accessor.h"
 #include "ns3/udp-socket-factory.h"
 #include "ns3/uinteger.h"
+#include "ns3/flow-id-tag.h"
+#include <sstream>
+#include <string>
 
 namespace ns3
 {
@@ -363,10 +366,24 @@ OnOffApplication::SendPacket()
         // Trace before adding header, for consistency with PacketSink
         m_txTraceWithSeqTsSize(packet, from, to, header);
         packet->AddHeader(header);
+        // Jiajin Add FlowIdTag
+        FlowIdTag tag;
+        tag.SetFlowId(GetNode()->GetId());
+        tag.SetFlowWeight(GetNode()->GetWeight());
+        tag.SetIsFwd(true);
+        Packet* packet_ptr = GetPointer(packet);
+        packet_ptr->AddPacketTag(tag);
     }
     else
     {
         packet = Create<Packet>(m_pktSize);
+        // Jiajin Add FlowIdTag
+        FlowIdTag tag;
+        tag.SetFlowId(GetNode()->GetId());
+        tag.SetFlowWeight(GetNode()->GetWeight());
+        tag.SetIsFwd(true);
+        Packet* packet_ptr = GetPointer(packet);
+        packet_ptr->AddPacketTag(tag);
     }
 
     int actual = m_socket->Send(packet);

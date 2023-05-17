@@ -1216,13 +1216,21 @@ QueueDisc::Transmit(Ptr<QueueDiscItem> item)
 void
 QueueDisc::UpdateFlowTable (Ptr<QueueDiscItem> item)
 {
+
     FlowIdTag tag;
     Packet* packet = GetPointer(item->GetPacket());
     packet->PeekPacketTag(tag);
     uint32_t flowId = tag.GetFlowId();
     uint32_t weight = tag.GetFlowWeight();
     uint32_t rank = item->GetPriority();
-    m_flow_table[flowId] = rank + weight;
+    switch (m_scheAlog)
+    {
+        case SchedulingAlgorithm::STFQ:
+            m_flow_table[flowId] = rank + weight;
+            break;
+        default:
+            break;
+    }
     NS_LOG_DEBUG(m_devQueueIface << " UpdateFlowTable flowId:" << flowId  << " pkt:" << packet << " m_flow_table[flowId]:" << m_flow_table[flowId] << " rank:" << rank << " weight:" << weight);
 }
 
@@ -1253,6 +1261,7 @@ QueueDisc::RankComputation (Ptr<QueueDiscItem> item)
             break;
 
         case SchedulingAlgorithm::LSTF:
+            m_current_round = 0;
             rank = weight;
             break;
 
@@ -1273,8 +1282,10 @@ QueueDisc::UpdateCurrentRound (Ptr<QueueDiscItem> item)
     {
         case SchedulingAlgorithm::STFQ:
             m_current_round = item->GetPriority();
+            //m_current_round = std::max(m_current_round, item->GetPriority());
             break;
         default:
+            m_current_round = 0;
             break;
     }
 

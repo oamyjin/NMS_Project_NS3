@@ -212,6 +212,7 @@ class OnOffApplication : public Application
      * \param socket the not connected socket
      */
     void ConnectionFailed(Ptr<Socket> socket);
+
 };
 
 } // namespace ns3

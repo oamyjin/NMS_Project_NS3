@@ -265,9 +265,10 @@ TrafficControlLayer::DeleteRootQueueDiscOnDevice(Ptr<NetDevice> device)
     NS_LOG_FUNCTION(this << device);
 
     std::map<Ptr<NetDevice>, NetDeviceInfo>::iterator ndi = m_netDevices.find(device);
-
+    bool a1 = ndi != m_netDevices.end();
+    bool a2 = ndi->second.m_rootQueueDisc;
     NS_ASSERT_MSG(ndi != m_netDevices.end() && ndi->second.m_rootQueueDisc,
-                  "No root queue disc installed on device " << device);
+                  "No root queue disc installed on device " << device << " " << a1 << "&&" << a2);
 
     // remove the root queue disc
     ndi->second.m_rootQueueDisc = nullptr;

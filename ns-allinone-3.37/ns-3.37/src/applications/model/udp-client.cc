@@ -31,6 +31,7 @@
 #include "ns3/socket-factory.h"
 #include "ns3/socket.h"
 #include "ns3/uinteger.h"
+#include "ns3/flow-id-tag.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -206,6 +207,15 @@ UdpClient::Send()
     seqTs.SetSeq(m_sent);
     Ptr<Packet> p = Create<Packet>(m_size - (8 + 4)); // 8+4 : the size of the seqTs header
     p->AddHeader(seqTs);
+
+    // Jiajin Add FlowIdTag
+    FlowIdTag tag;
+    tag.SetFlowId(GetNode()->GetId());
+    tag.SetFlowWeight(GetNode()->GetWeight());
+    tag.SetIsFwd(true);
+    Packet* packet_ptr = GetPointer(p);
+    packet_ptr->AddPacketTag(tag);
+    //std::cout << GetNode()->GetId() << std::endl;
 
     if ((m_socket->Send(p)) >= 0)
     {

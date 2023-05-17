@@ -47,7 +47,7 @@ SppifoQueueDisc::GetTypeId()
                           MakeQueueSizeChecker())
             .AddAttribute("FifoNum",
                           "The number of FIFOs",
-                          UintegerValue(8),
+                          UintegerValue(4),
                           MakeUintegerAccessor(&SppifoQueueDisc::m_fifo_num),
                           MakeUintegerChecker<uint32_t>())
             .AddAttribute("UseEcn",
@@ -65,7 +65,7 @@ SppifoQueueDisc::GetTypeId()
 }
 
 SppifoQueueDisc::SppifoQueueDisc()
-    : QueueDisc (SchedulingAlgorithm::STFQ, QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS)
+    : QueueDisc (SchedulingAlgorithm::STFQ, QueueDiscSizePolicy::MULTIPLE_QUEUES, QueueSizeUnit::PACKETS) //STFQ LSTF
 {
     NS_LOG_FUNCTION(this);
 
@@ -103,10 +103,10 @@ SppifoQueueDisc::DoEnqueue(Ptr<QueueDiscItem> item)
         // push up
         std::ofstream thr("MyResult/queuebound.txt", std::ios::out | std::ios::app);
         thr << Simulator::Now().GetSeconds() << " EQ i:" << i << " bound[i]:" << m_bounds[i] << " rank:" << rank << " fid:" << tag.GetFlowId() 
-            << " q7Size:" << GetInternalQueue(m_fifo_num-1)->GetNPackets() << "(" << m_bounds[m_fifo_num-1] 
-            << ") q6Size:" << GetInternalQueue(m_fifo_num-2)->GetNPackets() << "(" << m_bounds[m_fifo_num-2]
-            << " q5Size:" << GetInternalQueue(m_fifo_num-3)->GetNPackets() << "(" << m_bounds[m_fifo_num-3]
-            << " Maxsize:" << GetMaxSize().GetValue() << std::endl;
+            << " q7Size:" << GetInternalQueue(m_fifo_num-1)->GetNPackets() << "(bound:" << m_bounds[m_fifo_num-1] 
+            << ") q6Size:" << GetInternalQueue(m_fifo_num-2)->GetNPackets() << "(bound:" << m_bounds[m_fifo_num-2]
+            << " q5Size:" << GetInternalQueue(m_fifo_num-3)->GetNPackets() << "(bound:" << m_bounds[m_fifo_num-3]
+            << " Maxsize:" << GetMaxSize().GetValue() << " pktid:" << packet->GetUid() << std::endl;
         if (rank >= m_bounds[i])
         {
             if (GetInternalQueue(i)->GetNPackets() < GetMaxSize().GetValue())
@@ -219,10 +219,10 @@ SppifoQueueDisc::DoDequeue()
         packet->PeekPacketTag(tag);
         std::ofstream thr("MyResult/queuebound.txt", std::ios::out | std::ios::app);
         thr << Simulator::Now().GetSeconds() << " DQ i:" << band << " bound[i]:" << m_bounds[band] << " rank:" << item->GetPriority() << " fid:" << tag.GetFlowId() 
-            << " q7Size:" << GetInternalQueue(m_fifo_num-1)->GetNPackets() << "(" << m_bounds[m_fifo_num-1] 
-            << ") q6Size:" << GetInternalQueue(m_fifo_num-2)->GetNPackets() << "(" << m_bounds[m_fifo_num-2]
-            << " q5Size:" << GetInternalQueue(m_fifo_num-3)->GetNPackets() << "(" << m_bounds[m_fifo_num-3]
-            << " Maxsize:" << GetMaxSize().GetValue() << std::endl;
+            << " q7Size:" << GetInternalQueue(m_fifo_num-1)->GetNPackets() << "(bound:" << m_bounds[m_fifo_num-1] 
+            << ") q6Size:" << GetInternalQueue(m_fifo_num-2)->GetNPackets() << "(bound:" << m_bounds[m_fifo_num-2]
+            << ") q5Size:" << GetInternalQueue(m_fifo_num-3)->GetNPackets() << "(bound:" << m_bounds[m_fifo_num-3]
+            << ") Maxsize:" << GetMaxSize().GetValue() << " pktid:" << packet->GetUid() << std::endl;
         return item;
     }
     NS_LOG_DEBUG("band:" << band << " " << item);

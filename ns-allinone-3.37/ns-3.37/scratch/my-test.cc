@@ -34,13 +34,13 @@ const uint32_t ServerPerPod = ServerPerTor * TorPerPod;
 const uint32_t NodeNumPerPod = ServerPerPod + TorPerPod + AggPerPod;
 const uint32_t ServerTotalNum = ServerPerPod * PodNum;
 
-const char* Node2Tor_Capacity = "10Mbps"; // 10Gbps
-const char* Node2Tor_Delay = "10ms"; //10ns
+const char* Node2Tor_Capacity = "10Gbps"; // 10Gbps
+const char* Node2Tor_Delay = "3us"; //10ns
 const char* Tor2Agg_Capacity = "40Gbps";
 const char* Tor2Agg_Delay = "1us";
 const char* Agg2Core_Capacity = "40Gbps";
 const char* Agg2Core_Delay = "1us";
-const char* AppDataRate = "10Mbps";  // 10Gbps
+const char* AppDataRate = "10Gbps";  // 10Gbps
 
 double simulator_stop_time = 10.0;
 bool ECMProuting = true;
@@ -329,11 +329,14 @@ main(int argc, char* argv[])
     LogComponentEnable ("QueueDisc", LOG_LEVEL_INFO);
     // LogComponentEnable ("AFQQueueDisc", LOG_LEVEL_INFO);
 
-    //Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue(Seconds (0.0000)));//000600 //0.00002412 //delayed ack time out default is 200ms
+    Config::SetDefault ("ns3::TcpSocket::DelAckTimeout", TimeValue(Seconds (0.000600)));//000600 //0.00002412 //delayed ack time out default is 200ms
     //Config::SetDefault("ns3::TcpSocket::DelAckCount", UintegerValue(2));
-    //Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.0000132)));// 0000132 //0.00000804 RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
-    //Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 5RTT = 5*8.04 = 40.2us
-    //Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 syn timeout 5rtt
+    Config::SetDefault ("ns3::RttEstimator::InitialEstimation", TimeValue(Seconds (0.0000132)));// 0000132 //0.00000804 RTT(Propgation delay) = 2*(0.01+1+1+1+1+0.01) = 8.04us
+    Config::SetDefault ("ns3::TcpSocketBase::MinRto", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 5RTT = 5*8.04 = 40.2us
+    Config::SetDefault ("ns3::TcpSocket::ConnTimeout", TimeValue(Seconds (0.0000660))); // 0000660 // 0.0000402 syn timeout 5rtt
+
+    // Enable/Disable SACK in TCP
+    //Config::SetDefault("ns3::TcpSocketBase::Sack", BooleanValue(false));
     
     //Config::SetDefault ("ns3::TcpSocketBase::ClockGranularity", TimeValue(MilliSeconds (0.0000132)));//RTT
 
@@ -345,8 +348,8 @@ main(int argc, char* argv[])
     
 
     PointToPointHelper Sw2Serever;
-    Sw2Serever.SetDeviceAttribute("DataRate", StringValue("1Mbps"));
-    Sw2Serever.SetChannelAttribute("Delay", StringValue("1ms"));
+    Sw2Serever.SetDeviceAttribute("DataRate", StringValue("10Gbps"));
+    Sw2Serever.SetChannelAttribute("Delay", StringValue("3us"));
     Sw2Serever.SetQueue("ns3::DropTailQueue", "MaxSize", QueueSizeValue(QueueSize("1p")));
     PointToPointHelper Node2Tor;
     Node2Tor.SetDeviceAttribute("DataRate", StringValue(Node2Tor_Capacity));
@@ -503,9 +506,9 @@ main(int argc, char* argv[])
             tch.Uninstall(coreDev[i][j]);
         }
     }*/
-    //tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("60p")); //;"MinTh", UintegerValue(10)
+    tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("60p")); //;"MinTh", UintegerValue(10)
     //tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("300p"));
-    tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
+    //tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
     //tch.SetRootQueueDisc("ns3::FifoQueueDisc", "MaxSize", StringValue("300p"));
     tch.Install(podDev[0][20].Get(1)); //server21-tor, on the tor side
     /*

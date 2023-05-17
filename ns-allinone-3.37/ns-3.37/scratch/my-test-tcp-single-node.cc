@@ -558,8 +558,8 @@ main(int argc, char* argv[])
         tch.Uninstall(devices[i]);
     }
 
-    //tch.SetRootQueueDisc("ns3::SppifoQueueDisc");
-    tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("10000p"));
+    tch.SetRootQueueDisc("ns3::SppifoQueueDisc", "MaxSize", StringValue("60p"));
+    //tch.SetRootQueueDisc ("ns3::PifoQueueDisc", "MaxSize", StringValue("10000p"));
     //tch.SetRootQueueDisc ("ns3::AFQQueueDisc");
     //tch.SetRootQueueDisc("ns3::FifoQueueDisc");
     tch.Install(devices[CLIENT_CNT + SERVER_CNT - 1].Get(0));

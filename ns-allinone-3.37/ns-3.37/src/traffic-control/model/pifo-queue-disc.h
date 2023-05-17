@@ -61,6 +61,9 @@ private:
   virtual bool CheckConfig (void) override;
   virtual void InitializeParams (void) override;
 
+  bool m_useEcn;            //!< True if ECN is used (packets are marked instead of being dropped)
+  uint32_t m_minTh;         //!< Minimum threshold for (number of packets)
+
   //uint32_t m_max_rank = 0; // max rank in the pifo queue
 };
 

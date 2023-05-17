@@ -25,6 +25,7 @@
 #include "ns3/prio-queue.h"
 #include "ns3/net-device-queue-interface.h"
 #include "ns3/socket.h"
+#include "ns3/flow-id-tag.h"
 #include "pifo-queue-disc.h"
 
 namespace ns3 {
@@ -44,6 +45,16 @@ TypeId PifoQueueDisc::GetTypeId (void)
                           QueueSizeValue(QueueSize("100p")),
                           MakeQueueSizeAccessor(&QueueDisc::SetMaxSize, &QueueDisc::GetMaxSize),
                           MakeQueueSizeChecker())
+    .AddAttribute("MinTh",
+                          "MaximMinimumum average length threshold in packets/bytes",
+                          DoubleValue(10),
+                          MakeDoubleAccessor(&PifoQueueDisc::m_minTh),
+                          MakeDoubleChecker<double>())
+    .AddAttribute("UseEcn",
+                          "True to use ECN (packets are marked instead of being dropped)",
+                          BooleanValue(false),
+                          MakeBooleanAccessor(&PifoQueueDisc::m_useEcn),
+                          MakeBooleanChecker())
     // .AddAttribute("SchedulingAlgorithm",
     //                       "The scheduling algorithm",
     //                       SchedulingAlgorithm::STFQ,
@@ -80,7 +91,10 @@ PifoQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   NS_LOG_FUNCTION (this << item);
   NS_LOG_DEBUG(GetCurrentSize () << " " << GetMaxSize ());
   NS_LOG_DEBUG("PifoQueueDisc::DoEnqueue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets ());
-
+  FlowIdTag tag;
+  Packet* packet = GetPointer(item->GetPacket());
+  packet->PeekPacketTag(tag);
+  //std::cout << "EQ PifoQueueDisc::DoEnqueue fid:" << tag.GetFlowId() << " " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets () << " m_useEcn:" << m_useEcn << " m_minTh:" << m_minTh << std::endl;
   if (GetCurrentSize () >= GetMaxSize ())
   {
     NS_LOG_LOGIC ("Queue disc limit exceeded -- dropping packet");
@@ -103,7 +117,10 @@ PifoQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
   NS_LOG_LOGIC ("Number packets in priority queue::" << GetInternalPrioQueue (0)->GetNPackets ());
 
   UpdateFlowTable(item);
-  
+  if (m_useEcn && GetInternalPrioQueue(0)->GetNPackets() > m_minTh)
+  {
+      Mark(item, "Pifo ECN mark");
+  }
   return retval;
 }
 
@@ -113,6 +130,7 @@ PifoQueueDisc::DoDequeue (void)
   NS_LOG_DEBUG("PifoQueueDisc::DoDequeue");
   NS_LOG_FUNCTION (this);
   NS_LOG_DEBUG("PifoQueueDisc::DoDequeue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets ());
+  //std::cout << "DQ PifoQueueDisc::DoEnqueue " << GetCurrentSize()  << " " << GetInternalPrioQueue (0)->GetNPackets () << std::endl;
 
   Ptr<QueueDiscItem> item;
 
