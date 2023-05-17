@@ -2,7 +2,7 @@
 sudo rm -rf MyResult
 mkdir MyResult
 mkdir MyResult/rx_log
-./ns3 run nms-tcp-bbr > MyResult/log.txt # tcp-bbr-example-orig 
+./ns3 run nms-bbr > MyResult/log.txt # tcp-bbr-example-orig 
 #python scratch/my-flowmon-parse-results-to-json.py MyResult/FlowPerformance.xml
 python plot-output/cal_thr_by_rx.py
 python plot-output/plot_vt_update.py
